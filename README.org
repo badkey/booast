@@ -1,0 +1,14 @@
+* General Information
+
+The *Bad OO Acoustics simulation toolbox (booast)* provides some means
+for simulating acoustic problems using Octave or Matlab(tm).
+
+In particular, it provides two new matlab/octave classes, *vector* and
+*vectorgrid*. These can be used to implement arrays of vectors
+pointing to a location in $\mathcal R^3$. 
+
+* Installation
+
+Add the path to Octave/Matlab where you installed booast. E.g.
+: addpath('path/to/booast/');
+
