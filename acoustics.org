@@ -1,0 +1,381 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: Acoustics
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-03-13 21:51:02 jbatke>
+#+AUTHOR: Johann-Markus Batke
+#+EMAIL: JBatke@technik-emden.de
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.2.2 (Org mode 9.1.3)
+#+setupfile: booast.setup
+
+* COMMENT Admin 
+
+#+BEGIN_SRC emacs-lisp
+(org-babel-lob-ingest "octavetemplates.org")
+#+END_SRC
+
+#+RESULTS:
+: 2
+
+* Acoustic Waves
+
+The calculation of acoustic waves is greatly facilitated by
+*booast*. /Plane waves/, /cylindrical waves/ and /spherical waves/ are
+all defined in $\mathcal R^3$. 
+
+** Planewave
+
+A plane wave is described by $$p(\vec r, \vec k) = \mathrm e^{\mathrm
+i \vec r^T \, \vec k}.$$ The implementation using *booast* is straight
+forward.
+
+The calculation of pressure $p$ depends on location vector $\vec r$
+and wave number vector $\vec k$. Both vectors may be arrays of vectors.
+
+*** Syntax
+
+: p_CABFD =  planewave(vr_CAB, vk_FD)
+
+*** Description
+
+~p_CABFD = planewave(vr_CAB, vk_FD)~ returns a matrix containing
+pressure values according to a plane wave.
+- vr_CAB :: The observation points =vr_CAB= are an array of =vectors=
+            with dimensions =C=, =A= and =B=.
+- vk_FD :: The wavenumber vectors =vk_FD= may contain =F= different
+           values for frequency and =D= directions. 
+Accordingly, =p_CABFD= is defined for 5 dimensions.
+
+*** Definition
+
+#+name: planewave definition
+#+BEGIN_SRC octave :tangle planewave.m
+  function p_CABFD =  planewave(vr_CAB, vk_FD)
+    %% allocate memory
+    Dim_r = size(vr_CAB);
+    Dim_k = size(vk_FD);
+    R = prod(Dim_r);
+    K = prod(Dim_k);
+    p_RK = zeros(R, K);
+
+    %% Vectors in cart. coord.:
+    r_xyz_R = get(vr_CAB, 'cartesian', [3, R]);
+    k_xyz_K = get(vk_FD, 'cartesian', [3, K]);
+
+    %% pressure:
+    for r = 1:R
+      for k = 1:K
+	p_RK(r,k) = exp(i*(k_xyz_K(:, k).' * r_xyz_R(:, r)));
+      end
+    end
+    p_CABFD = reshape(p_RK, [Dim_r, Dim_k]);
+  end
+#+END_SRC
+
+*** COMMENT Interface test
+
+#+name: planewave interface test
+#+BEGIN_SRC octave 
+  %% Wellenzahl
+  F0 = 1000;
+  omega0 = 2*pi*F0;
+  C_snd = 342;
+  k0 = omega0 / C_snd;
+
+  %% Richtungen/Wellenzahlvektor
+  vk = vector(k0*ones(3,8,9), 'cartesian');
+
+  %% Beobachtungspunkte
+  vr = vector(ones(3, 5, 4), 'cartesian');
+
+  %% Druck einer ebenen Welle
+  p = planewave(vr, vk);
+  size(p)
+#+END_SRC
+
+#+RESULTS:
+| 5 | 4 | 8 | 9 |
+
+*** Examples
+
+**** Plane wave defined on cartesian coordinates
+
+A =vectorgrid= is set up using three vectors =x_A, x_B= and =x_C=. For
+visualisation, certain slices of this vectorgrid =g_ABC= are selected.
+The selected slices are used for pressure calculation, the resulting
+scalar arrays are shown using the =surface= command.
+
+#+name: planewave cartesian example 
+#+BEGIN_SRC octave :exports code
+    %% create observation grid (cartesian volume)
+    x_A = linspace(0, 10, 60);
+    y_B = linspace(0, 10, 30);
+    z_C = linspace(0, 10, 40);
+    g_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
+
+    %% slice some planes for visualisation
+    g_AB1 = g_ABC(:,:,1);
+    g_A1C = g_ABC(:,20,:);
+    g_1BC = g_ABC(1,:,:);
+
+    %% direction/wavenumbervector of planewave
+    v = vector([1, 0.1, 0.1]', 'cartesian');
+    p_AB1 = planewave(vector(g_AB1), v);
+    p_A1C = planewave(vector(g_A1C), v);
+    p_1BC = planewave(vector(g_1BC), v);
+
+    %% visualise
+    figure(1); clf; hold('on');
+    surface(g_AB1, real(p_AB1)); 
+    surface(g_A1C, real(p_A1C));
+    surface(g_1BC, real(p_1BC));
+    xlabel('x'); ylabel('y'); zlabel('z');
+    view(30,40);
+#+END_SRC
+
+#+name: planewave cartesian example image
+#+BEGIN_SRC octave :tangle planewave_cartesian_test.m :results file :exports results
+    <<planewave cartesian example>>
+    S_file = 'img/exa_plane_wave_cartesian.png';
+    <<save S_file>>
+#+END_SRC
+
+#+caption: Example plane wave defined in cartesian coordinates.
+#+attr_html: :width 100%
+#+RESULTS: example plane wave cartesian
+[[file:img/exa_plane_wave_cartesian.png]]
+
+**** Plane wave defined on spherical coordinates
+
+The example given above can also be calculated on a vectorgrid using
+vectors =r_A=, =theta_B=, and =phi_C= describing the axes of a
+spherical coordinate systeme. Slicing this kind of grid yields a
+surface of a sphere, a cone, or a half circle respectively.
+ 
+#+name: planewave spherical example
+#+BEGIN_SRC octave :tangle planewave_spherical_test.m 
+  %% create observation grid (cartesian volume)
+  A = 30; B = 40; C = 50;
+  r_A     = linspace(0, 10, A);
+  theta_B = linspace(0, pi, B);
+  phi_C   = linspace(0, 1.5*pi, C);
+  g_ABC   = vectorgrid(r_A, theta_B, phi_C, 'spherical');
+
+  %% slice some planes for visualisation
+  g_AB1 = g_ABC(:,:,10);  % circle
+  g_A1C = g_ABC(:,10,:);  % conus
+  g_1BC = g_ABC(10,:,:);  % sphere
+
+  %% direction/wavenumbervector of planewave
+  v = vector([1, 1, 0.3]', 'cartesian');
+
+  p_AB1 = real(planewave(vector(g_AB1), v));
+  p_A1C = real(planewave(vector(g_A1C), v)); %% visualise
+  p_1BC = real(planewave(vector(g_1BC), v));
+
+  figure(1); clf;
+  surface(g_AB1, p_AB1);
+  surface(g_A1C, p_A1C);
+  surface(g_1BC, p_1BC);
+  xlabel('x'); ylabel('y'); zlabel('z');
+  view(30,40); axis('equal');
+#+END_SRC
+
+#+RESULTS: planewave spherical example
+: 0
+
+#+name: planewave spherical example image
+#+BEGIN_SRC octave :results file :exports results
+  <<planewave spherical example>>
+  S_file = 'img/exa_plane_wave_spherical.png';
+  <<save S_file>>
+#+END_SRC
+
+#+caption: Example plane wave defined in spherical coordinates.
+#+attr_html: :width 100%
+#+RESULTS: planewave spherical example image
+[[file:img/exa_plane_wave_spherical.png]]
+
+** Sphericalwave
+
+Die \textsc{Green}sche Funktion $G(\mathbf r|\mathbf r_s)$ für das
+Freifeld beschreibt das Schallfeld für eine Punktquelle an der Stelle
+$\mathbf r_s = (r_s, \theta_s, \phi_s)$ . Es ist
+\begin{equation}
+  \label{eq:G}
+  G(\vec r|\vec r_s) = \frac{e^{\mathrm i\, k |\vec r-\vec r_s|}}{4\pi |\vec r-\vec r_s|}
+\end{equation}
+
+
+Pressure $p$ is then
+$$ p(\vec r, \vec r_s, k, Z_0) = -\mathrm i \, Z_0 \, G(\vec r|\vec r_s).$$
+
+*** Function definition
+
+#+name: sphericalwave definition
+#+BEGIN_SRC octave :tangle sphericalwave.m
+  function p_CABSF =  sphericalwave(vr_CAB, vs_S, k_F, Z0)
+
+    %% detect input args
+    if nargin < 4
+      Z0 = 1;
+    end
+  
+    %% allocate memory
+    Dim_r = size(vr_CAB);
+    Dim_s = size(vs_S);
+    R = prod(Dim_r);
+    S = prod(Dim_s);
+    F = numel(k_F);
+    p_RSF = zeros(R, S, F);
+
+    %% Vectors in cart. coord.:
+    r_xyz_R = get(vr_CAB, 'cartesian', [3, R]);
+    s_xyz_S = get(vs_S,   'cartesian', [3, S]);
+
+    %% Green
+    for r = 1:R
+      for s = 1:S
+	%% rel. Abstand
+	r_os = sqrt(sum((r_xyz_R(:,r) - s_xyz_S(:,s)).^2));
+	for f = 1:F
+	  %% Vorfaktor mal Green'sche Funktion
+	  if r_os != 0
+	    p_RSF(r,s,f) = -i * Z0 * k_F(f) * ...
+			    exp(i * k_F(f) * r_os) / (4*pi * r_os);
+	  else
+	    p_RSF(r,s,f) = NaN; %-i * Z0 * k_F(f); % tdb: lies Williams
+	  end
+	end
+      end
+    end
+
+    %% reshape output 
+    p_CABSF = reshape(p_RSF, [Dim_r, Dim_s, F]);
+#+END_SRC
+
+*** COMMENT Interface test
+#+BEGIN_SRC octave
+  %% Beobachtungspunkte
+  vr = vector(ones(3, 4, 5), 'cartesian');
+
+  %% Wellenzahlen
+  F0_F = linspace(10,1000, 1);
+  omega0_F = 2*pi*F0_F;
+  C_snd = 342;
+  k_F = omega0_F / C_snd;
+
+  %% Quellpositionen
+  vs = vector(ones(3, 2, 5), 'cartesian');
+
+  %% akustische Impedanz
+  Z = 1;
+
+  %% Druck einer ebenen Welle
+  p = sphericalwave(vr, vs, k_F, Z);
+  size(p)
+#+END_SRC
+
+#+RESULTS:
+| 4 | 5 | 2 | 5 |
+
+*** Examples
+**** Simple cartesian grid
+
+#+name: sphericalwave cartesian simple example
+#+BEGIN_SRC octave :exports code
+  %% Beobachtungspunkte
+  X = 40;  x_X = linspace(0, 10, X);
+  Y = 40;  y_Y = linspace(0, 10, Y);
+  Z = 1;   z_Z = 0;
+  gr = vectorgrid(x_X, y_Y, z_Z, 'cartesian');
+  vr = vector(gr);
+
+  %% Wellenzahlen
+  F0_F = linspace(100,100, 1);
+  omega0_F = 2*pi*F0_F;
+  C_snd = 342;
+  k_F = omega0_F / C_snd;
+
+  %% Quellpositionen
+  vs = vector([0, 5, 0]', 'cartesian');
+
+  %% akustische Impedanz
+  Z = 1;
+
+  %% Druck einer ebenen Welle
+  p = sphericalwave(vr, vs, k_F, Z);
+
+  %% malen nach Zahlen
+  surface(gr, real(p));
+#+END_SRC
+
+#+name: sphericalwave cartesian simple example image
+#+BEGIN_SRC octave :results file :exports results
+<<sphericalwave cartesian simple example>>
+S_file = 'img/spherical_test.png';
+saveas(1, S_file);
+ans = S_file;
+#+END_SRC
+
+#+RESULTS: sphericalwave cartesian simple example image
+[[file:img/spherical_test.png]]
+
+**** Example using several planes
+
+Here we go again
+
+#+name: sphericalwave cartesian 3plane example
+#+BEGIN_SRC octave :exports code
+  %% create observation grid (cartesian volume)
+  x_A = linspace(0, 10, 50);
+  y_B = x_A;
+  z_C = x_A;
+  g_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
+
+  %% slice some planes for visualisation
+  g_AB = g_ABC(:,:,1);
+  g_AC = g_ABC(:,10,:);
+  g_BC = g_ABC(10,:,:);
+
+  %% source position
+  vs = vector([1, 1, 1]', 'cartesian');
+
+  %% wave number
+  F0_F = linspace(100,100, 1);
+  omega0_F = 2*pi*F0_F;
+  C_snd = 342;
+  k_F = omega0_F / C_snd;
+
+  %% acoustical impedance
+  Z = 1;
+
+  %% visualise
+  figure(1); clf;
+  surface(g_AB, real(sphericalwave(vector(g_AB), vs, k_F, Z)));
+  surface(g_AC, real(sphericalwave(vector(g_AC), vs, k_F, Z)));
+  surface(g_BC, real(sphericalwave(vector(g_BC), vs, k_F, Z)));
+  xlabel('x'); ylabel('y'); zlabel('z');
+  view(30,40);
+#+END_SRC
+
+#+RESULTS: sphericalwave cartesian 3plane example
+: 0
+
+#+name: sphericalwave cartesian 3plane example image
+#+BEGIN_SRC octave :results file :exports results
+  <<sphericalwave cartesian 3plane example>>
+  S_file = 'img/spherical_3plane_test.png';
+  saveas(1, S_file);
+  ans = S_file;
+#+END_SRC
+
+#+caption: Spherical waves on 3 planes defined in cartesian coordinates.
+#+RESULTS: sphericalwave cartesian 3plane example image
+[[file:img/spherical_3plane_test.png]]
+

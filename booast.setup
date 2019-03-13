@@ -1,0 +1,12 @@
+# -*- mode: org; -*-
+#+PROPERTY: header-args:octave :noweb yes :eval no-export
+# +SETUPFILE: ../../local/org-html-themes/setup/theme-readtheorg.setup
+# +SETUPFILE: ../../local/org-html-themes/setup/theme-bigblow-local.setup
+# +SETUPFILE: ../../local/org-html-themes/setup/theme-readtheorg-local.setup
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
+
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>

@@ -1,0 +1,2050 @@
+#+title: Bad OO Acoustics simulation toolbox (booast)
+#+author: Johann-Markus Batke
+#+date: 2018-03-14
+#+setupfile: booast.setup
+#+exclude_tags: internal
+
+* General Information
+
+The *Bad OO Acoustics simulation toolbox (booast)* provides some means
+for simulating acoustic problems using Octave or Matlab(tm).
+
+In particular, it provides two new matlab/octave classes, *vector* and
+*vectorgrid*. These can be used to implement arrays of vectors
+pointing to a location in $\mathcal R^3$.
+
+- Visit section [[*Administration][Administration]] for setup (directory creation, etc) and
+  installation.
+- The file [[file:acoustics.org::*Acoustic%20Waves][Acoustics]] contains some application examples for booast.
+
+** Naming conventions
+
+Some naming conventions are used throughout the documentation.
+
+*** Variables
+
+| N         | constant             |
+| n         | variable             |
+| n_A       | vector with A values |
+| n_AB      | matrix AxB           |
+| n_ABC...Z | matrix AxBx...xZ     |
+|           |                      |
+
+*** Coordinate Systems
+
+| system    | variables 2D | variables 3D   |
+|-----------+--------------+----------------|
+| cartesian | x,y          | x,y,z          |
+| polar     | r, \phi      | r, \phi, z     |
+| spherical | -            | r,\theta, \phi |
+|-----------+--------------+----------------|
+
+* Vector
+A new class vector is defined. It servers to handle 3-dimensional
+information using mathematical vectors or matrizes of vectors.
+** Class
+*** Definition                                                     :internal:
+    We define a point in the 3-dimensional space as a vector.
+#+name: vector
+#+BEGIN_SRC octave :tangle @vector/vector.m
+  function st = vector(s1, s2,  s3, S_type)
+
+  <<copyright>>
+
+  if nargin == 4
+
+    %% Vektor aus 3 Komponenten zusammengesetzt
+    st.a = [s1; s2; s3]; % in jeder Spalte ein Vektor mit 3 Elementen
+    st.S_type = S_type;
+  
+  elseif nargin == 2
+
+    %% Vektor als Matrix übergeben (Dimension 1 muss 3 sein, alle
+    %% weiteren sind beliebig und werden in D_full abgelegt)
+    assert(size(s1, 1) == 3, ...
+	     'vector: 1st arg - matrix with 3 lines expected.');
+    assert(ischar(s2), ...
+	     'vector: 2nd arg - string with coordinate system expected.');
+
+    st.a = s1;
+    st.S_type = s2;
+  elseif nargin == 1
+    assert(isa(s1, 'vectorgrid'), ...
+	     'vector: vectorgrid expected for single argument call');
+
+    %% Daten aus Vectorgrid in Vektor umwandeln
+    [st.a, st.S_type] = get(s1);
+  else
+    error('Wrong number of input arguments.');
+  end
+
+  %% Bestimme vector-Dimensionen (wobei Dimension 1 = 3 oder 2...)
+  st.D_full = size(st.a); 
+
+  %% bestimme Dimensionalität
+  st.dims = st.D_full(1);
+
+  %% Objekt erzeugt
+  st = class(st, 'vector');
+  end
+#+END_SRC
+
+*** Tests                                                          :internal:
+Let us test for the vector. The snippet
+#+name: vectortest 
+#+BEGIN_SRC octave 
+  x = 1; y = 2; z = 3; 
+  S_type = 'cartesian';
+  v = vector(x, y, z, S_type);
+#+END_SRC
+is used in tests below.
+
+E.g., is this an object?
+#+name: vectortest object test
+#+BEGIN_SRC octave :tangle vector_object_test.m 
+<<vectortest>>
+ans = isobject(v);
+#+END_SRC
+
+#+RESULTS: vectortest object test
+: 1
+
+It is, if 1. How nice.
+
+*** Syntax
+
+: v = vector(s, S_type);
+: v = vector(s1, s2, S_type);
+: v = vector(s1, s2, s3, S_type);
+: v = vector(s1, s2, s3, ..., S_type);
+
+*** Description
+=vector()= returns a vector =v= of class =vector=.
+
+*** Input Arguments
+- =s1, s2, ...= are matrices
+- =S_type= type of the coordinate system ('cartesian', 'spherical'
+  or 'polar')
+*** Return Values
+- =v= vector object
+*** Examples
+
+- four parameter input :: single values for each dimension
+  #+name: vectortest four param test
+  #+BEGIN_SRC octave :results output
+    x = 1; y = 2; z = 3; S_type = 'cartesian';
+    v = vector(x, y, z, S_type);
+    isavector = isa(v, 'vector')
+  #+END_SRC
+
+  #+RESULTS: vectortest four param test
+  : isavector = 1
+
+- two parameters imput :: vector positions in a matrix
+     
+  #+name: vectortest two param test
+  #+BEGIN_SRC octave :tangle vector_matrix_input_test.m
+    x = [1; 2; 3]; S_type = 'cartesian';
+    v = vector(x, S_type);
+    ans = isobject(v);
+  #+END_SRC
+
+  #+RESULTS: vectortest two param test
+  : 1
+
+  As long the first dimension is 3, we can input matrices of any dimension.
+  #+name: vectortest multidim param test
+  #+BEGIN_SRC octave
+    x = rand(3, 4, 6, 7); S_type = 'cartesian';
+    v = vector(x, S_type);
+    ans = size(v);
+  #+END_SRC
+
+  #+RESULTS: vectortest multidim param test
+  | 4 | 6 | 7 |
+
+- one parameter input :: we use vectorgrid as input type
+  #+name: vectortest vectorgrid param test
+  #+BEGIN_SRC octave 
+    x = linspace(0,10, 10); y = x; z = x; S_type = 'cartesian';
+    g = vectorgrid(x, y, z, S_type);
+    v = vector(g);
+    ans = size(v);
+  #+END_SRC
+
+  #+RESULTS: vectortest vectorgrid param test
+  | 10 | 10 | 10 |
+
+** Methods
+*** display
+**** Definition                                                    :internal:
+ Method to display the content of =vector= 
+ #+name: display vector
+ #+BEGIN_SRC octave :tangle @vector/display.m
+ function display(st)
+ % DISPLAY display vector v
+ %
+ % ┌────
+ % │ display(v)
+ % └────
+ % display content of vector `v' on stdout.
+ % 
+ % See also: whos
+
+ <<copyright>>
+   fprintf('%s = ', inputname(1));
+   fprintf('%f ', st.a);
+   fprintf('\n');
+ end
+ #+END_SRC
+
+**** Syntax
+ : display(v)
+ display content of vector =v=
+
+**** Example
+ #+BEGIN_SRC octave :results output :exports both
+ <<vectortest>>
+ display(v)
+ #+END_SRC
+
+ #+RESULTS:
+ : v = 1.000000 2.000000 3.000000 
+
+*** size 
+**** Definition                                                    :internal:
+ Most important method is =size()=.
+
+ *Achtung* size() wird nach Aufruf des Konstruktors automatisch
+ gerufen... 
+
+ #+BEGIN_SRC octave :tangle @vector/size.m
+   function D_dim = size(st)
+
+   <<copyright>>
+   if isa(st, 'vector')
+     %% verwerfe Dimension 1 mit Wert 3
+     if numel(st.D_full) == 2
+       D_dim = [st.D_full(2), 1];
+     else
+       D_dim = st.D_full(2:end);
+     end
+   else
+     disp('its size time: return empty size');
+     D_dim = [0,0];
+   end
+
+ #+END_SRC
+
+ #+RESULTS:
+**** Tests                                                         :internal:
+ Test this with the test case above
+ #+BEGIN_SRC octave :results output :tangle tmp.m 
+ <<vectortest>>
+ ismethod(v, 'size')
+ size(v)
+ #+END_SRC
+
+ #+RESULTS:
+ : ans =  1
+ : ans =
+ : 
+ :    1   1
+ : 
+
+**** Examples
+ If arrays are in use:
+ #+BEGIN_SRC octave :results output :exports both
+   x = linspace(0,9, 9); y = x; z = x; S_type = 'cartesian';
+   g_XYZ = vectorgrid(x, y, z, S_type);
+   v_XYZ = vector(g_XYZ);
+   numel(v_XYZ)
+   size(v_XYZ)
+   numel(g_XYZ)
+   size(g_XYZ)
+ #+END_SRC
+
+ #+RESULTS:
+ #+begin_example
+ ans =  729
+ ans =
+
+    9   9   9
+
+ ans =  1
+ ans =
+
+    9   9   9
+
+ #+end_example
+
+*** numel
+**** Definition                                                    :internal:
+ number of elements in vector:
+ #+BEGIN_SRC octave :tangle @vector/numel.m
+   function D_dim = numel(st)
+
+   <<copyright>>
+   if isa(st, 'vector')
+     D_dim = prod(size(st));
+   else
+     error('Not a vector - cannot happen.')
+   end
+ #+END_SRC
+
+**** Tests                                                         :internal:
+ #+name: vectortest numel test
+ #+BEGIN_SRC octave 
+ <<vectortest>>
+ ans = numel(v);
+ #+END_SRC
+
+ #+RESULTS: vectortest numel test
+ : 1
+
+**** Syntax
+: n = numel(v)
+
+**** Input Arguments
+=v= vector 
+
+**** Return Values
+=n= is the integer number of elements.
+
+**** Description
+Returns the number of elements in =v=, e.g. vectors.
+
+*** dimensions
+#+BEGIN_SRC octave :tangle @vector/dimensions.m
+  function d = dimensions(st)
+
+    <<copyright>>
+    d = st.dims;
+#+END_SRC
+*** get
+**** Defintion                                                     :internal:
+ Occasionally, we want to get the content of the vector structure in a
+ standard octave/matlab variable. So we need a =get()= method.
+ #+BEGIN_SRC octave :tangle @vector/get.m
+    function a = get(st, S_type, D_dim)
+  
+    <<copyright>>
+      if nargin < 3
+	D_dim = st.D_full;
+      end
+
+      %% Daten in Form 3xL bringen
+      b = reshape(st.a, st.dims, numel(st));
+
+      switch st.dims
+	case 2
+       
+	  %% Koordinatentransformation
+	  if strcmp(st.S_type, S_type)
+
+	    a = b;
+  
+	  elseif (strcmp(st.S_type, 'cartesian') && strcmp(S_type, 'polar'))
+	 
+	    [t, r] = cart2pol(b(1, :), b(2, :));
+	    a = [r; t]; 
+   
+	  elseif (strcmp(st.S_type, 'polar') && strcmp(S_type, 'cartesian'))
+
+	    [x, y] = pol2cart(b(2, :), b(1, :));
+	    a = [x; y]; 
+  
+	  else
+	    error(sprintf('Unknown type %s - cannot convert.'), S_type);
+	  end
+       
+	case 3
+	  %% Koordinatentransformation
+	  if strcmp(st.S_type, S_type)
+
+	    a = b;
+  
+	  elseif (strcmp(st.S_type, 'cartesian') && strcmp(S_type, 'spherical'))
+	 
+	    [p, t, r] = cart2sph(b(1, :), b(2, :), b(3, :));
+	    a = [r; pi/2-t; p]; 
+  
+	  elseif (strcmp(st.S_type, 'cartesian') && strcmp(S_type, 'polar'))
+	 
+	    [t, r, z] = cart2pol(b(1, :), b(2, :), b(3, :));
+	    a = [r; t; z]; 
+   
+	  elseif (strcmp(st.S_type, 'polar') && strcmp(S_type, 'cartesian'))
+
+	    [x, y, z] = pol2cart(b(2, :), b(1, :), b(3, :));
+	    a = [x; y; z]; 
+  
+	  elseif (strcmp(st.S_type, 'polar') && strcmp(S_type, 'spherical'))
+  
+	    [x, y, z] = pol2cart(b(2, :), b(1, :), b(3, :));
+	    [p, t, r] = cart2sph(x, y, z);
+	    a = [r; pi/2-t; p]; 
+  
+	  elseif (strcmp(st.S_type, 'spherical') && strcmp(S_type, 'polar'))
+  
+	    [x, y, z] = sph2cart(b(3, :), pi/2-b(2, :), b(1, :));
+	    [p, r, z] = cart2pol(x, y, z);
+	    a = [r; p; z];
+  
+	  elseif (strcmp(st.S_type, 'spherical') && strcmp(S_type, 'cartesian'))
+	 
+	    [x, y, z] = sph2cart(b(3, :), pi/2-b(2, :), b(1, :));
+	    a = [x; y; z]; 
+  
+	  else
+	    error(sprintf('Unknown type %s - cannot convert.'), S_type);
+	  end
+	otherwise
+	  error('dimension error');
+      end
+  
+      %% recreate variable dimemsions 
+      a = reshape(a, D_dim);
+    end
+ #+END_SRC
+
+**** Tests                                                         :internal:
+***** TODO COMMENT 2D
+Get some date
+#+BEGIN_SRC octave
+  v = vector([1, 2, 3]', [4, 5, 6]', 'cartesian');
+#+END_SRC
+***** 3D
+ #+name: tectortest get test
+ #+BEGIN_SRC octave 
+ <<vectortest>>
+ ans = get(v, 'spherical');
+ #+END_SRC
+
+ #+RESULTS: tectortest get test
+ |  3.741657386773941 |
+ | 0.6405223126794245 |
+ |   1.10714871779409 |
+
+ ...so, this is the content used in the /vectortest/ defined.
+
+**** Description
+vector - returns the content of a vector object 
+
+**** Syntax
+
+: a = get(v, S_type, D_dim)
+ 
+**** Input Arguments 
+- =v= vector object 
+- =S_type= string with ('cartesian'|'polar'|'spherical')
+- =D_dim=  vector with dimensions of =v= (optional)
+
+**** Return values
+=a= matrix with 3 rows and elements according to =S_type= and =D_dim=
+dimensions.
+
+**** Examples
+     :PROPERTIES:
+     :header-args: :exports both
+     :END:
+ Known points on a sphere are easier to recognise, so let us test this
+ (including some coordinate transformation):
+ #+name: vector northpole test
+ #+BEGIN_SRC octave
+   v = vector([0, 0, 1]', 'cartesian');
+   get(v, 'spherical')
+ #+END_SRC
+
+ #+RESULTS: vector northpole test
+ | 1 |
+ | 0 |
+ | 0 |
+
+ ...or take the south pole
+ #+name: vector southpole
+ #+BEGIN_SRC octave
+   v = vector([0, 0, -1]', 'cartesian');
+   get(v, 'spherical')
+ #+END_SRC
+
+ #+RESULTS: vector southpole
+ |                 1 |
+ | 3.141592653589793 |
+ |                 0 |
+
+ ...or hit the equator in the east
+ #+name: vector equator east test
+ #+BEGIN_SRC octave
+   v = vector([0, 1, 0]', 'cartesian');
+   get(v, 'spherical')
+ #+END_SRC
+
+ #+RESULTS: vector equator east test
+ |                 1 |
+ | 1.570796326794897 |
+ | 1.570796326794897 |
+
+ ...or, where is Africa?
+ #+name: vector africa test
+ #+BEGIN_SRC octave
+   v = vector([1, 0, 0]', 'cartesian');
+   get(v, 'spherical')
+ #+END_SRC
+
+ #+RESULTS: vector africa test
+ |                 1 |
+ | 1.570796326794897 |
+ |                 0 |
+
+ #+name: vector multi dim get test
+ #+BEGIN_SRC octave
+   v = vector(rand(3, 3, 5, 6), 'polar');
+   ans = size(get(v, 'cartesian'));
+ #+END_SRC
+
+ #+RESULTS: vector multi dim get test
+ | 3 | 3 | 5 | 6 |
+
+*** set
+**** Definition                                                    :internal:
+Set some date in a existing =vector= object.
+  #+BEGIN_SRC octave :tangle @vector/set.m
+    function st = set(st, a, S_type)
+
+    <<copyright>>
+      if prod(size(a)) ~= prod(st.D_full)
+	error('set: Number of vectors must no change.');
+      else
+	st.a = reshape(a, st.D_full);
+	st.S_type = S_type;
+      end
+    end
+  #+END_SRC
+
+**** Tests                                                         :internal:
+ #+name: vector set test
+ #+BEGIN_SRC octave
+   v = vector([0, 0, -1]', 'cartesian');
+   v = set(v, [0, 0, 1], 'spherical');
+   ans = get(v, 'spherical')';
+ #+END_SRC
+
+ #+RESULTS: vector set test
+ | 0 | 0 | 1 |
+
+ Evoke an error message
+ #+name: vector set error test
+ #+BEGIN_SRC octave 
+   v = vector([0, 0, -1]', 'cartesian');
+   try
+     v = set(v, ones(3, 2), 'spherical');
+   catch
+     if (strfind(lasterror.message, "set:"))
+       S_res = sprintf('set error detected:: %s', lasterror.message);
+     else
+       S_res = 'no set error detected.';
+     endif
+   end_try_catch
+   ans = S_res;
+ #+END_SRC
+
+ #+RESULTS: vector set error test
+ : set error detected:: set: Number of vectors must no change.
+
+**** Description 
+=set= modifies the vector object
+
+=set= modifies the input vector object by replacing its values by
+values from the matrix a taken coloumn-wise.  Obtained vector object
+has a type according to the input value of =S_type=.
+
+**** Syntax
+: v = set(v, a, S_type)
+
+**** Input Arguments
+=v=      existing vector object
+=a=      matrix with 3 rows and coordinate values
+=S_type= type of coordinate system ='cartesian'|'spherical'|'polar'=
+
+**** Return Values
+=v= modified vector object
+
+**** See also
+vector, reshape
+
+*** normalize
+**** Definition                                                    :internal:
+ #+BEGIN_SRC octave :tangle @vector/normalize.m
+ function st = normalize(va_A)
+   v_rtp = get(va_A, 'spherical');
+   v_rtp(1, :) = 1; % set radius to 1
+   st = set(va_A, v_rtp, 'spherical');
+ #+END_SRC
+
+**** Tests                                                         :internal:
+ Der Betrag möge 1 werden:
+ #+BEGIN_SRC octave
+   v = vector([1, 0, -1]', 'cartesian');
+   v_abs_no_norm = sqrt(sum(get(v, 'cartesian').^2));
+   v_abs_norm = sqrt(sum(get(normalize(v), 'cartesian').^2));
+   ans = [v_abs_no_norm, v_abs_norm];
+ #+END_SRC
+
+ #+RESULTS:
+ | 1.414213562373095 | 1 |
+**** Syntax
+: vb = normalize(va)
+
+**** Input Arguments
+=va= vector
+
+**** Return Values
+=vb= is a vector with length one.
+
+*** scale
+**** Syntax
+ : vc_AB = vector_scale(a_A, vb_B)
+
+**** Definition                                                    :internal:
+ #+BEGIN_SRC octave :tangle @vector/scale.m
+ function vc_AB = scale(a_A, vb_B)
+
+   % Speicha
+   A = length(a_A);
+   B = numel(vb_B);
+   c_xyz_AB = zeros([3, A, B]); 
+  
+   % save dimensions of vb_B
+   C_dims = size(vb_B);
+
+   % if C_dims = Bx1 then squeeze dim
+   if (length(C_dims) == 2) && (C_dims(2) == 1)
+     clear C_dims;
+     C_dims = B;
+   end
+  
+   % Vektoren aus vb durchmultiplizieren
+   b_xyz_B = reshape(get(vb_B, 'cartesian'), 3, B);
+
+   for a = 1:A
+      c_xyz_AB(1:3, a, 1:B) = a_A(a) * b_xyz_B;
+   end
+  
+   % squeeze if A == 1
+   if A == 1
+     c_AB = reshape(c_xyz_AB, [3, C_dims]);
+   else
+     c_AB = reshape(c_xyz_AB, [3, A, C_dims]);
+   end
+
+   % return
+   vc_AB = vector(c_AB, 'cartesian');
+
+ #+END_SRC
+
+**** Description 
+ =scale= scales all vector object coordinates (by vector's scalar values) 
+
+**** Input Arguments
+ - =a_A= scalar value
+ - =vb_B= vector object (struct) with B vectors
+
+**** Return Values
+ - =vc_AB= - scaled vector (vector object)
+
+**** Examples
+
+ Fall: 1 Vektor, 1 Scalar, 1 Wort ;)
+ #+BEGIN_SRC octave
+   v = vector([1, 0, -1]', 'cartesian');
+   s = 2;
+   v = scale(s, v);
+   ans = get(v, 'cartesian')';
+ #+END_SRC
+
+ #+RESULTS:
+ | 2 | 0 | -2 |
+
+* Vectorgrid
+=vectorgrid= creates a grid of vectors.
+** Class
+*** Definition                                                     :internal:
+#+BEGIN_SRC octave :tangle @vectorgrid/vectorgrid.m
+  function st = vectorgrid(s1, s2, varargin)
+
+  <<copyright>>
+  switch nargin
+
+    case 3
+      st.dims = 2;
+
+      if (isreal(s1) && isvector(s1))  
+	st.achse{1} = s1;
+      end
+      if (isreal(s2) && isvector(s2))  
+	st.achse{2} = s2;  
+      end
+      S_type = varargin{1};
+      if (ischar(S_type))
+	st.S_type = S_type;
+      end
+
+    case 4
+      st.dims = 3;
+
+      if (isreal(s1) && isvector(s1))  
+	st.achse{1} = s1;
+      end
+      if (isreal(s2) && isvector(s2))  
+	st.achse{2} = s2;  
+      end
+      s3 = varargin{1};
+      if (isreal(s3) && isvector(s3))  
+	st.achse{3} = s3;
+      end
+      S_type = varargin{2};
+      if (ischar(S_type))
+	st.S_type = S_type;
+      end
+    otherwise
+      error('vectorgrid: need 3 or 4 input arguments.')
+  end
+  st = class(st, 'vectorgrid');
+  superiorto ('vector');
+#+END_SRC
+
+*** Tests                                                          :internal:
+    
+Define a vector grid with 3 dimensions:
+#+name: vectorgrid3
+#+BEGIN_SRC octave :results none
+  x = linspace(1, 10, 100); y = x(1:3); z = x; S_type = 'cartesian';
+  g = vectorgrid(x, y, z, S_type);
+#+END_SRC
+
+Is it an object?
+#+name: vectorgrid3 test
+#+BEGIN_SRC octave :tangle vector_test.m
+  <<vectorgrid3>>
+  ans = isa(g, 'vectorgrid');
+#+END_SRC
+
+#+RESULTS:
+: 1
+
+Define a 2-dimensional vectorgrid:
+#+name: vectorgrid2
+#+BEGIN_SRC octave :results none
+  x = linspace(1, 10, 100); y = x(1:3); S_type = 'cartesian';
+  g = vectorgrid(x, y, S_type);
+#+END_SRC
+
+Is it an object?
+#+name: vectorgrid2 test
+#+BEGIN_SRC octave :tangle vector_test.m
+  <<vectorgrid2>>
+  ans = isa(g, 'vectorgrid');
+#+END_SRC
+
+#+RESULTS: vectorgrid2 test
+: 1
+
+*** Syntax
+: st = vectorgrid(s1, s2, varargin)
+: st = vectorgrid(s1, s2, S_type)
+: st = vectorgrid(s1, s2, s3, S_type)
+*** Description
+=vectorgrid= holds all information necessary to create vectors of
+class =vector= along axes =s= of coordinate system =S_type=. It
+returns an object of class =vectorgrid=.
+
+2-dimensional and 3-dimensional grids are supported. *However* due to
+restrictions in *vector* only 3-dimensional grids are fully supported!
+
+*** Input Arguments
+- =s1, s2, s3= vectors of coordinate values
+- =S_type= type of the coordinate system ('cartesian', 'spherical'
+  or 'polar')
+**** TODO add support for 2D here!
+e.g. 
+*** Return Values
+- =st= vectorgrid
+
+*** Examples
+***** TODO 2D
+We look at some axes like
+#+name: vectorgrid example x_A y_B
+#+BEGIN_SRC octave
+  A = 20; B = 30;
+  x_A = linspace(-3, 3, A);
+  y_B = linspace(-2, 2, B);
+#+END_SRC
+
+A 2D vectorgrid is created via
+#+name: vectorgrid example vg_AB 
+#+BEGIN_SRC octave
+vg_AB = vectorgrid(x_A, y_B, 'cartesian');
+#+END_SRC
+
+So, we have got
+#+BEGIN_SRC octave :exports results :results output
+<<vectorgrid example x_A y_B>>
+<<vectorgrid example vg_AB>>
+whos x_A y_B vg_AB
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Variables in the current scope:
+
+   Attr Name        Size                     Bytes  Class
+   ==== ====        ====                     =====  ===== 
+        x_A         1x20                       160  double
+        y_B         1x30                       240  double
+        vg_AB      20x30                       417  vectorgrid
+
+Total is 51 elements using 817 bytes
+
+#+end_example
+
+***** 3D
+We look at some axes like
+#+name: vectorgrid example x_A y_B z_C
+#+BEGIN_SRC octave
+  A = 20; B = 30; C = 40;
+  x_A = linspace(-3, 3, A);
+  y_B = linspace(-2, 2, B);
+  z_C = linspace(-4, 4, C);
+#+END_SRC
+
+A 3D vectorgrid is created via
+#+name: vectorgrid example vg_ABC 
+#+BEGIN_SRC octave
+vg_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
+#+END_SRC
+
+So, we have got
+#+BEGIN_SRC octave :exports results :results output
+<<vectorgrid example x_A y_B z_C>>
+<<vectorgrid example vg_ABC>>
+whos x_A y_B z_C vg_ABC
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Variables in the current scope:
+
+   Attr Name        Size                     Bytes  Class
+   ==== ====        ====                     =====  ===== 
+        x_A         1x20                       160  double
+        y_B         1x30                       240  double
+        z_C         1x40                       320  double
+        vg_ABC     20x30x40                    737  vectorgrid
+
+Total is 91 elements using 1457 bytes
+
+#+end_example
+
+*** See Also
+meshgrid
+
+** Methods
+*** size
+**** Definition                                                    :internal:
+#+name: vectorgrid size
+#+BEGIN_SRC octave :tangle @vectorgrid/size.m
+  function Dim_g = size(st)
+  
+  <<copyright>>
+    if isa(st, 'vectorgrid')
+      switch st.dims
+	case 2
+	  c = numel(st.achse{1});
+	  a = numel(st.achse{2});
+	  Dim_g = [c, a];
+	case 3
+	  c = numel(st.achse{1});
+	  a = numel(st.achse{2});
+	  b = numel(st.achse{3});
+	  Dim_g = [c, a, b];
+	otherwise
+	  error('unknown number for dims.');
+      end
+    else
+      disp('This is not a vectorgrid - cannot happen error.');
+      Dim_g = [0];
+    end
+#+END_SRC
+**** Test                                                          :internal:
+Damit erhält man
+#+name: vectorgrid size test
+#+BEGIN_SRC octave :results raw
+  x = linspace(0,10, 194); y = x; z = x; S_type = 'cartesian';
+  g = vectorgrid(x, y(1:5), z(1:2), S_type);
+  Dim_g =  size(g);
+  ans = Dim_g;
+#+END_SRC
+
+#+RESULTS: vectorgrid size test
+| 194 | 5 | 2 |
+**** Syntax
+: Dim_g =  size(g);
+
+**** Description
+return dimensions of the grid.
+**** Input Arguments
+=g= is a vectorgrid.
+**** Output Arguments
+=Dim_g= is a matrix containing the size information.
+**** Examples
+#+name: vectorgrid size example 
+#+BEGIN_SRC octave :results output :exports both
+  x = linspace(0,10, 194); y = x; z = x; S_type = 'cartesian';
+  g = vectorgrid(x, y(1:5), z(1:2), S_type);
+  Dim_g =  size(g)
+#+END_SRC
+
+#+RESULTS: vectorgrid size example
+| 194 | 5 | 2 |
+
+**** Tips
+To determine the number of elements in a grid, use
+: prod(Dim_g)
+
+**** Alternatives
+
+**** See Also
+display   
+
+*** display
+**** Definition                                                    :internal:
+#+name: display vectorgrid
+#+BEGIN_SRC octave :tangle @vectorgrid/display.m
+function display(st)
+% display content of a vectorgrid g.
+
+<<copyright>>
+
+  fprintf('Vectorgrid %s contains', inputname(1));
+  fprintf(' %i axes.\n', st.dims);
+  fprintf('The coordinate type is %s.\n', st.S_type);
+  disp('The size is');
+  disp(size(st));
+end
+#+END_SRC
+
+**** Description
+show the content of vevtorgrid =vg=
+
+**** Syntax
+: display(vg)
+
+**** Example
+#+name: display vectorgrid test 
+#+BEGIN_SRC octave :results output :exports both
+<<vectorgrid2>>
+display(g);
+#+END_SRC
+
+#+RESULTS: display vectorgrid test
+: Vectorgrid g contains 2 axes.
+: The coordinate type is cartesian.
+: The size is
+:    100     3
+
+*** get
+**** Description
+Get an array with vector information as defined by the vectorgrid.
+
+**** Definition                                                    :internal:
+#+name: vectorgrid get 
+#+BEGIN_SRC octave :tangle @vectorgrid/get.m
+  function [n_dim_size, S_type] = get(st, shape)
+
+  <<copyright>>
+    size_g = size(st);
+    switch st.dims
+      case 3
+	n_dim_size = zeros(st.dims, size_g);
+	for c = 1:size_g(1)
+	  for a = 1:size_g(2)
+	    for b = 1:size_g(3)
+	      n_dim_size(: ,c, a, b) = [st.achse{1}(c);
+					st.achse{2}(a);
+					st.achse{3}(b)];
+	    end
+	  end
+	end
+      case 2
+	n_dim_size = zeros(st.dims, size_g);
+	for c = 1:size_g(1)
+	  for a = 1:size_g(2)
+	    n_dim_size(: ,c, a) = [st.achse{1}(c);
+				   st.achse{2}(a)];
+	  end
+	end
+      otherwise
+	error('wrong dimension.');
+    end
+    if nargin == 2
+      n_dim_size = reshape(n_dim_size, [3, shape]);
+    end
+    S_type = st.S_type;
+  end
+#+END_SRC
+
+**** Tests                                                         :internal:
+***** 2D
+...das ergibt:
+#+name: vectorgrid get test
+#+BEGIN_SRC octave 
+  g = vectorgrid([4,2,3,3],[3,5], 'cartesian');
+  [n2_42, S_type] = get(g);
+  % whos
+  ans = size(n2_42);
+#+END_SRC
+
+#+RESULTS: vectorgrid get test
+| 2 | 4 | 2 |
+
+und das kommt nun in den Vektor rein.
+
+#+name: vectorgrid get vector test
+#+BEGIN_SRC octave :results output
+  g = vectorgrid([2,3],[3,5],[5,6], 'cartesian');
+  [n3_222, S_type] = get(g);
+  v = vector(n3_222, S_type);
+  size(v)
+#+END_SRC
+
+#+RESULTS: vectorgrid get vector test
+: ans =
+: 
+:    2   2   2
+: 
+
+Es lässt sich auch ein "reshape" der Ausgangsdaten miterledigen
+#+name: vectorgrid get vector reshape test
+#+BEGIN_SRC octave :results output
+  g = vectorgrid([2,3],[3,5],[5,6], 'cartesian');
+  [n3_222, S_type] = get(g, 8);
+  whos
+#+END_SRC
+
+#+RESULTS: vectorgrid get vector reshape test
+#+begin_example
+Variables in the current scope:
+
+   Attr Name        Size                     Bytes  Class
+   ==== ====        ====                     =====  ===== 
+        S_type      1x9                          9  char
+        ans         1x1                          8  double
+        g           2x2x2                       65  vectorgrid
+        n3_222      3x8                        192  double
+
+Total is 35 elements using 274 bytes
+
+#+end_example
+
+*** reshape
+**** Definition                                                    :internal:
+get() macht immer ein reshape. Um das klar sichtbar zu machen, hier
+die Schnittstellenfunktion:
+#+name: vectorgrid reshape
+#+BEGIN_SRC octave :tangle @vectorgrid/reshape.m
+  function [g_reshaped, S_type] = reshape(g, shape)
+
+  <<copyright>>
+    [g_reshaped, S_type] = get(g, shape); 
+#+END_SRC
+
+**** Syntax
+: [a_reshaped, S_type] = reshape(g, shape)
+
+**** Description
+Get a reshaped matrix =a_reshaped= from vectorgrid =g= with shape =shape=.
+
+**** Examples
+#+name: vectorgrid reshape test
+#+BEGIN_SRC octave :results output
+  g = vectorgrid([2,3],[3,5],[5,6], 'cartesian');
+  [n, S_type] = get(g, [1, 8]);
+  whos
+#+END_SRC
+
+#+RESULTS: vectorgrid reshape test
+#+begin_example
+Variables in the current scope:
+
+   Attr Name        Size                     Bytes  Class
+   ==== ====        ====                     =====  ===== 
+        S_type      1x9                          9  char
+        ans         1x1                          8  double
+        g           2x2x2                       65  vectorgrid
+        n           3x1x8                      192  double
+
+Total is 35 elements using 274 bytes
+
+#+end_example
+
+**** See Also
+get
+
+*** meshgrid
+**** Definition                                                    :internal:
+
+Transform a vectorgrid to a meshgrid.
+
+*HINT* meshgrid is restricted to 3D for the time being!
+
+#+name: vectorgrid mesgrid
+#+BEGIN_SRC octave :tangle @vectorgrid/meshgrid.m
+  function [x_YXZ, y_YXZ, z_YXZ] = meshgrid(st, S_type)
+
+  <<copyright>>
+    if nargin < 2
+      %% default: wandle vectorgrid in Vektor mit kartesischen Werten
+      S_type = 'cartesian';
+    end
+    dim_XYZ = size(st);
+
+    s_xyz_L = get(vector(st), S_type);
+
+    % sortiere Werte a la Meshgrid aus Matlab
+    s_xyz_XYZ = reshape(s_xyz_L, [st.dims, dim_XYZ]);
+    s_xyz_YXZ = permute(s_xyz_XYZ, [1, 3, 2, 4]);
+
+    % output variables
+    dim_YXZ = dim_XYZ([2, 1, 3]);
+    switch st.dims
+      case 2
+	x_YXZ = reshape(s_xyz_YXZ(1,:,:,:), dim_YXZ);
+	y_YXZ = reshape(s_xyz_YXZ(2,:,:,:), dim_YXZ);
+        z_YXZ = []; % ugly, right?
+      case 3
+	x_YXZ = reshape(s_xyz_YXZ(1,:,:,:), dim_YXZ);
+	y_YXZ = reshape(s_xyz_YXZ(2,:,:,:), dim_YXZ);
+	z_YXZ = reshape(s_xyz_YXZ(3,:,:,:), dim_YXZ);
+      otherwise
+	error('corrupt dimensionality of vectorgrid.');
+    end
+  end
+#+END_SRC
+
+**** Tests                                                         :internal:
+***** TODO 2D
+Test dimensions of output
+#+name: vectorgrid mesgrid default test
+#+begin_src octave :results output
+  A = 21; B = 30; 
+  g_AB = vectorgrid(linspace(-3, 3, A), linspace(-2, 2, B), 'cartesian');
+  [X_BA, Y_BA] = meshgrid(g_AB);
+  size(X_BA)
+#+END_SRC
+***** 3D
+Test dimensions of output
+#+name: vectorgrid mesgrid default test
+#+begin_src octave :results output
+  A = 21; B = 30; C = 3;
+  g_ABC = vectorgrid(linspace(-3, 3, A), linspace(-2, 2, B), linspace(0, 1, C), 'cartesian');
+  [X_BAC, Y_BAC, Z_BAC] = meshgrid(g_ABC);
+  size(X_BAC)
+#+END_SRC
+
+#+RESULTS: vectorgrid mesgrid default test
+
+...ein Matlab-Meshgrid mit entsprechend vielen (hier 3)
+Dimensionen. Der Wertebereich lässt sich einschränken, indem die
+Indexbereich gesetzt werden. Dann können aber Dimensionen mit nur
+einem Beitrag entstehen, die für die weitere Verwendung mit
+Matlab/Octave-surface mit Squeeze entfernt werden müssen.
+
+#+name: vectorgrid mesgrid slice test
+#+begin_src octave :results output
+  g_CAB = vectorgrid([0,1,2,3], [1,2,3,4], [5,6], 'spherical');
+  [X_ACB, Y_ACB, Z_ACB] = meshgrid(g_CAB(:, :, 1));
+  size(X_ACB)
+#+END_SRC
+
+#+RESULTS: vectorgrid mesgrid slice test
+: ans =
+: 
+:    4   4
+: 
+*Man beachte*, das die Dimensionen der Ausgangsmatrix entsprechend
+Matlab-Konvention getauscht werden.
+
+Bei 3D-meshgrids sollen toolbox und matlab/octave das gleiche Ergebnis
+bringen:
+#+BEGIN_SRC octave :results output
+  % matlab meshgrid
+    A = 1; B = 2; C = 3;
+    x_A = linspace(0, 1, A);
+    y_B = linspace(2, 3, B);
+    z_C = linspace(4, 5, C);
+    [x_BAC, y_BAC, z_BAC] = meshgrid(x_A, y_B, z_C);
+
+    g_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
+    [gx_BAC, gy_BAC, gz_BAC] = meshgrid(g_ABC);
+
+    z_BAC
+    gz_BAC
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+z_BAC =
+
+ans(:,:,1) =
+
+   4
+   4
+
+ans(:,:,2) =
+
+   4.5000
+   4.5000
+
+ans(:,:,3) =
+
+   5
+   5
+
+gz_BAC =
+
+ans(:,:,1) =
+
+   4
+   4
+
+ans(:,:,2) =
+
+   4.5000
+   4.5000
+
+ans(:,:,3) =
+
+   5
+   5
+
+#+end_example
+
+**** Syntax
+: [x_YXZ, y_YXZ, z_YXZ] = meshgrid(st, S_type)
+
+**** Input arguments
+- =st= vectorgrid object
+- =S_type= coordinate system; defaults to 'cartesian'.
+
+**** Return values
+- =x_YXZ, y_YXZ, z_YXZ= matrices of grid values 
+
+**** Examples label:meshgridbooast
+
+***** 2D
+The 2D meshgrid according to Octave/Matlab is obtained by 
+#+name: meshgrid meshgrid x_BA y_BA
+#+BEGIN_SRC octave
+  [x_BA, y_BA] = meshgrid(vg_AB);
+#+END_SRC
+
+So we get 
+#+BEGIN_SRC octave :results output :tangle example_2D_meshgrid_booast.m
+<<meshgrid data x_A y_B>>
+<<meshgrid vectorgrid vg_AB>> 
+<<meshgrid meshgrid x_BA y_BA>>
+whos x_BA y_BA vg_AB
+#+END_SRC
+
+#+RESULTS:
+
+***** 3D
+
+We could take the vectorgrid example as given by
+#+BEGIN_SRC octave
+<<vectorgrid example x_A y_B z_C>>
+<<vectorgrid example vg_ABC>>
+#+END_SRC
+and convert is to a meshgrid like this:
+#+name: meshgrid from vectorgrid X_BAC Y_BAC Z_BAC 
+#+BEGIN_SRC octave
+[X_BAC, Y_BAC, Z_BAC] = meshgrid(vg_ABC);
+#+END_SRC
+The size of the output matrixes is
+#+BEGIN_SRC octave :results output :exports results
+<<vectorgrid example x_A y_B z_C>>
+<<vectorgrid example vg_ABC>>
+<<meshgrid from vectorgrid X_BAC Y_BAC Z_BAC>> 
+size(X_BAC)
+#+END_SRC
+
+#+RESULTS:
+: ans =
+: 
+:    30   20   40
+: 
+dimensions have changed due to the Octave/Matlab conventions.
+
+**** Alternatives label:meshgridalternatives
+
+An excursion to the Matlab/Octave meshgrid:
+
+***** 2D-Meshgrid using Matlab/Octave
+
+#+name: meshgrid from matlab x_BA y_BA
+#+BEGIN_SRC octave
+  A = 20; B = 30;
+  x_A = linspace(-3, 3, A);
+  y_B = linspace(-2, 2, B);
+  [x_BA, y_BA] = meshgrid(x_A, y_B);
+#+END_SRC
+
+***** 3D-Meshgrid using Matlab/Octave
+
+#+name: meshgrid from matlab x_BAC y_BAC z_BAC
+#+BEGIN_SRC octave
+  % matlab meshgrid
+    A = 10; B = 20; C = 30;
+    x_A = linspace(0, 3, A);
+    y_B = linspace(0, 2, B);
+    z_C = linspace(0, 1, C);
+    [x_BAC, y_BAC, z_BAC] = meshgrid(x_A, y_B, z_C);
+#+END_SRC
+
+*** subsref
+**** Definition                                                    :internal:
+#+BEGIN_SRC octave :tangle @vectorgrid/subsref.m
+  function st = subsref(st, s)
+
+    %% s is a struct containing type and subs, see doc for subsref
+    switch (s(1).type)
+      case '()' 
+	for dim  = 1:length(s(1).subs)
+	  st.achse{dim} = st.achse{dim}(s(1).subs{dim});
+	end
+      case '{}'
+	error('@vectorgrid/subsref: cell arrays are no implemented yet.');
+      otherwise
+	error('@vectorgrid/subsref: invalid property %s', s(1).type);
+    endswitch
+  end
+#+END_SRC
+
+#+RESULTS:
+**** Syntax
+: g(n,m, ...)
+: g(1:n, ...)
+whith =g= being a vectorgrid. So, =g= can be treated as an ordinary
+matrix as usually given on Octave/Matlab.
+
+**** Example
+Let us look for a portion of a vectorgrid as follows:
+ #+BEGIN_SRC octave :results output :exports both
+   %<<vectorgrid>>
+   x = linspace(0,10, 99); y = x; z = x; S_type = 'cartesian';
+   g = vectorgrid(x, y, z, S_type);
+   display(g(1:3,2,:));
+ #+END_SRC
+
+ #+RESULTS:
+ : Vectorgrid  contains 3 axes.
+ : The coordinate type is cartesian.
+ : The size is
+ :     3    1   99
+ : 
+
+To get the vector information from the vectorgrid, you need to use =vector=:
+ #+BEGIN_SRC octave :results output :exports both
+ g = vectorgrid([1,2,3], [4,5], [6,7], 'cartesian');
+ x_xyz_XYZ = get(vector(g(3,:,:)), 'cartesian')
+ #+END_SRC
+
+ #+RESULTS:
+ #+begin_example
+ x_xyz_XYZ =
+
+ ans(:,:,1,1) =
+
+    3
+    4
+    6
+
+ ans(:,:,2,1) =
+
+    3
+    5
+    6
+
+ ans(:,:,1,2) =
+
+    3
+    4
+    7
+
+ ans(:,:,2,2) =
+
+    3
+    5
+    7
+
+
+ #+end_example
+
+*** TODO end (index)
+
+*** surface
+**** Description
+
+=surface= takes a vectorgrid as input argument and some values to
+display as a surface accordingly to the vectorgrid definition.
+
+If =g_CAB= holds a grid spanning all 3 dimensions, we need to slice
+the grid and restrict to a singular value for one axis.
+
+**** Definition                                                    :internal:
+#+name: vectorgrid surface
+#+BEGIN_SRC octave :tangle @vectorgrid/surface.m
+  function surface(g_slice, s_slice, c_slice, S_flag)
+
+  %% proc input arguments  
+    if nargin < 4
+      S_flag = 'independendSurface';
+    end
+    if nargin < 3
+      c_slice = [];
+    end
+    if nargin < 2 
+      s_slice = [];
+    end
+
+    %% test g_slice for dims
+    assert(numel(size(g_slice))==3, 'g_slice is expected to have 3 dimensions.');
+
+    %% get matlab meshgrid from vectorgrid; this is the surface we plot
+    [x, y, z] = meshgrid(g_slice);
+
+    %% as we operate on a matlab meshgrid, we can savely squeeze them
+    x = squeeze(x);
+    y = squeeze(y);
+    z = squeeze(z);
+
+    if ~isempty(s_slice)
+
+      %% preserve dims
+      s_slice_size = size(s_slice);
+
+      if numel(s_slice_size) == 2
+        %% meshgrid reshapes accordingly to matlab meshgrid; do the same for
+        %function s_slice
+        s_slice = s_slice.';
+      else
+        %% ensure dims for s_slice
+        s_slice = squeeze(s_slice);
+      end
+    end
+
+    %% create new surface if surface is dependend on grid
+    if ~isempty(s_slice) && strcmp(S_flag, 'dependendSurface')
+
+      %% for surface creation we need to determine which dimension is singular
+      slice_size = size(g_slice);
+
+      switch g_slice.S_type
+	case 'cartesian'
+
+	  if slice_size(1) == 1
+	    %% g_ABC -> g_BC
+	    x = x + s_slice;
+	  elseif slice_size(2) == 1
+	    %% g_ABC -> g_AC
+	    y = y + s_slice;
+	  elseif slice_size(3) == 1
+	    %% g_AB -> g_AB
+	    z = z + s_slice;
+	  end
+
+	case 'spherical'
+	  %% get surface of grid
+	  %% create surface as defnd. by s_slice
+	  if slice_size(1) == 1
+	    x = x .* s_slice;
+	    y = y .* s_slice;
+	    z = z .* s_slice;
+	  elseif slice_size(2) == 1
+	    disp('not implemented yet.');
+	  elseif slice_size(3) == 1
+	    disp('not implemented yet.');
+	  end
+	otherwise
+	  error('Unknown coordinate type.');
+      end
+    end
+
+    %% draw the surface finally
+    if isempty(c_slice)
+      if isempty(s_slice)
+	surface(x, y, z);
+      else
+	surface(x, y, z, s_slice);
+      end
+    else
+      surface(x, y, z, c_slice);
+    end
+
+#+END_SRC
+
+**** Examples
+This example illustrates the use of the method =surface= for
+=vectorgrid=. The section ref:surfacealternatives discusses similar
+examples using Octave/Matlab's surface function.  
+
+***** 2D in 3D
+
+We first create a vectorgrid to define some function.
+#+name: surface example g_ABC
+#+BEGIN_SRC octave
+  A = 20; B = 30; C = 2;
+  g_ABC = vectorgrid(linspace(-3, 3, A), linspace(-2, 2, B), linspace(0, 1, C), 'cartesian');
+#+END_SRC
+
+Now we invent some function. It should be defined for $z =
+0$. Therefore we slice this space from the grid:
+#+name: surface example g_AB1
+#+BEGIN_SRC octave
+g_AB1 = g_ABC(:,:,1);
+#+END_SRC
+
+The function should look like the example in the alternatives section
+ref:surfacealternatives. Here we define the function the booasty way.
+#+name: surface example s_AB
+#+BEGIN_SRC octave
+r_xyz_AB = get(vector(g_AB1), 'cartesian');
+s_AB = squeeze(sum(r_xyz_AB(1:2, :, :).^2, 1));
+#+END_SRC
+
+The same is achieved by
+#+BEGIN_SRC octave
+[X_BA, Y_BA, Z_BA] = meshgrid(g_AB1);
+s_BA = X_BA.^2 + Y_BA.^2; 
+#+END_SRC
+where information is spread over several variables. However, it looks
+easier in this case...
+
+Finally the results yields Figure ref:surface_example_2d_3d after
+stating
+#+name: surface example surface
+#+BEGIN_SRC octave
+surface(g_AB1, s_AB);
+#+END_SRC
+so surface colors the slice defined by =g_AB1= by values =s_AB=.
+
+#+name: surface example 2d in 3d figure
+#+BEGIN_SRC octave :exports results :tangle surface_example_2d_in_3d.m :results file :var S_file="img/2d_in_3d_surface_colored_booast.png"
+  <<surface example g_ABC>>
+  <<surface example g_AB1>>
+  <<surface example s_AB>>
+
+  figure(1); clf;
+  <<surface example surface>>
+  view([30, 40]);
+  <<save S_file>>
+#+END_SRC
+
+#+caption: A surface defined using booast. label:surface_example_2d_3d
+#+RESULTS: surface example 2d in 3d figure
+[[file:img/2d_in_3d_surface_colored_booast.png]]
+
+***** 3D in 3D
+Using
+#+name: surface example dependendSurface
+#+BEGIN_SRC octave
+surface(g_AB1, s_AB, [], 'dependendSurface');
+#+END_SRC
+so surface colors the slice defined by =g_AB1= by values =s_AB=.
+
+#+name: surface example 2d in 3d figure dependendSurface
+#+BEGIN_SRC octave :exports results :tangle surface_example_2d_in_3d.m :results file :var S_file="img/2d_in_3d_surface_dependend.png"
+  <<surface example g_ABC>>
+  <<surface example g_AB1>>
+  <<surface example s_AB>>
+
+  figure(1); clf;
+  <<surface example dependendSurface>>
+  view([30, 40]);
+  <<save S_file>>
+#+END_SRC
+
+#+RESULTS: surface example 2d in 3d figure dependendSurface
+[[file:img/2d_in_3d_surface_dependend.png]]
+
+#+caption: A surface defined using booast being *dependend* from the definition space. label:surface_example_2d_3d_dep
+
+***** 3D in 3D coloring
+
+***** 3D in 3D Spherical
+
+**** Alternatives label:surfacealternatives
+As an alternative, we do the examples as tests solely using
+Octave/matlab's =surface= function.
+
+We use the meshgrid shown in section ref:meshgridalternatives. A
+function =z_BA= is defined using the grid information.
+#+name: Beispielfunktion 3D
+#+BEGIN_SRC octave
+<<matlab meshgrid x_BA y_BA>>
+z_BA = x_BA.^2 + y_BA.^2;
+#+END_SRC
+Therefore, we have got a function $z = f(x, y)$. 
+
+***** 2D in 3D
+
+We want to present $z = f(x, y)$ as a plane in the 3D
+space. Therefore, we need to
+ 1. create a z-plane in space, e.g. at $z = 0$
+    #+name: 2d in 3d surface
+    #+BEGIN_SRC octave 
+    s_BA = z_BA; % preserve results
+    z_BA = zeros(size(x_BA)); % invent some values
+    #+END_SRC
+ 2. show the z-plane, use $f(x,y)$ for coloring
+    #+name: 2d in 3d surface show
+    #+BEGIN_SRC octave
+    surface(x_A, y_B, z_BA, s_BA);
+    #+END_SRC
+This results in a figure like shown in Figure ref:alternative_2d_in_3d_surface.
+
+#+name: alternative 2d in 3d figure
+#+BEGIN_SRC octave :results file :tangle 2d_in_3d_surface_colored_octave.m :exports results :var S_file="img/2d_in_3d_surface_colored_octave.png"
+   <<Beispielfunktion 3D>>
+   <<2d in 3d surface>>
+   figure(1); clf;
+   <<2d in 3d surface show>>
+   view([30, 40]);
+   <<save S_file>>
+#+END_SRC
+
+#+caption: A 2D surface in 3D space showing a function $f(x,y)$ for $z = 0$ using colors. label:alternative_2d_in3d_surface
+#+RESULTS: alternative 2d in 3d figure
+file:img/2d_in_3d_surface_colored_octave.png
+
+
+***** 3D in 3D
+      :PROPERTIES:
+      :header-args: :exports results
+      :END:
+3D-Fläche im 3D-Raum darstellen; und so sagt man es surface:
+#+BEGIN_SRC octave :var S_file = "img/3din3d_plot_surface1.png" :results file
+  <<Beispielfunktion 3D>>
+  clf;
+  surface(x_A, y_B, z_BA);
+  view([30, 40]);
+  <<save S_file>>
+#+END_SRC
+
+#+RESULTS:
+[[file:img/3din3d_plot_surface1.png]]
+
+man kann auch die Meshgrid-Koordinaten an surface übergeben:
+#+BEGIN_SRC octave :var S_file = "img/3din3dplot_surface2.png" :results file
+    <<Beispielfunktion 3D>>
+    clf;
+    surface(x_BA, y_BA, z_BA);
+    view([30, 40]);
+    <<save S_file>>
+#+END_SRC
+
+#+RESULTS:
+[[file:img/3din3dplot_surface2.png]]
+
+...dann kann man auch ganz leicht die Sache im Raum drehen:
+#+BEGIN_SRC octave :var S_file = "img/3din3dplot_surface3.png" :results file
+<<Beispielfunktion 3D>>
+clf;
+surface(x_BA, z_BA, y_BA);
+view([30, 40]);
+<<save S_file>>
+#+END_SRC
+
+#+RESULTS:
+[[file:img/3din3dplot_surface3.png]]
+
+...so eine Fläche kann man auch anderweitig bemalen:
+#+BEGIN_SRC octave :var S_file = "img/3din3dplot_surface4.png" :results file :exports results
+<<Beispielfunktion 3D>>
+clf;
+s_BA = randn(B, A);
+surface(z_BA, x_BA, y_BA, s_BA);
+view([30, 40]);
+<<save S_file>>
+#+END_SRC
+
+#+RESULTS:
+[[file:img/3din3dplot_surface4.png]]
+
+***** COMMENT isosurfaces
+
+Man kann mit Mesgrid auch im 3D-Raum arbeiten. Etwa: man trägt über
+eine Ebene im Raum xyz eine Farbe s auf; die dargestellten Flächen
+müssen gesucht werden (etwa mit isosurfaces).
+
+#+BEGIN_SRC octave
+<<matlab meshgrid x_BAC y_BAC z_BAC>>
+s_BAC = rand(B, A, C);
+isosurface(x_BAC, y_BAC, z_BAC, s_BAC, 0.1);
+#+END_SRC
+
+#+RESULTS:
+
+***** COMMENT ngrid
+Aber es gibt ja auch das ngrid aus dem Control-Package - was es wohl tut?
+#+BEGIN_SRC octave
+% nur mit control package
+x_A = linspace(0, 3, 3);
+y_B = linspace(0, 2, 2);
+z_C = linspace(0, 1, 4);
+[a1, a2, a3] = ngrid(x_A, y_B, z_C);
+ans = whos
+#+END_SRC
+
+#+RESULTS:
+
+*** COMMENT Compare matlab's meshgrid vs. booast's vectorgrid and surface
+
+**** Setup the test scenario
+
+Define the coordinate system type, e.g. cartesian, spherical or cylindrical:
+#+name: coordinate system S_type
+#+BEGIN_SRC octave :results none
+  S_type = 'cartesian';
+  %S_type = 'spherical';
+#+END_SRC
+
+Create a vectorgrid according to the coordinate system type:
+#+name: g_ABC <- S_type
+#+BEGIN_SRC octave 
+  switch S_type
+    case 'cartesian'
+      %% create observation grid (cartesian volume)
+      x_A = linspace(-10, 10, 20);
+      y_B = linspace(-10, 10, 21);
+      z_C = linspace(-10, 10, 22);
+      g_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
+
+    case 'spherical'
+      %% create a spherical grid
+      A = 30;  r_A     = linspace(1, 10,   A); % m
+      B = 40;  theta_B = linspace(pi/10, pi, B); 
+      C = 50;  phi_C   = linspace(pi/10, 1.5*pi, C);
+      g_ABC = vectorgrid(r_A, theta_B, phi_C, 'spherical');
+    otherwise
+      error('no idea');
+  end
+
+#+END_SRC
+
+Slice some slices from this grid:
+#+name: g_slice <- g_ABC 
+#+BEGIN_SRC octave
+  %% slice some planes for visualisation
+  g_slice = g_ABC(1,:,:);
+  g_slice = g_ABC(:,1,:);
+  g_slice = g_ABC(:,:,1);
+#+END_SRC
+
+**** Test: plain surface 
+#+name: booast surface 1
+#+BEGIN_SRC octave :var S_file="img/booastsurface1.png" :results file :tangle tmp_booast1.m
+<<coordinate system S_type>>
+<<g_ABC <- S_type>>
+<<g_slice <- g_ABC>>
+
+  figure(1); clf;
+
+  %% visualise using matlab
+  subplot(1, 2, 1);
+  [x, y, z] = meshgrid(g_slice);
+  x = squeeze(x);
+  y = squeeze(y);
+  z = squeeze(z);
+
+  surface(x, y, z);
+  xlabel('x'); ylabel('y'); zlabel('z');
+  view(30,40);
+
+  %% visualise using toolbox
+  subplot(1, 2, 2);
+  surface(g_slice);
+  xlabel('x'); ylabel('y'); zlabel('z');
+  view(30,40);
+  <<save S_file>>
+#+END_SRC
+
+#+RESULTS: booast surface 1
+[[file:img/booastsurface1.png]]
+
+**** Test: function on a plain surface
+Use some function for drawing on this slice:
+#+name: s_slice <- g_slice
+#+BEGIN_SRC octave
+  %% some function on g_slice
+  slice_size = size(g_slice);
+  slice_dims = slice_size(slice_size != 1);
+  n_N = 1:slice_dims(1); s_N = pulstran(n_N, n_N*4, 'rectpuls', 2);
+  n_M = 1:slice_dims(2); s_M = pulstran(n_M, n_M*4, 'rectpuls', 2);
+  s_slice = s_N.' * s_M + 3;
+#+END_SRC
+
+
+#+name: booast surface 2
+#+BEGIN_SRC octave :results file :var S_file="img/booastsurface2.png" :tangle boostsurface2.m
+  <<coordinate system S_type>>
+  <<g_ABC <- S_type>>
+  <<g_slice <- g_ABC>>
+  <<s_slice <- g_slice>>
+
+  figure(1); clf;
+
+  %% visualise using matlab
+  subplot(1, 2, 1);
+  [x, y, z] = meshgrid(g_slice);
+  x = squeeze(x);
+  y = squeeze(y);
+  z = squeeze(z);
+
+  %% meshgrid reshapes according to matlab meshgrid; do the same for
+  %function s_slice
+  slice_size = size(s_slice);
+  if numel(slice_size) == 3
+    if slice_size(3) == 1
+      s_slice_m = s_slice.';
+    end
+  end
+
+  surface(x, y, z, s_slice');
+  xlabel('x'); ylabel('y'); zlabel('z');
+  view(30,40);
+
+  %% visualise using toolbox
+  subplot(1, 2, 2);
+  surface(g_slice, s_slice);
+  xlabel('x'); ylabel('y'); zlabel('z');
+  view(30,40);
+  <<save S_file>>
+#+END_SRC
+
+#+RESULTS: booast surface 2
+[[file:img/booastsurface2.png]]
+
+**** Test: draw a dependend surface on plain
+#+name: booast surface 3
+#+BEGIN_SRC octave :results file  :var S_file="img/booast_surface3.png" :tangle booast_surface_3_test.m
+<<coordinate system S_type>>
+<<g_ABC <- S_type>>
+<<g_slice <- g_ABC>>
+<<s_slice <- g_slice>>
+
+figure(1); clf;
+
+    %% visualise using matlab
+    subplot(1, 2, 1);
+    [x, y, z] = meshgrid(g_slice);
+    x = squeeze(x);
+    y = squeeze(y);
+    z = squeeze(z);
+    slice_size = size(g_slice);
+    switch S_type
+      case 'cartesian'
+	if slice_size(1) == 1
+	  x = x + s_slice;
+	elseif slice_size(2) == 1
+	  y = y + s_slice;
+	elseif slice_size(3) == 1
+	  z = z + s_slice;
+	end
+      case 'spherical'
+	%% get surface of grid
+	%% create surface as defnd. by s_slice
+	if slice_size(1) == 1
+	  x = x .* s_slice;
+	  y = y .* s_slice;
+	  z = z .* s_slice;
+	elseif slice_size(2) == 1
+	  disp('not implemented yet.');
+	elseif slice_size(3) == 1
+	  disp('not implemented yet.');
+	end
+      otherwise
+    end
+    c = 0*z;
+    surface(x, y, z, c);
+    xlabel('x'); ylabel('y'); zlabel('z');
+    view(30,40);
+
+    %% visualise using toolbox
+    subplot(1, 2, 2);
+    c_slice = 0 * s_slice;
+    surface(g_slice, s_slice, c_slice, 'dependendSurface');
+    xlabel('x'); ylabel('y'); zlabel('z');
+    view(30,40);
+  
+<<save S_file>>
+#+END_SRC
+
+#+RESULTS: booast surface 3
+
+
+
+#+name: test coordinate types in grid spherical
+#+BEGIN_SRC octave
+    %% create a spherical grid
+    C = 50;  r_C     = linspace(1, 10,   C); % m
+    A = 50;  theta_A = linspace(pi/10, pi, A); 
+    B = 50;  phi_B   = linspace(0, 1.5*pi, B);
+    g_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
+
+    %% slice a surface
+    s = 1;
+    g_slice_CAB = g_CAB(s, :, :);
+
+  %  s_CAB = ones(C, A, B);
+  %  s_CAB = reshape(linspace(0, 1, C*A*B), [C, A, B]);
+
+    %% some function
+    [x_ACB, y_ACB, z_ACB] = meshgrid(g_slice_CAB);
+
+    %% invent a function on that grid
+    s_ACB = 0.1*rand(A, C, B)+1;
+
+    x_AB = squeeze(x_ACB);
+    y_AB = squeeze(y_ACB);
+    z_AB = squeeze(z_ACB);
+    s_AB = squeeze(s_ACB(:,s, :));
+
+
+    %% draw
+    figure(1); clf;
+    surface(s_AB .* x_AB, s_AB .* y_AB, s_AB .* z_AB);
+    view([30, 40]);
+    axis('equal');
+    grid('on');
+#+END_SRC
+
+#+RESULTS: test coordinate types in grid spherical
+: 0
+
+***** Darstellung einer Funktion als abhängige Koordinate
+
+#+BEGIN_SRC octave :results file
+  clear all;
+
+  %% create observation grid (cartesian volume)
+  x_A = linspace(-10, 10, 20);
+  y_B = x_A;
+  z_C = x_A;
+  g_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
+
+  %% slice some planes for visualisation
+  g_AB1 = g_ABC(:,:,1);
+
+  %% some function depending on g_AB1
+  p_AB = x_A.'.^2 * y_B.^2;
+
+  [x_AB, y_AB, z_AB] = meshgrid(g_AB1);
+  figure(1); 
+
+  %% visualise using matlab
+  subplot(2, 2, 1);
+  surface(x_AB, y_AB, z_AB, p_AB);
+  xlabel('x'); ylabel('y'); zlabel('z');
+  view(30,40);
+
+  %% visualise using toolbox
+  subplot(2, 2, 2);
+  surface(g_AB1, p_AB);
+  view(30,40);
+
+  %% visualise using matlab
+  subplot(2, 2, 3);
+  surface(x_AB, y_AB, p_AB);
+  xlabel('x'); ylabel('y'); zlabel('z');
+  view(30,40);
+
+  %% visualise using toolbox
+  subplot(2, 2, 4);
+  surface(g_AB1, p_AB, 'dependend');
+  view(30,40);
+  %% save
+  S_file = 'img/exa_plane_wave_cartesian_z.png';
+  %<<save S_file>>
+
+#+END_SRC
+
+#+RESULTS:
+
+***** Darstellung einer Funktion per Farbe
+Die dargestellte Funktion über die Fläche wird durch die Werte
+=s_CAB=, die gleiche Dimensionalität wie =g_CAB= haben, übergeben und
+per Farbscala dargestellt.
+ 
+
+Definiert man einen ganzen Raum über =vectorgrid=, ist also zur
+Darstellung immer ein Ausschnitt zu wählen.
+
+#+BEGIN_SRC octave :var S_file = "img/exa_meshgrid.png" :results file
+  %% create a spherical grid
+  C = 50;  r_C     = linspace(1, 10,   C); % m
+  A = 50;  theta_A = linspace(pi/10, pi, A); 
+  B = 50;  phi_B   = linspace(0, 1.5*pi, B);
+  g_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
+
+  %% invent a function on that grid
+  s_CAB = rand(C, A, B);
+  s_CAB = ones(C, A, B);
+  s_CAB = reshape(linspace(0, 1, C*A*B), [C, A, B]);
+
+  %% draw the surface of subspaces of the grid
+  figure(1); clf;
+  subplot(1, 3, 1); for d = 1:floor(C/3):C surface(g_CAB(d, :, :), s_CAB(d, :, :)); view([30, 40]); axis('square'); end
+  subplot(1, 3, 2); for d = 1:floor(A/3):A surface(g_CAB(:, d, :), s_CAB(:, d, :)); view([30, 40]); axis('square'); end
+  subplot(1, 3, 3); for d = 1:floor(B/3):B surface(g_CAB(:, :, d), s_CAB(:, :, d)); view([30, 40]); axis('square'); end
+  <<save S_file>>
+#+END_SRC
+
+#+RESULTS:
+[[file:img/exa_meshgrid.png]]
+
+* Administration
+** Directory setup
+#+name: cleanup directories
+#+BEGIN_SRC shell
+rm -rf @vector @vectorgrid img
+#+END_SRC
+
+#+RESULTS: cleanup directories
+
+#+name: setup directories
+#+BEGIN_SRC shell
+mkdir @vector @vectorgrid img
+#+END_SRC
+
+#+RESULTS: setup directories
+** Installation
+Add the path to Octave/Matlab where you installed booast. E.g.
+: addpath('path/to/booast/');
+
+** COMMENT org setup
+
+#+name: org setup
+#+BEGIN_SRC emacs-lisp
+(org-babel-lob-ingest "octavetemplates.org")
+#+END_SRC
+
+#+RESULTS: org setup
+: 2
+
+** TODO Octave tests
+Do some automatic tests like in
+https://orgmode.org/worg/org-contrib/babel/intro.html
+
