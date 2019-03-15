@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-03-22 Do 13:39 -->
+<!-- 2019-03-14 Do 18:33 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Acoustics</title>
@@ -161,6 +161,19 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -191,7 +204,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2018 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -262,20 +275,20 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org04adad4">1. Acoustic Waves</a>
+<li><a href="#orga48bc39">1. Acoustic Waves</a>
 <ul>
-<li><a href="#org252840f">1.1. Planewave</a>
+<li><a href="#org04c0205">1.1. Planewave</a>
 <ul>
-<li><a href="#org501c588">1.1.1. Syntax</a></li>
-<li><a href="#orgdea6d5b">1.1.2. Description</a></li>
-<li><a href="#orge0c360c">1.1.3. Definition</a></li>
-<li><a href="#org7501f47">1.1.4. Examples</a></li>
+<li><a href="#org4ce3722">1.1.1. Syntax</a></li>
+<li><a href="#orgd0a7c2f">1.1.2. Description</a></li>
+<li><a href="#orgd6d1433">1.1.3. Definition</a></li>
+<li><a href="#org612ecd7">1.1.4. Examples</a></li>
 </ul>
 </li>
-<li><a href="#org44532c8">1.2. Sphericalwave</a>
+<li><a href="#orgd659667">1.2. Sphericalwave</a>
 <ul>
-<li><a href="#org8c0efa9">1.2.1. Function definition</a></li>
-<li><a href="#org66f89e5">1.2.2. Examples</a></li>
+<li><a href="#org9f65f59">1.2.1. Function definition</a></li>
+<li><a href="#orgae3753a">1.2.2. Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -284,8 +297,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org04adad4" class="outline-2">
-<h2 id="org04adad4"><span class="section-number-2">1</span> Acoustic Waves</h2>
+<div id="outline-container-orga48bc39" class="outline-2">
+<h2 id="orga48bc39"><span class="section-number-2">1</span> Acoustic Waves</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The calculation of acoustic waves is greatly facilitated by
@@ -294,8 +307,8 @@ all defined in \(\mathcal R^3\).
 </p>
 </div>
 
-<div id="outline-container-org252840f" class="outline-3">
-<h3 id="org252840f"><span class="section-number-3">1.1</span> Planewave</h3>
+<div id="outline-container-org04c0205" class="outline-3">
+<h3 id="org04c0205"><span class="section-number-3">1.1</span> Planewave</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 A plane wave is described by \[p(\vec r, \vec k) = \mathrm e^{\mathrm
@@ -309,18 +322,17 @@ and wave number vector \(\vec k\). Both vectors may be arrays of vectors.
 </p>
 </div>
 
-<div id="outline-container-org501c588" class="outline-4">
-<h4 id="org501c588"><span class="section-number-4">1.1.1</span> Syntax</h4>
+<div id="outline-container-org4ce3722" class="outline-4">
+<h4 id="org4ce3722"><span class="section-number-4">1.1.1</span> Syntax</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <pre class="example">
 p_CABFD =  planewave(vr_CAB, vk_FD)
-
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgdea6d5b" class="outline-4">
-<h4 id="orgdea6d5b"><span class="section-number-4">1.1.2</span> Description</h4>
+<div id="outline-container-orgd0a7c2f" class="outline-4">
+<h4 id="orgd0a7c2f"><span class="section-number-4">1.1.2</span> Description</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 <code>p_CABFD = planewave(vr_CAB, vk_FD)</code> returns a matrix containing
@@ -338,41 +350,41 @@ Accordingly, <code>p_CABFD</code> is defined for 5 dimensions.
 </div>
 </div>
 
-<div id="outline-container-orge0c360c" class="outline-4">
-<h4 id="orge0c360c"><span class="section-number-4">1.1.3</span> Definition</h4>
+<div id="outline-container-orgd6d1433" class="outline-4">
+<h4 id="orgd6d1433"><span class="section-number-4">1.1.3</span> Definition</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <div class="org-src-container">
-<pre class="src src-octave" id="org847534c"><span style="color: #0000FF;">function</span> p_CABFD <span style="color: #006FE0;">=</span>  <span style="color: #006699;">planewave</span>(vr_CAB<span style="color: #006FE0;">,</span> vk_FD)
-  <span style="color: #8D8D84; font-style: italic;">%% allocate memory</span>
-  Dim_r <span style="color: #006FE0;">=</span> size(vr_CAB)<span style="color: #006FE0;">;</span>
-  Dim_k <span style="color: #006FE0;">=</span> size(vk_FD)<span style="color: #006FE0;">;</span>
-  R <span style="color: #006FE0;">=</span> prod(Dim_r)<span style="color: #006FE0;">;</span>
-  K <span style="color: #006FE0;">=</span> prod(Dim_k)<span style="color: #006FE0;">;</span>
-  p_RK <span style="color: #006FE0;">=</span> zeros(R<span style="color: #006FE0;">,</span> K)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgfef2050">  <span style="color: #0000FF;">function</span> p_CABFD <span style="color: #006FE0;">=</span>  <span style="color: #006699;">planewave</span>(vr_CAB<span style="color: #006FE0;">,</span> vk_FD)
+    <span style="color: #8D8D84; font-style: italic;">%% allocate memory</span>
+    Dim_r <span style="color: #006FE0;">=</span> size(vr_CAB)<span style="color: #006FE0;">;</span>
+    Dim_k <span style="color: #006FE0;">=</span> size(vk_FD)<span style="color: #006FE0;">;</span>
+    R <span style="color: #006FE0;">=</span> prod(Dim_r)<span style="color: #006FE0;">;</span>
+    K <span style="color: #006FE0;">=</span> prod(Dim_k)<span style="color: #006FE0;">;</span>
+    p_RK <span style="color: #006FE0;">=</span> zeros(R<span style="color: #006FE0;">,</span> K)<span style="color: #006FE0;">;</span>
 
-  <span style="color: #8D8D84; font-style: italic;">%% Vectors in cart. coord.:</span>
-  r_xyz_R <span style="color: #006FE0;">=</span> get(vr_CAB<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">,</span> [3<span style="color: #006FE0;">,</span> R])<span style="color: #006FE0;">;</span>
-  k_xyz_K <span style="color: #006FE0;">=</span> get(vk_FD<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">,</span> [3<span style="color: #006FE0;">,</span> K])<span style="color: #006FE0;">;</span>
+    <span style="color: #8D8D84; font-style: italic;">%% Vectors in cart. coord.:</span>
+    r_xyz_R <span style="color: #006FE0;">=</span> get(vr_CAB<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">,</span> [3<span style="color: #006FE0;">,</span> R])<span style="color: #006FE0;">;</span>
+    k_xyz_K <span style="color: #006FE0;">=</span> get(vk_FD<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">,</span> [3<span style="color: #006FE0;">,</span> K])<span style="color: #006FE0;">;</span>
 
-  <span style="color: #8D8D84; font-style: italic;">%% pressure:</span>
-  <span style="color: #0000FF;">for</span> r <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>R
-    <span style="color: #0000FF;">for</span> k <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>K
-      p_RK(r<span style="color: #006FE0;">,</span>k) <span style="color: #006FE0;">=</span> exp(i<span style="color: #006FE0;">*</span>(k_xyz_K(<span style="color: #006FE0;">:,</span> k)<span style="color: #006FE0;">.'</span> <span style="color: #006FE0;">*</span> r_xyz_R(<span style="color: #006FE0;">:,</span> r)))<span style="color: #006FE0;">;</span>
+    <span style="color: #8D8D84; font-style: italic;">%% pressure:</span>
+    <span style="color: #0000FF;">for</span> r <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>R
+      <span style="color: #0000FF;">for</span> k <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>K
+        p_RK(r<span style="color: #006FE0;">,</span>k) <span style="color: #006FE0;">=</span> exp(i<span style="color: #006FE0;">*</span>(k_xyz_K(<span style="color: #006FE0;">:,</span> k)<span style="color: #006FE0;">.'</span> <span style="color: #006FE0;">*</span> r_xyz_R(<span style="color: #006FE0;">:,</span> r)))<span style="color: #006FE0;">;</span>
+      <span style="color: #0000FF;">end</span>
     <span style="color: #0000FF;">end</span>
+    p_CABFD <span style="color: #006FE0;">=</span> reshape(p_RK<span style="color: #006FE0;">,</span> [Dim_r<span style="color: #006FE0;">,</span> Dim_k])<span style="color: #006FE0;">;</span>
   <span style="color: #0000FF;">end</span>
-  p_CABFD <span style="color: #006FE0;">=</span> reshape(p_RK<span style="color: #006FE0;">,</span> [Dim_r<span style="color: #006FE0;">,</span> Dim_k])<span style="color: #006FE0;">;</span>
-<span style="color: #0000FF;">end</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org7501f47" class="outline-4">
-<h4 id="org7501f47"><span class="section-number-4">1.1.4</span> Examples</h4>
+<div id="outline-container-org612ecd7" class="outline-4">
+<h4 id="org612ecd7"><span class="section-number-4">1.1.4</span> Examples</h4>
 <div class="outline-text-4" id="text-1-1-4">
 </div>
 <ol class="org-ol">
-<li><a id="org395d9e7"></a>Plane wave defined on cartesian coordinates<br />
+<li><a id="orgc92ea85"></a>Plane wave defined on cartesian coordinates<br />
 <div class="outline-text-5" id="text-1-1-4-1">
 <p>
 A <code>vectorgrid</code> is set up using three vectors <code>x_A, x_B</code> and <code>x_C</code>. For
@@ -382,30 +394,30 @@ scalar arrays are shown using the <code>surface</code> command.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave" id="orge3f1252"><span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">create observation grid (cartesian volume)</span>
-x_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 60)<span style="color: #006FE0;">;</span>
-y_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 30)<span style="color: #006FE0;">;</span>
-z_C <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 40)<span style="color: #006FE0;">;</span>
-g_ABC <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_C<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgd71c5d7">    <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
+    x_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 60)<span style="color: #006FE0;">;</span>
+    y_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 30)<span style="color: #006FE0;">;</span>
+    z_C <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 40)<span style="color: #006FE0;">;</span>
+    g_ABC <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_C<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">slice some planes for visualisation</span>
-g_AB1 <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>1)<span style="color: #006FE0;">;</span>
-g_A1C <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,</span>20<span style="color: #006FE0;">,:</span>)<span style="color: #006FE0;">;</span>
-g_1BC <span style="color: #006FE0;">=</span> g_ABC(1<span style="color: #006FE0;">,:,:</span>)<span style="color: #006FE0;">;</span>
+    <span style="color: #8D8D84; font-style: italic;">%% slice some planes for visualisation</span>
+    g_AB1 <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>1)<span style="color: #006FE0;">;</span>
+    g_A1C <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,</span>20<span style="color: #006FE0;">,:</span>)<span style="color: #006FE0;">;</span>
+    g_1BC <span style="color: #006FE0;">=</span> g_ABC(1<span style="color: #006FE0;">,:,:</span>)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">direction/wavenumbervector of planewave</span>
-v <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 0.1<span style="color: #006FE0;">,</span> 0.1]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
-p_AB1 <span style="color: #006FE0;">=</span> planewave(vector(g_AB1)<span style="color: #006FE0;">,</span> v)<span style="color: #006FE0;">;</span>
-p_A1C <span style="color: #006FE0;">=</span> planewave(vector(g_A1C)<span style="color: #006FE0;">,</span> v)<span style="color: #006FE0;">;</span>
-p_1BC <span style="color: #006FE0;">=</span> planewave(vector(g_1BC)<span style="color: #006FE0;">,</span> v)<span style="color: #006FE0;">;</span>
+    <span style="color: #8D8D84; font-style: italic;">%% direction/wavenumbervector of planewave</span>
+    v <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 0.1<span style="color: #006FE0;">,</span> 0.1]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+    p_AB1 <span style="color: #006FE0;">=</span> planewave(vector(g_AB1)<span style="color: #006FE0;">,</span> v)<span style="color: #006FE0;">;</span>
+    p_A1C <span style="color: #006FE0;">=</span> planewave(vector(g_A1C)<span style="color: #006FE0;">,</span> v)<span style="color: #006FE0;">;</span>
+    p_1BC <span style="color: #006FE0;">=</span> planewave(vector(g_1BC)<span style="color: #006FE0;">,</span> v)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">visualise</span>
-figure(1)<span style="color: #006FE0;">;</span> clf<span style="color: #006FE0;">;</span> hold(<span style="color: #008000;">'on'</span>)<span style="color: #006FE0;">;</span>
-surface(g_AB1<span style="color: #006FE0;">,</span> real(p_AB1))<span style="color: #006FE0;">;</span> 
-surface(g_A1C<span style="color: #006FE0;">,</span> real(p_A1C))<span style="color: #006FE0;">;</span>
-surface(g_1BC<span style="color: #006FE0;">,</span> real(p_1BC))<span style="color: #006FE0;">;</span>
-xlabel(<span style="color: #008000;">'x'</span>)<span style="color: #006FE0;">;</span> ylabel(<span style="color: #008000;">'y'</span>)<span style="color: #006FE0;">;</span> zlabel(<span style="color: #008000;">'z'</span>)<span style="color: #006FE0;">;</span>
-view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;</span>
+    <span style="color: #8D8D84; font-style: italic;">%% visualise</span>
+    figure(1)<span style="color: #006FE0;">;</span> clf<span style="color: #006FE0;">;</span> hold(<span style="color: #008000;">'on'</span>)<span style="color: #006FE0;">;</span>
+    surface(g_AB1<span style="color: #006FE0;">,</span> real(p_AB1))<span style="color: #006FE0;">;</span> 
+    surface(g_A1C<span style="color: #006FE0;">,</span> real(p_A1C))<span style="color: #006FE0;">;</span>
+    surface(g_1BC<span style="color: #006FE0;">,</span> real(p_1BC))<span style="color: #006FE0;">;</span>
+    xlabel(<span style="color: #008000;">'x'</span>)<span style="color: #006FE0;">;</span> ylabel(<span style="color: #008000;">'y'</span>)<span style="color: #006FE0;">;</span> zlabel(<span style="color: #008000;">'z'</span>)<span style="color: #006FE0;">;</span>
+    view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 
@@ -418,7 +430,7 @@ view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;<
 </div>
 </li>
 
-<li><a id="org328b17e"></a>Plane wave defined on spherical coordinates<br />
+<li><a id="orgfa3d8a6"></a>Plane wave defined on spherical coordinates<br />
 <div class="outline-text-5" id="text-1-1-4-2">
 <p>
 The example given above can also be calculated on a vectorgrid using
@@ -428,31 +440,31 @@ surface of a sphere, a cone, or a half circle respectively.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave" id="orgcaa9df5"><span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">create observation grid (cartesian volume)</span>
-A <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 50<span style="color: #006FE0;">;</span>
-r_A     <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
-theta_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> pi<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
-phi_C   <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 1.5<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">;</span>
-g_ABC   <span style="color: #006FE0;">=</span> vectorgrid(r_A<span style="color: #006FE0;">,</span> theta_B<span style="color: #006FE0;">,</span> phi_C<span style="color: #006FE0;">,</span> <span style="color: #008000;">'spherical'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org11593a3">  <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
+  A <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 50<span style="color: #006FE0;">;</span>
+  r_A     <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
+  theta_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> pi<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
+  phi_C   <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 1.5<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">;</span>
+  g_ABC   <span style="color: #006FE0;">=</span> vectorgrid(r_A<span style="color: #006FE0;">,</span> theta_B<span style="color: #006FE0;">,</span> phi_C<span style="color: #006FE0;">,</span> <span style="color: #008000;">'spherical'</span>)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">slice some planes for visualisation</span>
-g_AB1 <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>10)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% circle</span>
-g_A1C <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,</span>10<span style="color: #006FE0;">,:</span>)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% conus</span>
-g_1BC <span style="color: #006FE0;">=</span> g_ABC(10<span style="color: #006FE0;">,:,:</span>)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% sphere</span>
+  <span style="color: #8D8D84; font-style: italic;">%% slice some planes for visualisation</span>
+  g_AB1 <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>10)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% circle</span>
+  g_A1C <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,</span>10<span style="color: #006FE0;">,:</span>)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% conus</span>
+  g_1BC <span style="color: #006FE0;">=</span> g_ABC(10<span style="color: #006FE0;">,:,:</span>)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% sphere</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">direction/wavenumbervector of planewave</span>
-v <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> 0.3]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% direction/wavenumbervector of planewave</span>
+  v <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> 0.3]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 
-p_AB1 <span style="color: #006FE0;">=</span> real(planewave(vector(g_AB1)<span style="color: #006FE0;">,</span> v))<span style="color: #006FE0;">;</span>
-p_A1C <span style="color: #006FE0;">=</span> real(planewave(vector(g_A1C)<span style="color: #006FE0;">,</span> v))<span style="color: #006FE0;">;</span> <span style="color: #8D8D84; font-style: italic;">%% visualise</span>
-p_1BC <span style="color: #006FE0;">=</span> real(planewave(vector(g_1BC)<span style="color: #006FE0;">,</span> v))<span style="color: #006FE0;">;</span>
+  p_AB1 <span style="color: #006FE0;">=</span> real(planewave(vector(g_AB1)<span style="color: #006FE0;">,</span> v))<span style="color: #006FE0;">;</span>
+  p_A1C <span style="color: #006FE0;">=</span> real(planewave(vector(g_A1C)<span style="color: #006FE0;">,</span> v))<span style="color: #006FE0;">;</span> <span style="color: #8D8D84; font-style: italic;">%% visualise</span>
+  p_1BC <span style="color: #006FE0;">=</span> real(planewave(vector(g_1BC)<span style="color: #006FE0;">,</span> v))<span style="color: #006FE0;">;</span>
 
-figure(1)<span style="color: #006FE0;">;</span> clf<span style="color: #006FE0;">;</span>
-surface(g_AB1<span style="color: #006FE0;">,</span> p_AB1)<span style="color: #006FE0;">;</span>
-surface(g_A1C<span style="color: #006FE0;">,</span> p_A1C)<span style="color: #006FE0;">;</span>
-surface(g_1BC<span style="color: #006FE0;">,</span> p_1BC)<span style="color: #006FE0;">;</span>
-xlabel(<span style="color: #008000;">'x'</span>)<span style="color: #006FE0;">;</span> ylabel(<span style="color: #008000;">'y'</span>)<span style="color: #006FE0;">;</span> zlabel(<span style="color: #008000;">'z'</span>)<span style="color: #006FE0;">;</span>
-view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;</span> axis(<span style="color: #008000;">'equal'</span>)<span style="color: #006FE0;">;</span>
+  figure(1)<span style="color: #006FE0;">;</span> clf<span style="color: #006FE0;">;</span>
+  surface(g_AB1<span style="color: #006FE0;">,</span> p_AB1)<span style="color: #006FE0;">;</span>
+  surface(g_A1C<span style="color: #006FE0;">,</span> p_A1C)<span style="color: #006FE0;">;</span>
+  surface(g_1BC<span style="color: #006FE0;">,</span> p_1BC)<span style="color: #006FE0;">;</span>
+  xlabel(<span style="color: #008000;">'x'</span>)<span style="color: #006FE0;">;</span> ylabel(<span style="color: #008000;">'y'</span>)<span style="color: #006FE0;">;</span> zlabel(<span style="color: #008000;">'z'</span>)<span style="color: #006FE0;">;</span>
+  view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;</span> axis(<span style="color: #008000;">'equal'</span>)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 
@@ -468,8 +480,8 @@ view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;<
 </div>
 </div>
 
-<div id="outline-container-org44532c8" class="outline-3">
-<h3 id="org44532c8"><span class="section-number-3">1.2</span> Sphericalwave</h3>
+<div id="outline-container-orgd659667" class="outline-3">
+<h3 id="orgd659667"><span class="section-number-3">1.2</span> Sphericalwave</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Die \textsc{Green}sche Funktion \(G(\mathbf r|\mathbf r_s)\) für das
@@ -488,85 +500,85 @@ Pressure \(p\) is then
 </p>
 </div>
 
-<div id="outline-container-org8c0efa9" class="outline-4">
-<h4 id="org8c0efa9"><span class="section-number-4">1.2.1</span> Function definition</h4>
+<div id="outline-container-org9f65f59" class="outline-4">
+<h4 id="org9f65f59"><span class="section-number-4">1.2.1</span> Function definition</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <div class="org-src-container">
-<pre class="src src-octave" id="org32bf6d6"><span style="color: #0000FF;">function</span> p_CABSF <span style="color: #006FE0;">=</span>  <span style="color: #006699;">sphericalwave</span>(vr_CAB<span style="color: #006FE0;">,</span> vs_S<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z0)
+<pre class="src src-octave" id="org1e531bb">  <span style="color: #0000FF;">function</span> p_CABSF <span style="color: #006FE0;">=</span>  <span style="color: #006699;">sphericalwave</span>(vr_CAB<span style="color: #006FE0;">,</span> vs_S<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z0)
 
-  <span style="color: #8D8D84; font-style: italic;">%% detect input args</span>
-  <span style="color: #0000FF;">if</span> nargin <span style="color: #006FE0;">&lt;</span> 4
-    Z0 <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>
-  <span style="color: #0000FF;">end</span>
+    <span style="color: #8D8D84; font-style: italic;">%% detect input args</span>
+    <span style="color: #0000FF;">if</span> nargin <span style="color: #006FE0;">&lt;</span> 4
+      Z0 <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>
+    <span style="color: #0000FF;">end</span>
+  
+    <span style="color: #8D8D84; font-style: italic;">%% allocate memory</span>
+    Dim_r <span style="color: #006FE0;">=</span> size(vr_CAB)<span style="color: #006FE0;">;</span>
+    Dim_s <span style="color: #006FE0;">=</span> size(vs_S)<span style="color: #006FE0;">;</span>
+    R <span style="color: #006FE0;">=</span> prod(Dim_r)<span style="color: #006FE0;">;</span>
+    S <span style="color: #006FE0;">=</span> prod(Dim_s)<span style="color: #006FE0;">;</span>
+    F <span style="color: #006FE0;">=</span> numel(k_F)<span style="color: #006FE0;">;</span>
+    p_RSF <span style="color: #006FE0;">=</span> zeros(R<span style="color: #006FE0;">,</span> S<span style="color: #006FE0;">,</span> F)<span style="color: #006FE0;">;</span>
 
-  <span style="color: #8D8D84; font-style: italic;">%% allocate memory</span>
-  Dim_r <span style="color: #006FE0;">=</span> size(vr_CAB)<span style="color: #006FE0;">;</span>
-  Dim_s <span style="color: #006FE0;">=</span> size(vs_S)<span style="color: #006FE0;">;</span>
-  R <span style="color: #006FE0;">=</span> prod(Dim_r)<span style="color: #006FE0;">;</span>
-  S <span style="color: #006FE0;">=</span> prod(Dim_s)<span style="color: #006FE0;">;</span>
-  F <span style="color: #006FE0;">=</span> numel(k_F)<span style="color: #006FE0;">;</span>
-  p_RSF <span style="color: #006FE0;">=</span> zeros(R<span style="color: #006FE0;">,</span> S<span style="color: #006FE0;">,</span> F)<span style="color: #006FE0;">;</span>
+    <span style="color: #8D8D84; font-style: italic;">%% Vectors in cart. coord.:</span>
+    r_xyz_R <span style="color: #006FE0;">=</span> get(vr_CAB<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">,</span> [3<span style="color: #006FE0;">,</span> R])<span style="color: #006FE0;">;</span>
+    s_xyz_S <span style="color: #006FE0;">=</span> get(vs_S<span style="color: #006FE0;">,</span>   <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">,</span> [3<span style="color: #006FE0;">,</span> S])<span style="color: #006FE0;">;</span>
 
-  <span style="color: #8D8D84; font-style: italic;">%% Vectors in cart. coord.:</span>
-  r_xyz_R <span style="color: #006FE0;">=</span> get(vr_CAB<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">,</span> [3<span style="color: #006FE0;">,</span> R])<span style="color: #006FE0;">;</span>
-  s_xyz_S <span style="color: #006FE0;">=</span> get(vs_S<span style="color: #006FE0;">,</span>   <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">,</span> [3<span style="color: #006FE0;">,</span> S])<span style="color: #006FE0;">;</span>
-
-  <span style="color: #8D8D84; font-style: italic;">%% Green</span>
-  <span style="color: #0000FF;">for</span> r <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>R
-    <span style="color: #0000FF;">for</span> s <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>S
-      <span style="color: #8D8D84; font-style: italic;">%% rel. Abstand</span>
-      r_os <span style="color: #006FE0;">=</span> sqrt(sum((r_xyz_R(<span style="color: #006FE0;">:,</span>r) <span style="color: #006FE0;">-</span> s_xyz_S(<span style="color: #006FE0;">:,</span>s))<span style="color: #006FE0;">.^</span>2))<span style="color: #006FE0;">;</span>
-      <span style="color: #0000FF;">for</span> f <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>F
-        <span style="color: #8D8D84; font-style: italic;">%% Vorfaktor mal Green'sche Funktion</span>
-        <span style="color: #0000FF;">if</span> r_os <span style="color: #006FE0;">!=</span> 0
-          p_RSF(r<span style="color: #006FE0;">,</span>s<span style="color: #006FE0;">,</span>f) <span style="color: #006FE0;">=</span> <span style="color: #006FE0;">-</span>i <span style="color: #006FE0;">*</span> Z0 <span style="color: #006FE0;">*</span> k_F(f) <span style="color: #006FE0;">*</span> <span style="color: #006FE0;">...</span>
-                          exp(i <span style="color: #006FE0;">*</span> k_F(f) <span style="color: #006FE0;">*</span> r_os) <span style="color: #006FE0;">/</span> (4<span style="color: #006FE0;">*</span>pi <span style="color: #006FE0;">*</span> r_os)<span style="color: #006FE0;">;</span>
-        <span style="color: #0000FF;">else</span>
-          p_RSF(r<span style="color: #006FE0;">,</span>s<span style="color: #006FE0;">,</span>f) <span style="color: #006FE0;">=</span> NaN<span style="color: #006FE0;">;</span> <span style="color: #8D8D84; font-style: italic;">%-i * Z0 * k_F(f); % tdb: lies Williams</span>
+    <span style="color: #8D8D84; font-style: italic;">%% Green</span>
+    <span style="color: #0000FF;">for</span> r <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>R
+      <span style="color: #0000FF;">for</span> s <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>S
+        <span style="color: #8D8D84; font-style: italic;">%% rel. Abstand</span>
+        r_os <span style="color: #006FE0;">=</span> sqrt(sum((r_xyz_R(<span style="color: #006FE0;">:,</span>r) <span style="color: #006FE0;">-</span> s_xyz_S(<span style="color: #006FE0;">:,</span>s))<span style="color: #006FE0;">.^</span>2))<span style="color: #006FE0;">;</span>
+        <span style="color: #0000FF;">for</span> f <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>F
+          <span style="color: #8D8D84; font-style: italic;">%% Vorfaktor mal Green'sche Funktion</span>
+          <span style="color: #0000FF;">if</span> r_os <span style="color: #006FE0;">!=</span> 0
+            p_RSF(r<span style="color: #006FE0;">,</span>s<span style="color: #006FE0;">,</span>f) <span style="color: #006FE0;">=</span> <span style="color: #006FE0;">-</span>i <span style="color: #006FE0;">*</span> Z0 <span style="color: #006FE0;">*</span> k_F(f) <span style="color: #006FE0;">*</span> <span style="color: #006FE0;">...</span>
+                            exp(i <span style="color: #006FE0;">*</span> k_F(f) <span style="color: #006FE0;">*</span> r_os) <span style="color: #006FE0;">/</span> (4<span style="color: #006FE0;">*</span>pi <span style="color: #006FE0;">*</span> r_os)<span style="color: #006FE0;">;</span>
+          <span style="color: #0000FF;">else</span>
+            p_RSF(r<span style="color: #006FE0;">,</span>s<span style="color: #006FE0;">,</span>f) <span style="color: #006FE0;">=</span> NaN<span style="color: #006FE0;">;</span> <span style="color: #8D8D84; font-style: italic;">%-i * Z0 * k_F(f); % tdb: lies Williams</span>
+          <span style="color: #0000FF;">end</span>
         <span style="color: #0000FF;">end</span>
       <span style="color: #0000FF;">end</span>
     <span style="color: #0000FF;">end</span>
-  <span style="color: #0000FF;">end</span>
 
-  <span style="color: #8D8D84; font-style: italic;">%% reshape output </span>
-  p_CABSF <span style="color: #006FE0;">=</span> reshape(p_RSF<span style="color: #006FE0;">,</span> [Dim_r<span style="color: #006FE0;">,</span> Dim_s<span style="color: #006FE0;">,</span> F])<span style="color: #006FE0;">;</span>
+    <span style="color: #8D8D84; font-style: italic;">%% reshape output </span>
+    p_CABSF <span style="color: #006FE0;">=</span> reshape(p_RSF<span style="color: #006FE0;">,</span> [Dim_r<span style="color: #006FE0;">,</span> Dim_s<span style="color: #006FE0;">,</span> F])<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org66f89e5" class="outline-4">
-<h4 id="org66f89e5"><span class="section-number-4">1.2.2</span> Examples</h4>
+<div id="outline-container-orgae3753a" class="outline-4">
+<h4 id="orgae3753a"><span class="section-number-4">1.2.2</span> Examples</h4>
 <div class="outline-text-4" id="text-1-2-2">
 </div>
 <ol class="org-ol">
-<li><a id="org882492a"></a>Simple cartesian grid<br />
+<li><a id="orgf893459"></a>Simple cartesian grid<br />
 <div class="outline-text-5" id="text-1-2-2-1">
 <div class="org-src-container">
-<pre class="src src-octave" id="orged02789"><span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">Beobachtungspunkte</span>
-X <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span>  x_X <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> X)<span style="color: #006FE0;">;</span>
-Y <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span>  y_Y <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> Y)<span style="color: #006FE0;">;</span>
-Z <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>   z_Z <span style="color: #006FE0;">=</span> 0<span style="color: #006FE0;">;</span>
-gr <span style="color: #006FE0;">=</span> vectorgrid(x_X<span style="color: #006FE0;">,</span> y_Y<span style="color: #006FE0;">,</span> z_Z<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
-vr <span style="color: #006FE0;">=</span> vector(gr)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgc2c36b7">  <span style="color: #8D8D84; font-style: italic;">%% Beobachtungspunkte</span>
+  X <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span>  x_X <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> X)<span style="color: #006FE0;">;</span>
+  Y <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span>  y_Y <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> Y)<span style="color: #006FE0;">;</span>
+  Z <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>   z_Z <span style="color: #006FE0;">=</span> 0<span style="color: #006FE0;">;</span>
+  gr <span style="color: #006FE0;">=</span> vectorgrid(x_X<span style="color: #006FE0;">,</span> y_Y<span style="color: #006FE0;">,</span> z_Z<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+  vr <span style="color: #006FE0;">=</span> vector(gr)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">Wellenzahlen</span>
-F0_F <span style="color: #006FE0;">=</span> linspace(100<span style="color: #006FE0;">,</span>100<span style="color: #006FE0;">,</span> 1)<span style="color: #006FE0;">;</span>
-omega0_F <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">*</span>F0_F<span style="color: #006FE0;">;</span>
-C_snd <span style="color: #006FE0;">=</span> 342<span style="color: #006FE0;">;</span>
-k_F <span style="color: #006FE0;">=</span> omega0_F <span style="color: #006FE0;">/</span> C_snd<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% Wellenzahlen</span>
+  F0_F <span style="color: #006FE0;">=</span> linspace(100<span style="color: #006FE0;">,</span>100<span style="color: #006FE0;">,</span> 1)<span style="color: #006FE0;">;</span>
+  omega0_F <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">*</span>F0_F<span style="color: #006FE0;">;</span>
+  C_snd <span style="color: #006FE0;">=</span> 342<span style="color: #006FE0;">;</span>
+  k_F <span style="color: #006FE0;">=</span> omega0_F <span style="color: #006FE0;">/</span> C_snd<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">Quellpositionen</span>
-vs <span style="color: #006FE0;">=</span> vector([0<span style="color: #006FE0;">,</span> 5<span style="color: #006FE0;">,</span> 0]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% Quellpositionen</span>
+  vs <span style="color: #006FE0;">=</span> vector([0<span style="color: #006FE0;">,</span> 5<span style="color: #006FE0;">,</span> 0]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">akustische Impedanz</span>
-Z <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% akustische Impedanz</span>
+  Z <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">Druck einer ebenen Welle</span>
-p <span style="color: #006FE0;">=</span> sphericalwave(vr<span style="color: #006FE0;">,</span> vs<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z)<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% Druck einer ebenen Welle</span>
+  p <span style="color: #006FE0;">=</span> sphericalwave(vr<span style="color: #006FE0;">,</span> vs<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">malen nach Zahlen</span>
-surface(gr<span style="color: #006FE0;">,</span> real(p))<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% malen nach Zahlen</span>
+  surface(gr<span style="color: #006FE0;">,</span> real(p))<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 
@@ -578,43 +590,43 @@ surface(gr<span style="color: #006FE0;">,</span> real(p))<span style="color: #00
 </div>
 </li>
 
-<li><a id="org229a245"></a>Example using several planes<br />
+<li><a id="orgd988014"></a>Example using several planes<br />
 <div class="outline-text-5" id="text-1-2-2-2">
 <p>
 Here we go again
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave" id="org8801126"><span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">create observation grid (cartesian volume)</span>
-x_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 50)<span style="color: #006FE0;">;</span>
-y_B <span style="color: #006FE0;">=</span> x_A<span style="color: #006FE0;">;</span>
-z_C <span style="color: #006FE0;">=</span> x_A<span style="color: #006FE0;">;</span>
-g_ABC <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_C<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org15518d1">  <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
+  x_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 50)<span style="color: #006FE0;">;</span>
+  y_B <span style="color: #006FE0;">=</span> x_A<span style="color: #006FE0;">;</span>
+  z_C <span style="color: #006FE0;">=</span> x_A<span style="color: #006FE0;">;</span>
+  g_ABC <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_C<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">slice some planes for visualisation</span>
-g_AB <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>1)<span style="color: #006FE0;">;</span>
-g_AC <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,</span>10<span style="color: #006FE0;">,:</span>)<span style="color: #006FE0;">;</span>
-g_BC <span style="color: #006FE0;">=</span> g_ABC(10<span style="color: #006FE0;">,:,:</span>)<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% slice some planes for visualisation</span>
+  g_AB <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>1)<span style="color: #006FE0;">;</span>
+  g_AC <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,</span>10<span style="color: #006FE0;">,:</span>)<span style="color: #006FE0;">;</span>
+  g_BC <span style="color: #006FE0;">=</span> g_ABC(10<span style="color: #006FE0;">,:,:</span>)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">source position</span>
-vs <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> 1]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% source position</span>
+  vs <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> 1]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">wave number</span>
-F0_F <span style="color: #006FE0;">=</span> linspace(100<span style="color: #006FE0;">,</span>100<span style="color: #006FE0;">,</span> 1)<span style="color: #006FE0;">;</span>
-omega0_F <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">*</span>F0_F<span style="color: #006FE0;">;</span>
-C_snd <span style="color: #006FE0;">=</span> 342<span style="color: #006FE0;">;</span>
-k_F <span style="color: #006FE0;">=</span> omega0_F <span style="color: #006FE0;">/</span> C_snd<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% wave number</span>
+  F0_F <span style="color: #006FE0;">=</span> linspace(100<span style="color: #006FE0;">,</span>100<span style="color: #006FE0;">,</span> 1)<span style="color: #006FE0;">;</span>
+  omega0_F <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">*</span>F0_F<span style="color: #006FE0;">;</span>
+  C_snd <span style="color: #006FE0;">=</span> 342<span style="color: #006FE0;">;</span>
+  k_F <span style="color: #006FE0;">=</span> omega0_F <span style="color: #006FE0;">/</span> C_snd<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">acoustical impedance</span>
-Z <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% acoustical impedance</span>
+  Z <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">visualise</span>
-figure(1)<span style="color: #006FE0;">;</span> clf<span style="color: #006FE0;">;</span>
-surface(g_AB<span style="color: #006FE0;">,</span> real(sphericalwave(vector(g_AB)<span style="color: #006FE0;">,</span> vs<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z)))<span style="color: #006FE0;">;</span>
-surface(g_AC<span style="color: #006FE0;">,</span> real(sphericalwave(vector(g_AC)<span style="color: #006FE0;">,</span> vs<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z)))<span style="color: #006FE0;">;</span>
-surface(g_BC<span style="color: #006FE0;">,</span> real(sphericalwave(vector(g_BC)<span style="color: #006FE0;">,</span> vs<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z)))<span style="color: #006FE0;">;</span>
-xlabel(<span style="color: #008000;">'x'</span>)<span style="color: #006FE0;">;</span> ylabel(<span style="color: #008000;">'y'</span>)<span style="color: #006FE0;">;</span> zlabel(<span style="color: #008000;">'z'</span>)<span style="color: #006FE0;">;</span>
-view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;</span>
+  <span style="color: #8D8D84; font-style: italic;">%% visualise</span>
+  figure(1)<span style="color: #006FE0;">;</span> clf<span style="color: #006FE0;">;</span>
+  surface(g_AB<span style="color: #006FE0;">,</span> real(sphericalwave(vector(g_AB)<span style="color: #006FE0;">,</span> vs<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z)))<span style="color: #006FE0;">;</span>
+  surface(g_AC<span style="color: #006FE0;">,</span> real(sphericalwave(vector(g_AC)<span style="color: #006FE0;">,</span> vs<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z)))<span style="color: #006FE0;">;</span>
+  surface(g_BC<span style="color: #006FE0;">,</span> real(sphericalwave(vector(g_BC)<span style="color: #006FE0;">,</span> vs<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z)))<span style="color: #006FE0;">;</span>
+  xlabel(<span style="color: #008000;">'x'</span>)<span style="color: #006FE0;">;</span> ylabel(<span style="color: #008000;">'y'</span>)<span style="color: #006FE0;">;</span> zlabel(<span style="color: #008000;">'z'</span>)<span style="color: #006FE0;">;</span>
+  view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 
@@ -632,9 +644,9 @@ view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;<
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: 2017-11-23 Do 00:00</p>
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-11-23 Do&gt; </span></span> Rev. Time-stamp: <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-03-13 Mi 21:51&gt;</span></span></p>
 <p class="author">Author: Johann-Markus Batke</p>
-<p class="date">Created: 2018-03-22 Do 13:39</p>
+<p class="date">Created: 2019-03-14 Do 18:33</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14
+#+date: 2018-03-14; Revision Time-stamp: <2019-03-14 20:39:13 jbatke>
 #+setupfile: booast.setup
 #+exclude_tags: internal
 
