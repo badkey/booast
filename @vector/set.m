@@ -1,26 +1,28 @@
-function st = set(st, a, S_type)
-% set - modifies the vector object 
-% 
-% st = set(st, a, S_type)
-%
-% INPUTS 
-% st - existing vector object
-% a - matrix with 3 rows and coordinate values
-% S_type - type of coordinate system 'cartesian'|'spherical'|'polar'
-%
-% OUTPUTS
-% st - modified vector object
-%
-% DESCRIPTION
-% set - modifies the input vector object by replacing its values by  values from the matrix a 
-% taken coloumn-wise. 
-% Obtained vector object has a type according to the input value of S_type   
-%              
-% See also: vector, reshape
-  if prod(size(a)) ~= prod(st.D_full)
-    error('set: Number of vectors must no change.');
-  else
-    st.a = reshape(a, st.D_full);
-    st.S_type = S_type;
-  end
-end
+    function st = set(st, a, S_type)
+
+    % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
+    % 
+    % Permission is hereby granted, free of charge, to any person obtaining a copy
+    % of this software and associated documentation files (the "Software"), to deal
+    % in the Software without restriction, including without limitation the rights
+    % to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    % copies of the Software, and to permit persons to whom the Software is
+    % furnished to do so, subject to the following conditions:
+    % 
+    % The above copyright notice and this permission notice shall be included in all
+    % copies or substantial portions of the Software.
+    % 
+    % THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    % IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    % FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    % AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    % SOFTWARE.
+      if prod(size(a)) ~= prod(st.D_full)
+	error('set: Number of vectors must no change.');
+      else
+	st.a = reshape(a, st.D_full);
+	st.S_type = S_type;
+      end
+    end

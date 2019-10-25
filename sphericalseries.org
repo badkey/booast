@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-03-13 21:58:09 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-03-27 12:09:59 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -60,11 +60,9 @@ sphericalnormalisation
 <<copyright>>
 
 function N_O = sphericalnormalisation(N_order, norm)
-
   if nargin < 2
     norm = 'norm';
   end
-
   N_O = zeros((N_order+1)^2, 1);
 
   if strcmp(norm, 'norm')

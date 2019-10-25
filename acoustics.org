@@ -4,7 +4,7 @@
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+OPTIONS: timestamp:t title:t toc:t todo:t |:t
 #+TITLE: Acoustics
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-03-13 21:51:02 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-10-25 23:15:18 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -145,6 +145,9 @@ scalar arrays are shown using the =surface= command.
     <<save S_file>>
 #+END_SRC
 
+#+RESULTS: planewave cartesian example image
+[[file:img/exa_plane_wave_cartesian.png]]
+
 #+caption: Example plane wave defined in cartesian coordinates.
 #+attr_html: :width 100%
 #+RESULTS: example plane wave cartesian
@@ -187,7 +190,6 @@ surface of a sphere, a cone, or a half circle respectively.
 #+END_SRC
 
 #+RESULTS: planewave spherical example
-: 0
 
 #+name: planewave spherical example image
 #+BEGIN_SRC octave :results file :exports results
@@ -315,6 +317,8 @@ $$ p(\vec r, \vec r_s, k, Z_0) = -\mathrm i \, Z_0 \, G(\vec r|\vec r_s).$$
   surface(gr, real(p));
 #+END_SRC
 
+#+RESULTS: sphericalwave cartesian simple example
+
 #+name: sphericalwave cartesian simple example image
 #+BEGIN_SRC octave :results file :exports results
 <<sphericalwave cartesian simple example>>
@@ -324,7 +328,6 @@ ans = S_file;
 #+END_SRC
 
 #+RESULTS: sphericalwave cartesian simple example image
-[[file:img/spherical_test.png]]
 
 **** Example using several planes
 
@@ -379,3 +382,6 @@ Here we go again
 #+RESULTS: sphericalwave cartesian 3plane example image
 [[file:img/spherical_3plane_test.png]]
 
+* Test
+Prüfe Mail vom Kollegen
+[[gnus:nnimap+hsel.unix:INBOX#201903190130.x2J1U8tl003799@joule.et-inf.fho-emden.de][Email from Reminder Service: Tuesday's Calendar]]

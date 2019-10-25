@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2019-03-14 20:39:13 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2019-03-27 23:30:10 jbatke>
 #+setupfile: booast.setup
 #+exclude_tags: internal
 
@@ -11,9 +11,9 @@ for simulating acoustic problems using Octave or Matlab(tm).
 
 In particular, it provides two new matlab/octave classes, *vector* and
 *vectorgrid*. These can be used to implement arrays of vectors
-pointing to a location in $\mathcal R^3$.
+pointing to a location in R^3.
 
-- Visit section [[*Administration][Administration]] for setup (directory creation, etc) and
+- Visit section [[*Installation][Installation]] for setup (directory creation, etc) and
   installation.
 - The file [[file:acoustics.org::*Acoustic%20Waves][Acoustics]] contains some application examples for booast.
 
@@ -28,7 +28,7 @@ Some naming conventions are used throughout the documentation.
 | n_A       | vector with A values |
 | n_AB      | matrix AxB           |
 | n_ABC...Z | matrix AxBx...xZ     |
-|           |                      |
+
 
 *** Coordinate Systems
 
@@ -93,9 +93,9 @@ information using mathematical vectors or matrizes of vectors.
 Let us test for the vector. The snippet
 #+name: vectortest 
 #+BEGIN_SRC octave 
-  x = 1; y = 2; z = 3; 
-  S_type = 'cartesian';
-  v = vector(x, y, z, S_type);
+x = 1; y = 2; z = 3; 
+S_type = 'cartesian';
+v = vector(x, y, z, S_type);
 #+END_SRC
 is used in tests below.
 
@@ -108,6 +108,9 @@ ans = isobject(v);
 
 #+RESULTS: vectortest object test
 : 1
+
+
+
 
 It is, if 1. How nice.
 
@@ -2015,7 +2018,7 @@ Darstellung immer ein Ausschnitt zu wählen.
 #+RESULTS:
 [[file:img/exa_meshgrid.png]]
 
-* Administration
+* Installation
 ** Directory setup
 #+name: cleanup directories
 #+BEGIN_SRC shell
@@ -2030,7 +2033,7 @@ mkdir @vector @vectorgrid img
 #+END_SRC
 
 #+RESULTS: setup directories
-** Installation
+** Matlab/Octave Installation
 Add the path to Octave/Matlab where you installed booast. E.g.
 : addpath('path/to/booast/');
 
@@ -2044,7 +2047,21 @@ Add the path to Octave/Matlab where you installed booast. E.g.
 #+RESULTS: org setup
 : 2
 
+
+#+begin_src octave
+version
+#+end_src
+
+#+RESULTS:
+: 4.2.1
+
 ** TODO Octave tests
 Do some automatic tests like in
 https://orgmode.org/worg/org-contrib/babel/intro.html
 
+#+begin_src octave
+version
+#+end_src
+
+#+RESULTS:
+: 4.2.1
