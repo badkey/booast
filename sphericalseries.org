@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-03-13 21:58:09 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-04-05 16:35:26 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -11,7 +11,44 @@
 #+exclude_tags: internal
 
 * General Information
-* Spherical toolset 
+* Spherical Series
+Spherical Series provides means to calculate the Fourier Bessel Series 
+
+The form is
+\begin{equation}
+  \label{eq:fbs}
+  P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
+  \left\{\begin{array}{ll}
+  A_{n}^{m}(k) & j_n(kr) \\
+  B_{n}^{m}(k) & h_n(kr) \\
+  \end{array}\right\}
+  Y_{n}^{m}(\theta, \phi).
+\end{equation}
+
+Dabei sind
+- $A_{n}^{m}(k)$ Koeffizienten der Reihe, die das Schallfeld außerhalb des betrachteten Gebiets beschreiben und
+- $B_{n}^{m}(k)$ die Koeffizienten der Reihe, die das Schallfeld innerhalb des betrachteten Gebiets beschreiben.  Weiterhin ist
+- $j_n(kr)$ die sphärische Besselfunktion der ersten Art und
+- $h_n(kr)$ die sphärische Hankelfunktion, siehe \parencite{batke06:_bessel}.
+- $Y_{n}^{m}(\theta, \phi)$ sind Kugelflächenfunktionen \parencite{batke06:_spherical} und
+- $k = \omega/\mathrm c$ ist die Wellenzahl, wobei
+- $\mathrm c$ die Schallgeschwindigkeit bezeichnet. 
+Der Term $j_n(kr) \, Y_{n}^{m}(\theta, \phi)$ wird mitunter zur
+Basisfunktion $R_n^m(r, \theta, \phi, k)$ und $h_n(kr) \,
+Y_{n}^{m}(\theta, \phi)$ zur Basisfunktion $S_n^m(r, \theta, \phi, k)$
+zusammengefasst \parencite{batke08:_basis}, damit ergibt sich die
+Schreibweise
+\begin{equation}
+  \label{eq:1r}
+  P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
+  \left\{\begin{array}{ll}
+      A_{n}^{m}(k) & R_n^m(r, \theta, \phi, k)\\
+      B_{n}^{m}(k) & S_n^m(r, \theta, \phi, k)\\
+  \end{array}\right. .
+\end{equation}
+
+
+
 ** sphericalnormalisation
 *** Documentation
 
@@ -498,4 +535,5 @@ end
 
 ** series
    [[file:~/Kontor/Technicolor/Matlab/hoatools/Sphericalseries/sphericalseries_hoa_plane.m::function%20A_OFD%20=%20sphericalseries_hoa_plane(N_order,%20theta_D,%20phi_D,%20...][hoa plane]]
+
 * Examples

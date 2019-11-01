@@ -28,9 +28,9 @@ ans = S_file;
 #+END_SRC
 
 * Documentation template
-documentation in a m-file should contain
+documentation in a m-file should contain (e.g. this could go to a snippet)
 ** function
-explanation of function: do something
+explanation of function: calculates something for given argument
 *** Syntax
 *** Description
 *** Input Arguments
