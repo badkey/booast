@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-03-27 12:09:59 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-10-26 00:18:30 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -11,6 +11,8 @@
 #+exclude_tags: internal
 
 * General Information
+Spherical series refer to spherical harmonics and higher order ambisonics, in particluar.
+
 * Spherical toolset 
 ** sphericalnormalisation
 *** Documentation
@@ -226,7 +228,7 @@ function N_O = sphericalnormalisation(N_order, norm)
    S_file = 'img/legendre.png'; saveas(1, S_file);
    ans = S_file;
  #+END_SRC
-
+ #+attr_org: :width 500
  #+RESULTS: sphericallegendre test
  [[file:img/legendre.png]]
 
@@ -321,7 +323,7 @@ function N_O = sphericalnormalisation(N_order, norm)
  #+RESULTS:
 
  #+name: sphericalazimuth test
- #+BEGIN_SRC octave
+ #+BEGIN_SRC octave :results file
    N_order = 2;
    o = 1:(N_order+1)^2;
 
@@ -342,10 +344,12 @@ function N_O = sphericalnormalisation(N_order, norm)
      legend(num2str(o'));
 
    end
-
+   S_file = 'img/sphericalazimuth.png'; saveas(1, S_file);
+   ans = S_file;
  #+END_SRC
-
+#+attr_org: :width 500
  #+RESULTS: sphericalazimuth test
+ [[file:img/sphericalazimuth.png]]
 
 ** sphericalharmonic
 *** Documentation
@@ -440,6 +444,8 @@ for n = 0:N_order
 end
 #+END_SRC
 
+#+RESULTS: sphericalharmonic booast surface test
+
  #+name: sphericalharmonic numeric test
  #+BEGIN_SRC octave
 
@@ -494,6 +500,10 @@ end
 
  #+END_SRC
 
+ #+RESULTS: sphericalharmonic numeric test
+
 ** series
+hoa_plane
+
    [[file:~/Kontor/Technicolor/Matlab/hoatools/Sphericalseries/sphericalseries_hoa_plane.m::function%20A_OFD%20=%20sphericalseries_hoa_plane(N_order,%20theta_D,%20phi_D,%20...][hoa plane]]
 * Examples
