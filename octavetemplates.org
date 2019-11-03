@@ -1,9 +1,15 @@
+* Source blocks 
+
+Save the result and pass S_file to ans.
 #+name: save S_file
 #+BEGIN_SRC octave
 saveas(1, S_file);
 ans = S_file;
 #+END_SRC
 
+#+RESULTS: save S_file
+
+A copyright notice.
 #+name: copyright
 #+BEGIN_SRC octave
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
@@ -27,14 +33,57 @@ ans = S_file;
 % SOFTWARE.
 #+END_SRC
 
+
+* Octave Documentation
+
+
+#+name: octave comment
+#+BEGIN_SRC emacs-lisp :var s="Zeile 1\nZeile 2" :results raw
+(replace-regexp-in-string "^" "% " s)
+#+END_SRC
+
+#+RESULTS: octave comment
+% Zeile 1
+% Zeile 2
+% Zeile 1
+% Zeile 2
+
+Usage in octave header:
+: :post octave comment(s=*this*)
+
+Example
+ #+name: interface doc
+ #+BEGIN_SRC org :results ascii [:results output] :post octave comment(s=*this*)
+ - INPUTS ::
+   - in 1
+   - in 2
+ - OUTPUTS ::
+   out
+ #+END_SRC
+
+#+call: interface doc()
+
 * Documentation template
 documentation in a m-file should contain (e.g. this could go to a snippet)
 ** function
-explanation of function: calculates something for given argument
-*** Syntax
-*** Description
-*** Input Arguments
-*** Return Values
+file:namedfunc.m: calculates something for given argument
+*** Octave definition                                              :internal:
+#+BEGIN_SRC octave :tangle namedfunc.m
+<<named doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+#+END_SRC
+*** Interface test                                                 :internal:
+*** Documenation                                                     :ignore:
+#+name: named doc
+#+BEGIN_SRC org
+,*** Syntax
+,*** Description
+,*** Input Arguments
+,*** Return Values
+#+END_SRC
+
+#+call: named doc[:output html]()
+
 *** Examples
 *** Tips
 *** Alternatives

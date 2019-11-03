@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-01 10:19:56 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-03 00:17:23 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -9,12 +9,17 @@
 #+setupfile: octavetemplates.org
 #+setupfile: booast.setup
 #+exclude_tags: internal
+#+property: header-args:org               :eval export :exports results
+#+PROPERTY: header-args:octave :noweb yes :eval export
 
 * General Information
-* Spherical Series
-Spherical Series provides means to calculate the Fourier Bessel Series 
+This is all about Higher Order Ambisonics.
 
-The form is
+We need to implement some math.
+* Spherical Mathematics
+** Fourier Bessel Series
+Spherical Series provides means to calculate the "Fourier Bessel
+Series".  The form of this series is
 \begin{equation}
   \label{eq:fbs}
   P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
@@ -25,19 +30,19 @@ The form is
   Y_{n}^{m}(\theta, \phi).
 \end{equation}
 
-Dabei sind
-- $A_{n}^{m}(k)$ Koeffizienten der Reihe, die das Schallfeld außerhalb des betrachteten Gebiets beschreiben und
-- $B_{n}^{m}(k)$ die Koeffizienten der Reihe, die das Schallfeld innerhalb des betrachteten Gebiets beschreiben.  Weiterhin ist
-- $j_n(kr)$ die sphärische Besselfunktion der ersten Art und
-- $h_n(kr)$ die sphärische Hankelfunktion, siehe \parencite{batke06:_bessel}.
-- $Y_{n}^{m}(\theta, \phi)$ sind Kugelflächenfunktionen \parencite{batke06:_spherical} und
-- $k = \omega/\mathrm c$ ist die Wellenzahl, wobei
-- $\mathrm c$ die Schallgeschwindigkeit bezeichnet. 
-Der Term $j_n(kr) \, Y_{n}^{m}(\theta, \phi)$ wird mitunter zur
-Basisfunktion $R_n^m(r, \theta, \phi, k)$ und $h_n(kr) \,
-Y_{n}^{m}(\theta, \phi)$ zur Basisfunktion $S_n^m(r, \theta, \phi, k)$
-zusammengefasst \parencite{batke08:_basis}, damit ergibt sich die
-Schreibweise
+In particular, we have
+- $A_{n}^{m}(k)$ coefficients describing a soundfield outside 
+- $B_{n}^{m}(k)$ coefficients describing a soundfield inside
+- $j_n(kr)$ the spherical bessel function
+- $h_n(kr)$ the spherical hankel function
+- $Y_{n}^{m}(\theta, \phi)$ spherical harmonics
+- $k = \omega/\mathrm c$ wavenumber
+- $\mathrm c$ speed of sound
+
+** HOA Series
+The product $j_n(kr) \, Y_{n}^{m}(\theta, \phi)$ may combined to a basefunction $R_n^m(r, \theta, \phi, k)$ and $h_n(kr) \,
+Y_{n}^{m}(\theta, \phi)$ is combined to basefunction $S_n^m(r, \theta, \phi, k)$
+yielding 
 \begin{equation}
   \label{eq:1r}
   P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
@@ -47,54 +52,172 @@ Schreibweise
   \end{array}\right. .
 \end{equation}
 
+** Spherical Fourier Transform
+Combination of $A_{n}^{m}(k)$ and $j_n(kr)$ results in 
+\begin{equation}
+  \label{eq:sfs}
+  P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
+  \left\{\begin{array}{ll}
+  C_{n}^{m}(k,r) \\
+  D_{n}^{m}(k,r) \\
+  \end{array}\right\}
+  Y_{n}^{m}(\theta, \phi).
+\end{equation}
+
+* Spherical Functions
+** sphericalbesselj
+file:sphericalbesselj.m: calculates spherical bessel function at order N
 
 
-* Spherical toolset 
-** sphericalnormalisation
-*** Documentation
+*** Octave definition                                              :internal:
 
- =sphericalnormalisation= - calculates the normalization factor 
+#+BEGIN_SRC octave :tangle sphericalbesselj.m
+<<sphericalbesselj doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
 
- : N_O = sphericalnormalisation(N_order, norm)
+function J_sph_CF = sphericalbesselj(N_order, x_CF)
+  
+  C = size(x_CF, 1);
+  F = size(x_CF, 2);
+  L = C*F;
+  x_L = reshape(x_CF, 1, L);
+  J_sph_L = zeros(L, 1);
+  
+  % finde Nullen im Argument
+  idx_zero = (x_L == 0);
 
-#+name: octave comment
-#+BEGIN_SRC emacs-lisp :var s="Zeile 1\nZeile 2" :results raw
-(replace-regexp-in-string "^" "% " s)
+  % Ergebnis zuweisen
+  if N_order == 0
+    J_sph_L(idx_zero) = 1;
+  else
+    J_sph_L(idx_zero) = 0;
+  end
+
+  % finde den Rest
+  idx_nzero = (x_L ~= 0);
+
+  % Ergebnis zuweisen
+  J_sph_L(idx_nzero) = sqrt(pi ./ (2*x_L(idx_nzero))) .* ...
+      besselj(N_order + 0.5, x_L(idx_nzero));
+
+  % Form retten
+  J_sph_CF = reshape(J_sph_L, C, F);
+
 #+END_SRC
 
-#+RESULTS: octave comment
-% Zeile 1
-% Zeile 2
-:post octave comment(s=*this*)
+*** Interface test                                                 :internal:
+#+BEGIN_SRC octave
+N_order = 3;
+r_C = linspace(1, 2, 2);
+k_F = linspace(1, 2, 2);
+J_sph_CF = sphericalbesselj(N_order, r_C'*k_F);
+ans = size(J_sph_CF);
+#+END_SRC
 
- #+name: sphericalnormalisation doc 
- #+BEGIN_SRC org :results ascii [:results output]
-sphericalnormalisation
- - INPUTS ::
-   - N_order :: order of a spherical harmonic
-   - norm :: type of normalization: 
-     - 'norm' - fully normalized; 
-     - 'N3D'- normalized;
-     - 'sch0' or 'SN3D'- seminormalazed
-     - 'sch1'- Schmidt-Semi-normalized (Matlab)
-     - 'sconv' - norm. over all spherical convolutions
-     - 'planewave_impinging' - norm. for plane waves
+#+RESULTS:
+| 2 | 2 |
 
- - OUTPUTS ::
-     - N_O - corresponding normalization factor
+*** Documenation                                                     :ignore:
 
- - DESCRIPTION :: Calculates the normalization factor for a given
-                  harmonic order and normalization type.  If the type
-                  of normalization is not defined at the output, full
-                  normalization 'norm' will be performed.
- #+END_SRC
+#+name: sphericalbesselj doc
+#+BEGIN_SRC org
+,*** Syntax
+: J_sph_CF = sphericalbesselj(N_order, x_CF);
 
-#+call: octave comment(s=sphericalnormalisation doc)
+,*** Description
+spherical bessel function at order N
+
+,*** Input Arguments
+- x_CF :: C x F matrix
+
+,*** Return Values
+- J_sph_CF :: C x F matrix
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+#+END_SRC
+
+#+call: sphericalbesselj doc[:output html]()
 
 
- #+BEGIN_SRC octave :tangle sphericalnormalisation.m 
-<<octave comment(sphericalnormalisation doc)>>
+** sphericalbessel
 
+file:sphericalbessel.m: wrapper for sphericalbesselj, return all orders up to N
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalbessel.m
+<<sphericalbessel doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function J_sph_OCF = sphericalbessel(N_order, x_CF)
+
+  if length(size(x_CF)) > 2
+    error('Input argument must not have more than 2 dimensions.');
+  end
+  
+  % Speicher
+  O = (N_order+1)^2;
+  C = size(x_CF, 1);
+  F = size(x_CF, 2);
+  J_sph_OCF = zeros(O, C, F);
+  
+  for n = 0:N_order
+    J_CF = sphericalbesselj(n, x_CF);
+    for m = -n:n
+      J_sph_OCF(n^2+n+m+1, :, :) = J_CF;
+    end
+  end
+#+END_SRC
+
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave
+N_order = 3;
+r_C = linspace(1, 2, 2);
+k_F = linspace(1, 2, 2);
+J_sph_OCF = sphericalbessel(N_order, r_C'*k_F);
+ans = size(J_sph_OCF);
+#+END_SRC
+
+#+RESULTS:
+| 16 | 2 | 2 |
+
+*** Documenation                                                     :ignore:
+
+#+name: sphericalbessel doc
+#+BEGIN_SRC org
+,*** Syntax
+: J_sph_OCF = sphericalbessel(N_order, x_CF)
+
+,*** Description
+
+,*** Input Arguments
+
+,*** Return Values
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+#+END_SRC
+
+#+call: sphericalbessel doc[:output html]()
+
+
+** sphericalnormalisation
+=sphericalnormalisation= - calculates the normalization factor 
+file:./sphericalnormalisation.m
+*** Octave definition                                              :internal:
+#+BEGIN_SRC octave :tangle sphericalnormalisation.m 
+<<sphericalnormalisation doc[:results ascii :post octave comment(s=*this*)]()>>
 <<copyright>>
 
 function N_O = sphericalnormalisation(N_order, norm)
@@ -176,6 +299,7 @@ function N_O = sphericalnormalisation(N_order, norm)
  #+END_SRC
 
  #+RESULTS:
+*** Interface test                                                 :internal:
 
  #+name: sphericalnormalisation test
  #+BEGIN_SRC octave 
@@ -190,38 +314,48 @@ function N_O = sphericalnormalisation(N_order, norm)
  | 0.4886025119029199 |
  | 0.3454941494713355 |
 
-** sphericallegendre
-*** Documentation
-*** Implementation
+*** Documentation                                                    :ignore:
 
- #+name: spheriallegendre
- #+BEGIN_SRC octave :tangle sphericallegendre.m
+#+name: sphericalnormalisation doc
+#+BEGIN_SRC org :exports results 
+,*** Syntax
+: N_O = sphericalnormalisation(N_order, norm)
+
+,*** Description
+Calculates the normalization factor for a given harmonic order and
+normalization type.  If the type of normalization is not defined at
+the output, full normalization 'norm' will be performed.
+
+,*** Input Arguments
+- N_order :: order of a spherical harmonic
+- norm :: type of normalization: 
+  | 'norm'                | fully normalized;                     |
+  | 'N3D'                 | normalized;                           |
+  | 'sch0' or 'SN3D'      | seminormalazed                        |
+  | 'sch1'                | Schmidt-Semi-normalized (Matlab)      |
+  | 'sconv'               | norm. over all spherical convolutions |
+  | 'planewave_impinging' | norm. for plane waves                 |
+
+,*** Return Values
+  - N_O - corresponding normalization factor
+#+END_SRC
+
+#+call: sphericalnormalisation doc[:output html]()
+*** Examples
+*** Tips
+*** Alternatives
+*** See Also
+
+** sphericallegendre
+
+file:sphericallegendre.m: calculates spherical Legendre functions
+
+*** Octave definition                                              :internal:
+#+BEGIN_SRC octave :tangle sphericallegendre.m
+<<sphericallegendre doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+
  function P_OA = sphericallegendre(N_order, theta_A)
- % sphericallegendre - calculates Legendre functions
- %
- % P_OA = sphericallegendre(N_order, theta_A)
- %
- % INPUTS
- % N_order - order of the spherical harmonic
- % theta_A - vector representing the calculation range of inclination theta
- %
- % OUTPUTS
- % P_OA - matrix of Legendre function values
- %
- % DESCRIPTION
- % Resulting matrix of Legendre function values has the dimensions ((N_order+1)^2+1)xlength(theta_A).
- % For positive odd m a negative sign is used.
- % No normalization is used.
- % Regarding normalization the calculation is done for a symmetric calculation of m.
- %
- % for m >= 0: P_n^m( cos(theta )  [including (-1)^m]
- % for m < 0:  (-1)^m P_n^|m|( cos(theta )
- %
- % equivalent to (using legendre polynomial notation without Condon-Shortley phase):
- % for m >= 0: (-1)^m P_n,|m|( cos(theta )
- % for m < 0:  P_n,|m|( cos(theta )
- %
- % See also: legendre 
 
    O = (N_order+1)^2;
    A = length(theta_A);  % Anzahl der theta Werte
@@ -251,16 +385,17 @@ function N_O = sphericalnormalisation(N_order, norm)
          P_OA([o_m-1:-1:o_l], :) = fac .* P_QA(2:end,:);
      end
    end
- #+END_SRC
+#+END_SRC
 
+*** Interface test                                                 :internal:
  #+name: sphericallegendre test
  #+BEGIN_SRC octave :results file
    % Legendrefunktionen
-   N_order = 3;
-   theta_A = linspace(0, pi, 100);
+   N_order = 2;
+   theta_A = linspace(0, pi, 90);
    P_OA = sphericallegendre(N_order, theta_A);
    figure(1);
-   plot(P_OA.');
+   plot(P_OA.'); xlabel('\theta'); ylabel('P_{n}(\theta)')
    S_file = 'img/legendre.png'; saveas(1, S_file);
    ans = S_file;
  #+END_SRC
@@ -268,8 +403,49 @@ function N_O = sphericalnormalisation(N_order, norm)
  #+RESULTS: sphericallegendre test
  [[file:img/legendre.png]]
 
+*** Documenation                                                     :ignore:
+#+name: sphericallegendre doc
+#+BEGIN_SRC org
+,*** Syntax
+
+: P_OA = sphericallegendre(N_order, theta_A)
+
+,*** Description
+
+Resulting matrix of Legendre function values has the dimensions ((N_order+1)^2+1)xlength(theta_A).
+For positive odd m a negative sign is used.
+No normalization is used.
+Regarding normalization the calculation is done for a symmetric calculation of m.
+
+- for $m >= 0$: $P_n^m(\cos(\theta )$  [including $(-1)^m$]
+- for $m < 0:$  $(-1)^m P_n^{|m|}(\cos(\theta )$
+
+equivalent to (using legendre polynomial notation without Condon-Shortley phase):
+- for $m >= 0$: $(-1)^m P_n,|m|( \cos(\theta )$
+- for $m < 0$:  $P_n,|m|( \cos(\theta )$
+
+,*** Input Arguments
+
+- N_order :: order of the spherical harmonic
+- theta_A :: vector representing the calculation range of inclination theta
+
+,*** Return Values
+
+- P_OA :: matrix of Legendre function values
+
+,*** See Also
+legendre 
+#+END_SRC
+
+#+call: sphericallegendre doc[:output html]()
+
 ** trg
- #+BEGIN_SRC octave :tangle trg.m
+
+file:trg.m: calculates something for given argument
+*** Octave definition                                              :internal:
+#+BEGIN_SRC octave :tangle trg.m
+<<named doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
  function y = trg(m, x)
    if m > 0
      y = (-1)^m * sqrt(2) * cos(m*x);
@@ -278,20 +454,41 @@ function N_O = sphericalnormalisation(N_order, norm)
    else % m == 0
      y = 1;
    end
- #+END_SRC
+#+END_SRC
+*** Interface test                                                 :internal:
+tbd
+*** Documenation                                                     :ignore:
+#+name: named doc
+#+BEGIN_SRC org
+,*** Syntax
+: y = trg(m, x)
+,*** Description
+
+,*** Input Arguments
+
+- x : numeric argument
+- m : order
+
+,*** Return Values
+
+y
+#+END_SRC
+
+#+call: named doc[:output html]()
+
+*** Examples
+*** Tips
+*** Alternatives
+*** See Also
+trh
 
 ** trh
-
- % 2D normalised (N2D) as defined in sec. 3.1 of
- % J. Daniel: 
- % Spatial Sound Endcoding Including Near Field Effect: Introducing Distance 
- % coding Filters and a Viable, New Ambisonic Format, 
- % AES 23rd International Conference, 2003
-
-
- #+BEGIN_SRC octave :tangle trh.m
+file:trh.m: calculates something for given argument
+*** Octave definition                                              :internal:
+#+BEGIN_SRC octave :tangle trh.m
+<<named doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
  function y = trh(m, x)
- % real-valued circular harmonics 2D normalised (N2D) of degree m and azimuth x
    if m > 0
      y = sqrt(2) * cos(m*x);
    elseif m < 0
@@ -299,30 +496,46 @@ function N_O = sphericalnormalisation(N_order, norm)
    else % m == 0
      y = 1;
    end
- #+END_SRC
+#+END_SRC
+*** Interface test                                                 :internal:
+*** Documenation                                                     :ignore:
+#+name: trg doc
+#+BEGIN_SRC org
+,*** Syntax
+,*** Description
+
+real-valued circular harmonics 2D normalised (N2D) of degree m and azimuth x
+
+2D normalised (N2D) as defined in sec. 3.1 of
+J. Daniel: 
+Spatial Sound Endcoding Including Near Field Effect: Introducing Distance 
+coding Filters and a Viable, New Ambisonic Format, 
+AES 23rd International Conference, 2003
+
+,*** Input Arguments
+- m :: degree
+- x :: azimuth
+
+,*** Return Values
+- y :: circular harmonic
+#+END_SRC
+
+#+call: trg doc[:output html]()
+
+*** Examples
+*** Tips
+*** Alternatives
+*** See Also
+trh
 
 ** sphericalazimuth
-*** Documentation
 
- % sphericalazimuth - calculates the spherical azimuth
- %
- % D_OB = sphericalazimuth(N_order, phi_B, S_type)
- %
- % INPUTS
- % N_order - order of the spherical harmonic
- % phi_B - vector representing the calculation range of azimuth phi ?
- % S_type - type of the spherical harmonic: 'real', 'real_signed', 'real_unsigned'  or 'complex'
- %
- % OUTPUTS
- % D_OB - matrix with spherical azimuth values
- %
- % DESCRIPTION
- % If less than 3 variablrs are defined at the input, calculation is done for S_type = 'complex' case.
- %
- % See also: trg, trh
+file:sphericalazimuth.m: calculates spherical azimuth of order N for angle phi 
 
-*** Implementation
- #+BEGIN_SRC octave :tangle sphericalazimuth.m
+*** Octave definition                                              :internal:
+#+BEGIN_SRC octave :tangle sphericalazimuth.m
+<<named doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
  function D_OB = sphericalazimuth(N_order, phi_B, S_type)
  if nargin < 3
    S_type = 'complex';
@@ -354,12 +567,35 @@ function N_O = sphericalnormalisation(N_order, norm)
    otherwise
      error('Unknown spherical azimuth type %s!', S_type);
  end
- #+END_SRC
+#+END_SRC
+*** Interface test                                                 :internal:
+*** Documenation                                                     :ignore:
+#+name: sphericalazimuth doc
+#+BEGIN_SRC org
+,*** Syntax
+: D_OB = sphericalazimuth(N_order, phi_B, S_type)
 
- #+RESULTS:
+,*** Description
+spherical azimuth of order N for angle phi 
+
+If less than 3 variablrs are defined at the input, calculation is done
+for S_type = 'complex' case.
+
+,*** Input Arguments
+- N_order :: order of the spherical harmonic
+- phi_B :: vector representing the calculation range of azimuth phi ?
+- S_type :: type of the spherical harmonic: 'real', 'real_signed', 'real_unsigned'  or 'complex'
+
+,*** Return Values
+- D_OB :: matrix with o orders and B angles
+#+END_SRC
+
+#+call: sphericalazimuth doc[:output html]()
+
+*** Examples
 
  #+name: sphericalazimuth test
- #+BEGIN_SRC octave :results file
+ #+BEGIN_SRC octave :exports results :results file
    N_order = 2;
    o = 1:(N_order+1)^2;
 
@@ -384,43 +620,25 @@ function N_O = sphericalnormalisation(N_order, norm)
    ans = S_file;
  #+END_SRC
 #+attr_org: :width 500
- #+RESULTS: sphericalazimuth test
+#+RESULTS: sphericalazimuth test
  [[file:img/sphericalazimuth.png]]
+*** Tips
+*** Alternatives
+*** See Also
+trg, trh
+
 
 ** sphericalharmonic
 *** Documentation
 
- % sphericalharmonic - returns a spherical harmonic of given order, type and normalization
- %
- % Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, norm, type)
- %
- % INPUTS
- % N_order - Ambisonics order
- % theta_A - vector representing the calculation range of inclination theta
- % phi_B - vector representing the calculation range of azimuth phi
- % norm - string with type of normalization: 'norm' - fully normalized; 
- %                                           'N3D'- normalized; 
- %                                           'sch0' or 'SN3D'- seminormalazed
- %                                           'sch1'- Schmidt-Semi-normalized (Matlab)
- %                                           'sconv' - norm. over all spherical convolutions
- %                                           'planewave_impinging' - norm. for plane waves
- % type - type of the spherical harmonic: 'real', 'real_signed', 'real_unsigned'  or 'complex'
- %
- % OUTPUTS
- % Y_OAB - matrix of the spherical harmonics values
- %
- % DESCRIPTION
- % If the number of input arguments is < 5, the calculation would be done for a 'complex' type of a 
- % spherical harmonic. If the number of input arguments is < 4, the calculation would be done for a
- % 'norm' normalization type case.
- % Harmonics are returned in rows of p (e.g. row = 1 -> m = 0, row = 2 -> m = 1)
- % after Poletti
- %
- % See also: sphericalnormalisation, sphericallegendre, sphericalazimuth
+file:sphericalharmonic.m: returns a spherical harmonic of given order,
+type and normalization
 
-*** Implementation
+*** Octave definition                                              :internal:
 
 #+BEGIN_SRC octave :tangle sphericalharmonic.m
+<<sphericalharmonic doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
 function Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, norm, type)
 if nargin < 5
   type = 'complex';
@@ -428,7 +646,6 @@ end
 if nargin < 4
   norm = 'norm';
 end
-
 O = (N_order+1)^2;
 
 %% Normierungsfaktor
@@ -449,8 +666,106 @@ for o = 1:O
 end
 #+END_SRC
 
+#+RESULTS:
+
+*** Interface test                                                 :internal:
+#+name: sphericalharmonic numeric test
+#+BEGIN_SRC octave :results output
+N_order = 2
+A = 50; theta_A = linspace(0, pi, A);
+B = 150; phi_B = linspace(0, 2*pi, B);
+S_norm = 'norm';
+S_type = 'complex';
+Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
+for n = 0:N_order
+  for m = 0:n
+ 
+    % m > 0
+    op = n^2+n+m+1;
+    % m < 0
+    om = n^2+n-m+1;
+ 
+    % hermitisch-Test
+    if m == 0
+	 Z_OAB(op, :, :) = Y_OAB(op, :, :);
+    else
+	 Z_OAB(op, :, :) = (-1)^m * conj(Y_OAB(om, :,:));
+	 Z_OAB(om, :, :) = (-1)^m * conj(Y_OAB(op, :,:));
+    end
+ 
+    % reell-Test I
+    if m == 0
+	 X_OAB(op, :, :) = Y_OAB(op, :, :);
+    else
+	 X_OAB(op, :, :) = (-1)^m / sqrt(2) * ...
+          (Y_OAB(op, :, :) + conj(Y_OAB(op, :, :)));
+	 X_OAB(om, :, :) = (-1)*i*(-1)^m /(sqrt(2)) * ...
+          (Y_OAB(op, :, :) - conj(Y_OAB(op, :, :)));
+    end
+
+    % reell-Test II
+    if m == 0
+	 W_OAB(op, :, :) = Y_OAB(op, :, :);
+    else
+	 W_OAB(op, :, :) = (-1)^m / sqrt(2) * ...
+          (Y_OAB(op, :, :) + (-1)^m * Y_OAB(om, :, :));
+	 W_OAB(om, :, :) = -i / sqrt(2) * ...
+          ((-1)^m * Y_OAB(op, :, :) - Y_OAB(om, :, :));
+    end
+
+  end
+end
+
+if sum(sum(sum(abs(X_OAB-S_OAB)))) > 10^-8
+  disp('real valued harmonics I failed!');
+end
+if sum(sum(sum(abs(W_OAB-S_OAB)))) > 10^-8
+  disp('real valued harmonics II failed!');
+end
+if sum(sum(sum(abs(Y_OAB-Z_OAB)))) > 10^-8
+  disp('Y is not hermitian!');
+end
+#+END_SRC
+
+ #+RESULTS: sphericalharmonic numeric test
+
+*** Documenation                                                     :ignore:
+#+name: sphericalharmonic doc
+#+BEGIN_SRC org
+,*** Syntax
+: Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, norm, type)
+,*** Description
+
+If the number of input arguments is < 5, the calculation would be done
+for a 'complex' type of a spherical harmonic. If the number of input
+arguments is < 4, the calculation would be done for a 'norm'
+normalization type case.
+
+Harmonics are returned in rows of p (e.g. row = 1 -> m = 0, row = 2 ->
+m = 1) after e.g. Poletti.
+
+,*** Input Arguments
+- N_order :: Ambisonics order
+- theta_A :: vector representing the calculation range of inclination theta
+- phi_B :: vector representing the calculation range of azimuth phi
+- norm :: string with type of normalization: 
+          | 'norm'                | fully normalized                      |
+          | 'N3D'                 | normalized                            |
+          | 'sch0' or 'SN3D'      | seminormalazed                        |
+          | 'sch1'                | Schmidt-Semi-normalized (Matlab(tm))  |
+          | 'sconv'               | norm. over all spherical convolutions |
+          | 'planewave_impinging' | norm. for plane waves                 |
+- type :: type of the spherical harmonic: 
+          |'real', 'real_signed', 'real_unsigned'  or 'complex'|
+,*** Return Values
+- Y_OAB :: matrix of the spherical harmonics values
+#+END_SRC
+
+#+call: sphericalharmonic doc[:output html]()
+
+*** Examples
  #+name: sphericalharmonic booast surface test
- #+BEGIN_SRC octave
+ #+BEGIN_SRC octave :tangle sphericalharmonicbooastsurfacetest.m :var S_file="img/sphereharmsurf.png" :results file
 %% spherical harmonics
 N_order = 2;
 A = 50; theta_A = linspace(0, pi, A);
@@ -463,12 +778,14 @@ Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
 vg = vectorgrid(1, theta_A, phi_B, 'spherical');
 
 %% draw
+figure(1); clf;
 for n = 0:N_order
   for m = -n:n
     o = n^2+n+m+1;
-    figure(100+o); clf;
+    subplot(N_order + 1, 2*N_order + 1, (N_order+1)+n*(2*N_order+1)+m);
     Y_AB = Y_OAB(o, :, :);
-    surface(vg, abs(real(Y_AB)), sign(real(Y_AB)), 'dependendSurface');
+    % surface(vg, abs(real(Y_AB)), sign(real(Y_AB)), 'dependendSurface');
+    surface(vg, abs(real(Y_AB)), [], 'dependendSurface');
     xlabel('x');
     ylabel('y');
     zlabel('z');
@@ -478,69 +795,253 @@ for n = 0:N_order
     axis('equal');
   end
 end
+<<save S_file>>
 #+END_SRC
 
+#+caption: Spherical harmonic functions shown as functions of the radius.
+#+attr_org: :width 500
 #+RESULTS: sphericalharmonic booast surface test
+[[file:img/sphereharmsurf.png]]
 
- #+name: sphericalharmonic numeric test
- #+BEGIN_SRC octave
+*** Tips
+*** Alternatives
+*** See Also
+sphericalnormalisation, sphericallegendre, sphericalazimuth
 
-   for n = 0:N_order
-     for m = 0:n
+
+
+
+* Spherical Series
+** Sphericalseries_hoa_plane
+
+
+#+name: spherical series hoa planewave test
+#+BEGIN_SRC octave
+% Rasta
+% -------------------------------------------------------------------
+
+% conus
+if 1
+  R_max = 1.5;
+  C = 30; r_C = linspace(0, R_max, C);
+  A = 1;  theta_A = linspace(pi/2, pi/2, A);
+  B = 40; phi_B = linspace(0, 2*pi,    B);
+  gg_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
+end
+
+% sphere
+if 0
+  R_max = 0.15;
+  C = 1; r_C = linspace(R_max, R_max, C);
+  A = 30;  theta_A = linspace(0, pi, A);
+  B = 40; phi_B = linspace(0, 2*pi,  B);
+  gg_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
+end
+
+% Spherical stuff
+% -------------------------------------------------------------------
+N_order = 4;
+F = 1;
+f_F = linspace(100, 1000, F); % Frequenzen
+k_F = -2*pi*f_F/342; % Wellenzahl
+
+% ebene Welle
+% -------------------------------------------------------------------
+Theta_i = pi/3;
+Phi_i = pi/2;
+S_norm = 'norm';
+S_type = 'complex';
+A_OF = sphericalseries_hoa_plane(N_order, Theta_i, Phi_i, ...
+                                 S_norm, S_type, F);
+
+% Sphärische-Fouriertransformations-Coeffizienten (sfc)
+% -------------------------------------------------------------------
+C_OCF = sphericalseries_sfc(A_OF, [], r_C, inf, k_F);
+
+% inverse sphärische Fouriertransformation (isf)
+% -------------------------------------------------------------------
+
+% Basisfunktion
+Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
+
+% ISF im Frequenzbereich
+P_CABF = sphericalseries_isf(C_OCF, Y_OAB);
+
+% ISF im Zeitbereich
+c_OCF = ifft(C_OCF, [], 3);
+p_CABF = sphericalseries_isf(c_OCF, Y_OAB);
+      
+
+% malen
+% -------------------------------------------------------------------
+if 1
+  for f = 1:F
+    figure(f);
+    vectorgrid_surface(gg_CAB, squeeze(abs(real(P_CABF(:,:,:,f)))));
+    axis('equal');
+    grid('on');
+    view([30 30]);
+  end
+end
+
+#+END_SRC
+
+** sphericalseries_hoa_spherical
+** sphericalseries_hoa_basis
+
+file:sphericalseries_hoa_basis.m: returns spherical basis functions R = j_n Y and S = h_n Y
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalseries_hoa_basis.m
+<<sphericalseries_hoa_basis doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+
+function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
+                                               vg_CAB, k_F, ...
+                                               S_norm, S_type)
+
+  if strcmp(vectorgrid_type(vg_CAB), 'spherical')
     
-       % m > 0
-       op = n^2+n+m+1;
-       % m < 0
-       om = n^2+n-m+1;
+    [r_C, theta_A, phi_B] = vectorgrid_grid(vg_CAB);
     
-       % hermitisch-Test
-       if m == 0
-	 Z_OAB(op, :, :) = Y_OAB(op, :, :);
-       else
-	 Z_OAB(op, :, :) = (-1)^m * conj(Y_OAB(om, :,:));
-	 Z_OAB(om, :, :) = (-1)^m * conj(Y_OAB(op, :,:));
-       end
+    ind_ext  = find(r_C <= R_src); % exterior case
+    ind_int  = find(r_C >  R_src); % interior case
     
-       % reell-Test I
-       if m == 0
-	 X_OAB(op, :, :) = Y_OAB(op, :, :);
-       else
-	 X_OAB(op, :, :) = (-1)^m / sqrt(2) * ...
-             (Y_OAB(op, :, :) + conj(Y_OAB(op, :, :)));
-	 X_OAB(om, :, :) = (-1)*i*(-1)^m /(sqrt(2)) * ...
-             (Y_OAB(op, :, :) - conj(Y_OAB(op, :, :)));
-       end
+    % Basisfunktionen als Summanden der inversen
+    % sph. Fouriertransformation mit den Funktionen j_n und h_n
+    % berechnet:
+    Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
 
-       % reell-Test II
-       if m == 0
-	 W_OAB(op, :, :) = Y_OAB(op, :, :);
-       else
-	 W_OAB(op, :, :) = (-1)^m / sqrt(2) * ...
-             (Y_OAB(op, :, :) + (-1)^m * Y_OAB(om, :, :));
-	 W_OAB(om, :, :) = -i / sqrt(2) * ...
-             ((-1)^m * Y_OAB(op, :, :) - Y_OAB(om, :, :));
-       end
+    if ~isempty(ind_ext)
+      j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
+      R_OCABF = sphericalseries_isfs(j_OCF, Y_OAB);
+    else 
+      R_OCABF = [];
+    end
 
-     end
-   end
+    if ~isempty(ind_int)
+      h_OCF = sphericalhankel(N_order, r_C(ind_int).'*k_F);
+      S_OCABF = sphericalseries_isfs(h_OCF, Y_OAB);
+    else
+      S_OCABF = [];
+    end
+  else 
+    error('Vectorgrid need to be spherical (at least in a way...).');
+  end
+#+END_SRC
+*** Interface test                                                 :internal:
 
-   if sum(sum(sum(abs(X_OAB-S_OAB)))) > 10^-8
-     disp('real valued harmonics I failed!');
-   end
-   if sum(sum(sum(abs(W_OAB-S_OAB)))) > 10^-8
-     disp('real valued harmonics II failed!');
-   end
-   if sum(sum(sum(abs(Y_OAB-Z_OAB)))) > 10^-8
-     disp('Y is not hermitian!');
-   end
+*** Documenation                                                     :ignore:
+#+name: sphericalseries_hoa_basis doc
+#+BEGIN_SRC org
+,*** Syntax
 
- #+END_SRC
+,*** Description
+: [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
+:                                            vg_CAB, k_F, ...
+:                                            S_norm, S_type)
+ 
+returns spherical basis functions R = j_n Y and S = h_n Y
+    
+,*** Input Arguments
 
- #+RESULTS: sphericalharmonic numeric test
+,*** Return Values
 
-** series
-hoa_plane
+,*** Examples
 
-   [[file:~/Kontor/Technicolor/Matlab/hoatools/Sphericalseries/sphericalseries_hoa_plane.m::function%20A_OFD%20=%20sphericalseries_hoa_plane(N_order,%20theta_D,%20phi_D,%20...][hoa plane]]
+,*** Tips
 
+,*** Alternatives
+
+,*** See Also
+#+END_SRC
+
+#+call: sphericalseries_hoa_basis doc[:output html]()
+
+** sphericalseries_hoa
+
+file:sphericalseries_hoa.m: calculates something for given argument
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalseries_hoa.m
+<<sphericalseries_hoa doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function p_CABF = sphericalseries_hoa(C_OF, F_OCABF, D_OF, G_OCABF)
+  
+  if length(size(F_OCABF)) < 3
+    error('Function basis needs at least 3 dimensions.');
+  end
+  
+  % berechne Ergebnis der Reihenentwicklung mit Koeffizienten C mit
+  % Funktionsbasis F:
+  if ~isempty(F_OCABF)
+    p_CABF = sphericalseries(C_OF, F_OCABF);
+  else
+    p_CABF = [];
+  end
+  
+  % falls zwei Koeffzi. und Basen übergeben, weitere Berechnung:
+  if nargin == 4
+    
+    if ~isempty(G_OCABF)
+      q_CABF = sphericalseries(D_OF, G_OCABF);
+    else
+      q_CABF = [];
+    end
+
+    % concatiniere 8) Ergebnis: 
+    p_CABF = [p_CABF; q_CABF];
+  end
+  
+function p_CABF = sphericalseries(C_OF, F_OCABF)
+% bestimme Größe der Eingangsmatrizen 
+  C = size(F_OCABF, 2);
+  A = size(F_OCABF, 3);
+  B = size(F_OCABF, 4);
+  F = size(F_OCABF, 5);
+  p_CABF = zeros(C, A, B, F);
+  for f = 1:F
+    for c = 1:C
+      for a= 1:A
+        for b = 1:B
+          p_CABF(c, a, b, f) = C_OF(:,f).' *  F_OCABF(: ,c, a, b, f);
+        end
+      end
+    end
+  end
+#+END_SRC
+*** Interface test                                                 :internal:
+*** Documenation                                                     :ignore:
+
+#+name: sphericalseries_hoa doc
+#+BEGIN_SRC org
+,*** Syntax
+
+: p_CABF = sphericalseries_hoa(C_OF, F_OCBAF, D_OF, G_OCBAF)
+
+,*** Description
+
+returns result of HOA series with coefficients C and D und basis
+functions F and G. The second pair (D and G) is optional.
+
+,*** Input Arguments
+
+,*** Return Values
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+#+END_SRC
+
+#+call: sphericalseries_hoa doc[:output html]()
+
+
+
+** sphericalseries_sfc
 * Examples

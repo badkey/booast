@@ -1,8 +1,8 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2019-03-27 23:30:10 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2019-11-02 00:22:05 jbatke>
+#+PROPERTY: header-args:octave :noweb yes :eval export
 #+setupfile: booast.setup
-#+exclude_tags: internal
 
 * General Information
 
@@ -28,7 +28,6 @@ Some naming conventions are used throughout the documentation.
 | n_A       | vector with A values |
 | n_AB      | matrix AxB           |
 | n_ABC...Z | matrix AxBx...xZ     |
-
 
 *** Coordinate Systems
 
@@ -109,9 +108,6 @@ ans = isobject(v);
 #+RESULTS: vectortest object test
 : 1
 
-
-
-
 It is, if 1. How nice.
 
 *** Syntax
@@ -128,8 +124,10 @@ It is, if 1. How nice.
 - =s1, s2, ...= are matrices
 - =S_type= type of the coordinate system ('cartesian', 'spherical'
   or 'polar')
+
 *** Return Values
 - =v= vector object
+
 *** Examples
 
 - four parameter input :: single values for each dimension
@@ -179,6 +177,7 @@ It is, if 1. How nice.
   | 10 | 10 | 10 |
 
 ** Methods
+Methods for class =vector=.
 *** display
 **** Definition                                                    :internal:
  Method to display the content of =vector= 
@@ -1099,7 +1098,7 @@ get
 
 Transform a vectorgrid to a meshgrid.
 
-*HINT* meshgrid is restricted to 3D for the time being!
+*WARNING* meshgrid is restricted to 3D for the time being!
 
 #+name: vectorgrid mesgrid
 #+BEGIN_SRC octave :tangle @vectorgrid/meshgrid.m
@@ -1136,15 +1135,18 @@ Transform a vectorgrid to a meshgrid.
 #+END_SRC
 
 **** Tests                                                         :internal:
-***** TODO 2D
+***** TODO COMMENT 2D
 Test dimensions of output
-#+name: vectorgrid mesgrid default test
+#+name: vectorgrid meshgrid default test
 #+begin_src octave :results output
   A = 21; B = 30; 
   g_AB = vectorgrid(linspace(-3, 3, A), linspace(-2, 2, B), 'cartesian');
   [X_BA, Y_BA] = meshgrid(g_AB);
   size(X_BA)
 #+END_SRC
+
+#+RESULTS: vectorgrid meshgrid default test
+
 ***** 3D
 Test dimensions of output
 #+name: vectorgrid mesgrid default test
@@ -1156,6 +1158,10 @@ Test dimensions of output
 #+END_SRC
 
 #+RESULTS: vectorgrid mesgrid default test
+: ans =
+: 
+:    30   21    3
+: 
 
 ...ein Matlab-Meshgrid mit entsprechend vielen (hier 3)
 Dimensionen. Der Wertebereich lässt sich einschränken, indem die
@@ -1193,7 +1199,6 @@ bringen:
 
     z_BAC
     gz_BAC
-
 #+END_SRC
 
 #+RESULTS:
@@ -1246,12 +1251,14 @@ ans(:,:,3) =
 
 **** Examples label:meshgridbooast
 
-***** 2D
+***** COMMENT 2D
 The 2D meshgrid according to Octave/Matlab is obtained by 
 #+name: meshgrid meshgrid x_BA y_BA
 #+BEGIN_SRC octave
   [x_BA, y_BA] = meshgrid(vg_AB);
 #+END_SRC
+
+#+RESULTS: meshgrid meshgrid x_BA y_BA
 
 So we get 
 #+BEGIN_SRC octave :results output :tangle example_2D_meshgrid_booast.m
@@ -1270,6 +1277,10 @@ We could take the vectorgrid example as given by
 <<vectorgrid example x_A y_B z_C>>
 <<vectorgrid example vg_ABC>>
 #+END_SRC
+
+#+RESULTS:
+: 0
+
 and convert is to a meshgrid like this:
 #+name: meshgrid from vectorgrid X_BAC Y_BAC Z_BAC 
 #+BEGIN_SRC octave
@@ -1303,6 +1314,9 @@ An excursion to the Matlab/Octave meshgrid:
   y_B = linspace(-2, 2, B);
   [x_BA, y_BA] = meshgrid(x_A, y_B);
 #+END_SRC
+
+#+RESULTS: meshgrid from matlab x_BA y_BA
+: 0
 
 ***** 3D-Meshgrid using Matlab/Octave
 
@@ -1520,14 +1534,14 @@ g_AB1 = g_ABC(:,:,1);
 #+END_SRC
 
 The function should look like the example in the alternatives section
-ref:surfacealternatives. Here we define the function the booasty way.
+ref:surfacealternatives. Here we define the function the booasty way:
 #+name: surface example s_AB
 #+BEGIN_SRC octave
 r_xyz_AB = get(vector(g_AB1), 'cartesian');
 s_AB = squeeze(sum(r_xyz_AB(1:2, :, :).^2, 1));
 #+END_SRC
 
-The same is achieved by
+The same is achieved in an Octave/Matlab manner by
 #+BEGIN_SRC octave
 [X_BA, Y_BA, Z_BA] = meshgrid(g_AB1);
 s_BA = X_BA.^2 + Y_BA.^2; 
@@ -1556,16 +1570,18 @@ so surface colors the slice defined by =g_AB1= by values =s_AB=.
 #+END_SRC
 
 #+caption: A surface defined using booast. label:surface_example_2d_3d
+#+attr_org: :width 400
 #+RESULTS: surface example 2d in 3d figure
 [[file:img/2d_in_3d_surface_colored_booast.png]]
 
 ***** 3D in 3D
-Using
+Using 'dependendSurface' we can show the data as a 3D plane in the 3D
+space. So we state
 #+name: surface example dependendSurface
 #+BEGIN_SRC octave
 surface(g_AB1, s_AB, [], 'dependendSurface');
 #+END_SRC
-so surface colors the slice defined by =g_AB1= by values =s_AB=.
+surface() colors the slice defined by =g_AB1= by values =s_AB=.
 
 #+name: surface example 2d in 3d figure dependendSurface
 #+BEGIN_SRC octave :exports results :tangle surface_example_2d_in_3d.m :results file :var S_file="img/2d_in_3d_surface_dependend.png"
@@ -1579,16 +1595,17 @@ so surface colors the slice defined by =g_AB1= by values =s_AB=.
   <<save S_file>>
 #+END_SRC
 
+#+attr_org: :width 400
+#+caption: A surface defined using booast being *dependend* from the definition space. label:surface_example_2d_3d_dep
 #+RESULTS: surface example 2d in 3d figure dependendSurface
 [[file:img/2d_in_3d_surface_dependend.png]]
 
-#+caption: A surface defined using booast being *dependend* from the definition space. label:surface_example_2d_3d_dep
 
-***** 3D in 3D coloring
+***** TODO 3D in 3D coloring
 
-***** 3D in 3D Spherical
+***** TODO 3D in 3D Spherical
 
-**** Alternatives label:surfacealternatives
+**** COMMENT Alternatives label:surfacealternatives
 As an alternative, we do the examples as tests solely using
 Octave/matlab's =surface= function.
 
@@ -1628,7 +1645,8 @@ This results in a figure like shown in Figure ref:alternative_2d_in_3d_surface.
    <<save S_file>>
 #+END_SRC
 
-#+caption: A 2D surface in 3D space showing a function $f(x,y)$ for $z = 0$ using colors. label:alternative_2d_in3d_surface
+#+caption: A 2D surface in 3D space showing a function $f(x,y)$ for $z = 0$ using colors. 
+#+caption: label:alternative_2d_in_3d_surface
 #+RESULTS: alternative 2d in 3d figure
 file:img/2d_in_3d_surface_colored_octave.png
 
@@ -2036,24 +2054,6 @@ mkdir @vector @vectorgrid img
 ** Matlab/Octave Installation
 Add the path to Octave/Matlab where you installed booast. E.g.
 : addpath('path/to/booast/');
-
-** COMMENT org setup
-
-#+name: org setup
-#+BEGIN_SRC emacs-lisp
-(org-babel-lob-ingest "octavetemplates.org")
-#+END_SRC
-
-#+RESULTS: org setup
-: 2
-
-
-#+begin_src octave
-version
-#+end_src
-
-#+RESULTS:
-: 4.2.1
 
 ** TODO Octave tests
 Do some automatic tests like in
