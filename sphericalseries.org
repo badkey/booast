@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-03 00:17:23 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-20 14:22:57 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -40,9 +40,11 @@ In particular, we have
 - $\mathrm c$ speed of sound
 
 ** HOA Series
-The product $j_n(kr) \, Y_{n}^{m}(\theta, \phi)$ may combined to a basefunction $R_n^m(r, \theta, \phi, k)$ and $h_n(kr) \,
-Y_{n}^{m}(\theta, \phi)$ is combined to basefunction $S_n^m(r, \theta, \phi, k)$
-yielding 
+
+The product $j_n(kr) \, Y_{n}^{m}(\theta, \phi)$ may combined to a
+basefunction $R_n^m(r, \theta, \phi, k)$ and $h_n(kr) \,
+Y_{n}^{m}(\theta, \phi)$ is combined to basefunction $S_n^m(r, \theta,
+\phi, k)$ yielding
 \begin{equation}
   \label{eq:1r}
   P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
@@ -53,6 +55,7 @@ yielding
 \end{equation}
 
 ** Spherical Fourier Transform
+
 Combination of $A_{n}^{m}(k)$ and $j_n(kr)$ results in 
 \begin{equation}
   \label{eq:sfs}
@@ -213,8 +216,10 @@ ans = size(J_sph_OCF);
 
 
 ** sphericalnormalisation
+
 =sphericalnormalisation= - calculates the normalization factor 
 file:./sphericalnormalisation.m
+
 *** Octave definition                                              :internal:
 #+BEGIN_SRC octave :tangle sphericalnormalisation.m 
 <<sphericalnormalisation doc[:results ascii :post octave comment(s=*this*)]()>>
@@ -442,6 +447,7 @@ legendre
 ** trg
 
 file:trg.m: calculates something for given argument
+
 *** Octave definition                                              :internal:
 #+BEGIN_SRC octave :tangle trg.m
 <<named doc[:results ascii :post octave comment(s=*this*)]()>>
@@ -482,8 +488,11 @@ y
 *** See Also
 trh
 
+
 ** trh
+
 file:trh.m: calculates something for given argument
+
 *** Octave definition                                              :internal:
 #+BEGIN_SRC octave :tangle trh.m
 <<named doc[:results ascii :post octave comment(s=*this*)]()>>
@@ -527,6 +536,7 @@ AES 23rd International Conference, 2003
 *** Alternatives
 *** See Also
 trh
+
 
 ** sphericalazimuth
 
@@ -629,7 +639,6 @@ trg, trh
 
 
 ** sphericalharmonic
-*** Documentation
 
 file:sphericalharmonic.m: returns a spherical harmonic of given order,
 type and normalization
@@ -726,8 +735,8 @@ if sum(sum(sum(abs(Y_OAB-Z_OAB)))) > 10^-8
   disp('Y is not hermitian!');
 end
 #+END_SRC
-
- #+RESULTS: sphericalharmonic numeric test
+ 
+#+RESULTS: sphericalharmonic numeric test
 
 *** Documenation                                                     :ignore:
 #+name: sphericalharmonic doc
@@ -1040,7 +1049,6 @@ functions F and G. The second pair (D and G) is optional.
 #+END_SRC
 
 #+call: sphericalseries_hoa doc[:output html]()
-
 
 
 ** sphericalseries_sfc

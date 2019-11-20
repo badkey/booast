@@ -1,5 +1,5 @@
 #+TITLE: Acoustics
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-01 11:50:52 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-20 14:28:26 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -141,12 +141,10 @@ scalar arrays are shown using the =surface= command.
     <<save S_file>>
 #+END_SRC
 
-#+RESULTS: planewave cartesian example image
-[[file:img/exa_plane_wave_cartesian.png]]
-
 #+caption: Example plane wave defined in cartesian coordinates.
+#+attr_org: :width 500
 #+attr_html: :width 100%
-#+RESULTS: example plane wave cartesian
+#+RESULTS: planewave cartesian example image
 [[file:img/exa_plane_wave_cartesian.png]]
 
 **** Plane wave defined on spherical coordinates

@@ -1,6 +1,38 @@
-function display(st)
-% display content of a vectorgrid g.
-
+% 1 Syntax
+% ========
+% 
+%   ,----
+%   | J_sph_OCF = sphericalbessel(N_order, x_CF)
+%   `----
+% 
+% 
+% 2 Description
+% =============
+% 
+% 
+% 3 Input Arguments
+% =================
+% 
+% 
+% 4 Return Values
+% ===============
+% 
+% 
+% 5 Examples
+% ==========
+% 
+% 
+% 6 Tips
+% ======
+% 
+% 
+% 7 Alternatives
+% ==============
+% 
+% 
+% 8 See Also
+% ==========
+% 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
 % Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,10 +52,21 @@ function display(st)
 % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
+function J_sph_OCF = sphericalbessel(N_order, x_CF)
 
-  fprintf('Vectorgrid %s contains', inputname(1));
-  fprintf(' %i axes.\n', st.dims);
-  fprintf('The coordinate type is %s.\n', st.S_type);
-  disp('The size is');
-  disp(size(st));
-end
+  if length(size(x_CF)) > 2
+    error('Input argument must not have more than 2 dimensions.');
+  end
+  
+  % Speicher
+  O = (N_order+1)^2;
+  C = size(x_CF, 1);
+  F = size(x_CF, 2);
+  J_sph_OCF = zeros(O, C, F);
+  
+  for n = 0:N_order
+    J_CF = sphericalbesselj(n, x_CF);
+    for m = -n:n
+      J_sph_OCF(n^2+n+m+1, :, :) = J_CF;
+    end
+  end

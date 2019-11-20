@@ -1,6 +1,46 @@
-function display(st)
-% display content of a vectorgrid g.
-
+% 1 Syntax
+% ========
+% 
+%   ,----
+%   | J_sph_CF = sphericalbesselj(N_order, x_CF);
+%   `----
+% 
+% 
+% 2 Description
+% =============
+% 
+%   spherical bessel function at order N
+% 
+% 
+% 3 Input Arguments
+% =================
+% 
+%   x_CF
+%         C x F matrix
+% 
+% 
+% 4 Return Values
+% ===============
+% 
+%   J_sph_CF
+%         C x F matrix
+% 
+% 
+% 5 Examples
+% ==========
+% 
+% 
+% 6 Tips
+% ======
+% 
+% 
+% 7 Alternatives
+% ==============
+% 
+% 
+% 8 See Also
+% ==========
+% 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
 % Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,9 +61,30 @@ function display(st)
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-  fprintf('Vectorgrid %s contains', inputname(1));
-  fprintf(' %i axes.\n', st.dims);
-  fprintf('The coordinate type is %s.\n', st.S_type);
-  disp('The size is');
-  disp(size(st));
-end
+function J_sph_CF = sphericalbesselj(N_order, x_CF)
+  
+  C = size(x_CF, 1);
+  F = size(x_CF, 2);
+  L = C*F;
+  x_L = reshape(x_CF, 1, L);
+  J_sph_L = zeros(L, 1);
+  
+  % finde Nullen im Argument
+  idx_zero = (x_L == 0);
+
+  % Ergebnis zuweisen
+  if N_order == 0
+    J_sph_L(idx_zero) = 1;
+  else
+    J_sph_L(idx_zero) = 0;
+  end
+
+  % finde den Rest
+  idx_nzero = (x_L ~= 0);
+
+  % Ergebnis zuweisen
+  J_sph_L(idx_nzero) = sqrt(pi ./ (2*x_L(idx_nzero))) .* ...
+      besselj(N_order + 0.5, x_L(idx_nzero));
+
+  % Form retten
+  J_sph_CF = reshape(J_sph_L, C, F);

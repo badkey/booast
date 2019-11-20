@@ -1,6 +1,27 @@
-function display(st)
-% display content of a vectorgrid g.
-
+% 1 Syntax
+% ========
+% 
+%   ,----
+%   | y = trg(m, x)
+%   `----
+% 
+% 
+% 2 Description
+% =============
+% 
+% 
+% 3 Input Arguments
+% =================
+% 
+%   - x : numeric argument
+%   - m : order
+% 
+% 
+% 4 Return Values
+% ===============
+% 
+%   y
+% 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
 % Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,10 +41,34 @@ function display(st)
 % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
+ function D_OB = sphericalazimuth(N_order, phi_B, S_type)
+ if nargin < 3
+   S_type = 'complex';
+ end
 
-  fprintf('Vectorgrid %s contains', inputname(1));
-  fprintf(' %i axes.\n', st.dims);
-  fprintf('The coordinate type is %s.\n', st.S_type);
-  disp('The size is');
-  disp(size(st));
-end
+ D_OB = zeros((N_order+1)^2, length(phi_B));
+ switch S_type 
+   case 'complex'
+     for n= 0:N_order
+       for m = -n:n
+         o = n^2+n+m+1;
+         D_OB(o,:) = exp(1i*m*phi_B);
+       end
+     end
+   case {'real_signed', 'real'}
+     for n= 0:N_order
+       for m = -n:n
+         o = n^2+n+m+1;
+         D_OB(o,:) = trg(m, phi_B);
+       end
+     end
+   case 'real_unsigned'
+     for n= 0:N_order
+       for m = -n:n
+         o = n^2+n+m+1;
+         D_OB(o,:) = trh(m, phi_B);
+       end
+     end
+   otherwise
+     error('Unknown spherical azimuth type %s!', S_type);
+ end
