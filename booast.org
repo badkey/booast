@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2019-11-02 00:22:05 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2019-11-24 16:28:22 jbatke>
 #+PROPERTY: header-args:octave :noweb yes :eval export
 #+setupfile: booast.setup
 
@@ -955,6 +955,35 @@ display(g);
 : The size is
 :    100     3
 
+*** type
+**** Definition                                                    :internal:
+#+BEGIN_SRC octave :tangle @vectorgrid/type.m
+function S_type = type(st)
+% return type of vectorgrid g.
+
+<<copyright>>
+
+   S_type = st.S_type;
+#+END_SRC
+
+**** Description
+
+return type of vectorgrid 
+
+**** Syntax
+
+: type(g)
+
+**** Example
+
+#+BEGIN_SRC octave :results output
+g = vectorgrid([2,3],[3,5],[5,6], 'cartesian');
+type(g)
+#+END_SRC
+
+#+RESULTS:
+: ans = cartesian
+
 *** get
 **** Description
 Get an array with vector information as defined by the vectorgrid.
@@ -1016,15 +1045,44 @@ und das kommt nun in den Vektor rein.
 #+BEGIN_SRC octave :results output
   g = vectorgrid([2,3],[3,5],[5,6], 'cartesian');
   [n3_222, S_type] = get(g);
+  n3_222
   v = vector(n3_222, S_type);
   size(v)
 #+END_SRC
 
 #+RESULTS: vectorgrid get vector test
-: ans =
-: 
-:    2   2   2
-: 
+#+begin_example
+n3_222 =
+
+ans(:,:,1,1) =
+
+   2   3
+   3   3
+   5   5
+
+ans(:,:,2,1) =
+
+   2   3
+   5   5
+   5   5
+
+ans(:,:,1,2) =
+
+   2   3
+   3   3
+   6   6
+
+ans(:,:,2,2) =
+
+   2   3
+   5   5
+   6   6
+
+ans =
+
+   2   2   2
+
+#+end_example
 
 Es lässt sich auch ein "reshape" der Ausgangsdaten miterledigen
 #+name: vectorgrid get vector reshape test
@@ -1093,6 +1151,14 @@ Total is 35 elements using 274 bytes
 **** See Also
 get
 
+*** grid
+**** Definition                                                    :internal:
+#+BEGIN_SRC octave :tangle @vectorgrid/grid.m
+function [g1, g2, g3] = grid(st)
+  g1 = st.achse{1};
+  g2 = st.achse{2};
+  g3 = st.achse{3};
+#+END_SRC
 *** meshgrid
 **** Definition                                                    :internal:
 
@@ -1421,6 +1487,7 @@ If =g_CAB= holds a grid spanning all 3 dimensions, we need to slice
 the grid and restrict to a singular value for one axis.
 
 **** Definition                                                    :internal:
+
 #+name: vectorgrid surface
 #+BEGIN_SRC octave :tangle @vectorgrid/surface.m
   function surface(g_slice, s_slice, c_slice, S_flag)
@@ -1514,7 +1581,7 @@ the grid and restrict to a singular value for one axis.
 
 **** Examples
 This example illustrates the use of the method =surface= for
-=vectorgrid=. The section ref:surfacealternatives discusses similar
+=vectorgrid=. The section ref:sec:surfacealternatives discusses similar
 examples using Octave/Matlab's surface function.  
 
 ***** 2D in 3D
@@ -1534,7 +1601,7 @@ g_AB1 = g_ABC(:,:,1);
 #+END_SRC
 
 The function should look like the example in the alternatives section
-ref:surfacealternatives. Here we define the function the booasty way:
+ref:sec:surfacealternatives. Here we define the function the booasty way:
 #+name: surface example s_AB
 #+BEGIN_SRC octave
 r_xyz_AB = get(vector(g_AB1), 'cartesian');
@@ -1549,7 +1616,7 @@ s_BA = X_BA.^2 + Y_BA.^2;
 where information is spread over several variables. However, it looks
 easier in this case...
 
-Finally the results yields Figure ref:surface_example_2d_3d after
+Finally the results yields Figure ref:fig:surface_example_2d_3d after
 stating
 #+name: surface example surface
 #+BEGIN_SRC octave
@@ -1569,7 +1636,7 @@ so surface colors the slice defined by =g_AB1= by values =s_AB=.
   <<save S_file>>
 #+END_SRC
 
-#+caption: A surface defined using booast. label:surface_example_2d_3d
+#+caption: A surface defined using booast. label:fig:surface_example_2d_3d
 #+attr_org: :width 400
 #+RESULTS: surface example 2d in 3d figure
 [[file:img/2d_in_3d_surface_colored_booast.png]]
@@ -1581,6 +1648,7 @@ space. So we state
 #+BEGIN_SRC octave
 surface(g_AB1, s_AB, [], 'dependendSurface');
 #+END_SRC
+
 surface() colors the slice defined by =g_AB1= by values =s_AB=.
 
 #+name: surface example 2d in 3d figure dependendSurface
@@ -1599,7 +1667,6 @@ surface() colors the slice defined by =g_AB1= by values =s_AB=.
 #+caption: A surface defined using booast being *dependend* from the definition space. label:surface_example_2d_3d_dep
 #+RESULTS: surface example 2d in 3d figure dependendSurface
 [[file:img/2d_in_3d_surface_dependend.png]]
-
 
 ***** TODO 3D in 3D coloring
 

@@ -2,19 +2,29 @@
 % ========
 % 
 %   ,----
-%   | p_CABF = sphericalseries_hoa(C_OF, F_OCBAF, D_OF, G_OCBAF)
+%   | p_CABF = sphericalseries_hoa(C_OF, F_OCABF, D_OF, G_OCABF)
 %   `----
 % 
 % 
 % 2 Description
 % =============
 % 
-%   returns result of HOA series with coefficients C and D und basis
-%   functions F and G. The second pair (D and G) is optional.
+%   Returns result of HOA series with coefficients C and D and basis
+%   functions F and G.  The second pair (D and G) is optional.  The matrix
+%   of basis function should have at least 3 dimensions.
 % 
 % 
 % 3 Input Arguments
 % =================
+% 
+%   C_OF
+%         ???????
+%   F_OCABF
+%         basis function values matrix
+%   D_OF
+%         ??????
+%   G_OCABF
+%         basis function values matrix
 % 
 % 
 % 4 Return Values
@@ -56,7 +66,7 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 function p_CABF = sphericalseries_hoa(C_OF, F_OCABF, D_OF, G_OCABF)
-  
+
   if length(size(F_OCABF)) < 3
     error('Function basis needs at least 3 dimensions.');
   end

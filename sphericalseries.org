@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-20 14:22:57 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-24 16:13:30 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -70,7 +70,6 @@ Combination of $A_{n}^{m}(k)$ and $j_n(kr)$ results in
 * Spherical Functions
 ** sphericalbesselj
 file:sphericalbesselj.m: calculates spherical bessel function at order N
-
 
 *** Octave definition                                              :internal:
 
@@ -147,7 +146,6 @@ spherical bessel function at order N
 
 #+call: sphericalbesselj doc[:output html]()
 
-
 ** sphericalbessel
 
 file:sphericalbessel.m: wrapper for sphericalbesselj, return all orders up to N
@@ -213,6 +211,223 @@ ans = size(J_sph_OCF);
 #+END_SRC
 
 #+call: sphericalbessel doc[:output html]()
+
+** sphericalbessely
+file:sphericalbessely.m: compute the spherical Bessel's function of the second kind
+
+*** Octave definition                                              :internal:
+
+
+#+BEGIN_SRC octave :tangle sphericalbessely.m
+<<sphericalbessely doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+
+function N_sph = sphericalbessely(n, x)
+
+  idx_zero = find(x == 0);
+  if length(idx_zero) ~= 0
+    disp(['sphericalneumann: found zeros in input argument: setting ' ...
+          'to NaN!']);
+    idx_zero
+    x(idx_zero) = nan;
+  end
+  
+  % sph. Besselfunktion der 2. Art für pos. Arg.
+  N_sph = (pi ./ (2*abs(x))).^0.5 .* bessely(n + 0.5, abs(x));
+
+  % finde neg. Arg.
+  idx_neg = (x < 0);
+  
+  % Vorzeichen für neg. Arg. retten (vlg. Gumerov/Duraiswami Glg. 2.1.90)
+  N_sph(idx_neg) = (-1)^(n+1) * N_sph(idx_neg);
+
+  N_sph = reshape(N_sph, size(x));
+#+END_SRC
+
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave
+n = 3;
+x = linspace(0, 10);
+N_sph = sphericalbessely(n, x);
+ans = size(N_sph);
+#+END_SRC
+
+#+RESULTS:
+| 1 | 100 |
+
+*** Documenation                                                     :ignore:
+
+#+name: sphericalbessely doc
+#+BEGIN_SRC org
+,*** Syntax
+
+: N_sph = sphericalbessely(n, x)
+
+,*** Description
+
+2nd kind Bessel function is computed for each element of x.If the input argument
+(element of a matrix x) is = 0, the output has a value NaN.
+
+,*** Input Arguments
+
+- n - Ambisonics order
+- x - matrix to return the result (should not have more than 2 dimensions)
+
+,*** Return Values
+
+- N_sph - matrix of the 2nd kind Bessel function values
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+
+bessely
+#+END_SRC
+
+#+call: sphericalbessely doc[:output html]()
+
+
+** sphericalneumann
+
+file:sphericalneumann.m: 2nd kind Bessel function for Ambisonics
+coefficients are given as a vector
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalneumann.m
+<<sphericalneumann doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function N_sph_OCF = sphericalneumann(N_order, x_CF)
+
+  if length(size(x_CF)) > 2
+    error('Input argument must not have more than 2 dimensions.');
+  end
+
+  % Speicher
+  O = (N_order+1)^2;
+  C = size(x_CF, 1);
+  F = size(x_CF, 2);
+  N_sph_OCF = zeros(O, C, F);
+
+  for n = 0:N_order
+    N_CF = sphericalbessely(n, x_CF);
+    for m = -n:n
+      N_sph_OCF(n^2+n+m+1, :, :) = N_CF;
+    end
+  end
+#+END_SRC
+
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave
+N_order = 3;
+x_CF = ones(4, 5);
+N_sph_OCF = sphericalneumann(N_order, x_CF);
+ans = size(N_sph_OCF);
+#+END_SRC
+
+#+RESULTS:
+| 16 | 4 | 5 |
+
+*** Documenation                                                     :ignore:
+
+#+name: sphericalneumann doc
+#+BEGIN_SRC org
+,*** Syntax
+
+: N_sph_OCF = sphericalneumann(N_order, x_CF)
+
+,*** Description
+
+First derivative of the 2nd kind Bessel function is computed for each
+element of x.If the input argument (element of a matrix x) is = 0, the
+output has a value NaN.
+
+,*** Input Arguments
+
+- N_order - Ambisonics order
+- x_CF - matrix to return the result (should not have more than 2 dimensions)
+
+,*** Return Values
+
+- N_sph_OCF - multi-dimensional matrix with Neumann function calculation results
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+sphericalbessely
+#+END_SRC
+
+#+call: sphericalneumann doc[:output html]()
+
+
+** sphericalhankel
+file:sphericalhankel.m: returns the Bessel function of the 3rd kind (Hankel function)
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalhankel.m
+<<sphericalhankel doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function h_OCF = sphericalhankel(n, x_CF)
+
+h_OCF = sphericalbessel(n, x_CF) + i*sphericalneumann(n, x_CF);
+#+END_SRC
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave
+n = 3;
+x_CF = ones(4, 5);
+h_ocf = sphericalhankel(n, x_CF);
+ans = size(h_ocf);
+#+END_SRC
+
+#+RESULTS:
+| 16 | 4 | 5 |
+
+*** Documenation                                                     :ignore:
+
+#+name: sphericalhankel doc
+#+BEGIN_SRC org
+,*** Syntax
+: h_OCF = sphericalhankel(n, x_CF)
+
+,*** Description
+
+According to the mathematical definition, Hankel function is obtained be combining two linearly 
+independent solutions of Bessel's differential equation (Wikipedia). This is done by means of 
+summation spherical bessel function of the 1st kind with spherical bessel function of the 2nd kind,
+multiplyed by the imaginary unit.
+
+This calculation is done for all elements of the matrix x_Cf
+
+,*** Input Arguments
+- n - Ambisonics order
+- x_CF -  matrix to return the result (should not have more than 2 dimensions)
+
+,*** Return Values
+- h_OCF - multi-dimensional matrix of calculation results
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+sphericalbessel, sphericalneumann
+#+END_SRC
+
+#+call: sphericalhankel doc[:output html]()
 
 
 ** sphericalnormalisation
@@ -488,7 +703,6 @@ y
 *** See Also
 trh
 
-
 ** trh
 
 file:trh.m: calculates something for given argument
@@ -536,7 +750,6 @@ AES 23rd International Conference, 2003
 *** Alternatives
 *** See Also
 trh
-
 
 ** sphericalazimuth
 
@@ -636,7 +849,6 @@ for S_type = 'complex' case.
 *** Alternatives
 *** See Also
 trg, trh
-
 
 ** sphericalharmonic
 
@@ -818,11 +1030,518 @@ end
 sphericalnormalisation, sphericallegendre, sphericalazimuth
 
 
+** sphericalmodematrix
+file:sphericalmodematrix.m: calculates something for given argument
 
 
-* Spherical Series
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalmodematrix.m
+<<sphericalmodematrix doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function Psi_OL = sphericalmodematrix(N_order, theta_L, phi_L, S_norm, S_type)
+  if nargin < 5
+    type = 'complex';
+  end
+  if nargin < 4
+    norm = 'norm';
+  end
+
+  % Normierungsfaktor
+  N_O = sphericalnormalisation(N_order, S_norm);
+  
+  % Legendrefunktionen
+  P_OL = sphericallegendre(N_order, theta_L);
+
+  % Deklinationsfunktion
+  D_OL = sphericalazimuth(N_order, phi_L, S_type);
+
+  % Kugelflächenfunktion
+  Y_OL = diag(N_O) * P_OL .* D_OL;
+
+  Psi_OL = conj(Y_OL);
+#+END_SRC
+
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave
+N_order = 3;
+theta_D = pi;
+phi_D = pi;
+S_norm = 'N3D';
+S_type = 'complex';
+Psi_OL = sphericalmodematrix(N_order, theta_D, phi_D, S_norm, S_type);
+ans = size(Psi_OL);
+#+END_SRC
+
+#+RESULTS:
+| 16 | 1 |
+
+*** Documenation                                                     :ignore:
+
+#+name: sphericalmodematrix doc
+#+BEGIN_SRC org
+,*** Syntax
+
+: Psi_OL = sphericalmodematrix(N_order, theta_L, phi_L, S_norm, S_type)
+
+
+% $Id$
+,*** Description
+
+sphericalmodematrix - returns Ambisonics complex conjugate values
+
+,*** Input Arguments
+- N_order -  Ambisonics order
+- theta_L - vector representing the calculation range of inclination theta
+- phi_L - vector representing the calculation range of azimuth phi
+- S_norm - string with type of normalization: 'norm' - fully normalized; 
+                                             'N3D'- normalized; 
+                                             'sch0' or 'SN3D'- seminormalazed
+                                             'sch1'- Schmidt-Semi-normalized (Matlab)
+                                             'sconv' - norm. over all spherical convolutions
+                                             'planewave_impinging' - norm. for plane waves
+
+,*** Return Values
+- Psi_OL - matrix of complex conjugate spherical harmonics values
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+sphericalharmonic
+
+#+END_SRC
+
+#+call: sphericalmodematrix doc[:output html]()
+
+
+* Spherical Fourier Transform
+** sphericalseries_isfs
+file:sphericalseries_isfs.m: calculates something for given argument
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalseries_isfs.m
+<<sphericalseries_isfs doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
+% sphericalseries_isfs - inverse spherical fourier series
+%
+% F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
+%
+% INPUTS
+% f_OCF - spherical fourier series coefficient
+% Y_OAB - spherical harmonics
+%
+% OUTPUTS
+% F_OCABF - intermediate result
+%
+% DESCRIPTION
+% precalculation of ISF
+
+  O = size(f_OCF, 1);
+  C = size(f_OCF, 2);
+  F = size(f_OCF, 3);
+  A = size(Y_OAB, 2);
+  B = size(Y_OAB, 3);
+  F_OCABF = zeros(O, C, A, B, F);
+  
+  for o = 1:O
+    for c = 1:C
+      for f = 1:F
+        F_OCABF(o, c, 1:A, 1:B, f) = f_OCF(o,c,f) * Y_OAB(o, 1:A, 1:B);
+      end
+    end
+  end
+#+END_SRC
+*** Interface test                                                 :internal:
+*** Documenation                                                     :ignore:
+
+    #+name: sphericalseries_isfs doc
+    #+BEGIN_SRC org
+    ,*** Syntax
+
+    ,*** Description
+
+    ,*** Input Arguments
+
+    ,*** Return Values
+
+    ,*** Examples
+
+    ,*** Tips
+
+    ,*** Alternatives
+
+    ,*** See Also
+    #+END_SRC
+
+    #+call: sphericalseries_isfs doc[:output html]()
+
+
+** sphericalseries_isf
+file:sphericalseries_isf.m: calculates something for given argument
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalseries_isf.m
+<<sphericalseries_isf doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function F_CABF = sphericalseries_isf(f_OCF, Y_OAB, perm)
+
+% sphericalseries_isf - performs inverse spherical Fourier transform
+%
+% F_CABF = sphericalseries_isf(f_OCF, Y_OAB, perm)
+% 
+% INPUTS
+% f_OCF
+% Y_OAB
+% perm - permutation matrix
+%
+% OUTPUTS
+% F_CABF
+%
+% DESCRIPTIOn
+% If the number of input arguments is less than 3, the permutation matrix perm is emty, so no
+% permutation is done.
+%
+
+  if nargin < 3
+    perm = [];
+  end
+  
+  % Summanden der ISFT berechnet:
+  F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB);
+
+  % über Summenindex o addiert; verbleibende Dimension O = 1
+  % anschließend wegschieben (d.h. F_CBAF1 entsteht; squeeze geht
+  % nicht, da andere Dimensionen mit 1 mitwegfallen würden)
+  F_CABF = shiftdim(sum(F_OCABF, 1), 1);
+
+  % falls gesetzt, permutieren
+  if ~isempty(perm)
+    F_CABF = permute(F_CABF, perm);
+  end
+
+#+END_SRC
+
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave
+f_OCF = ones(1, 1, 6);
+Y_OAB = ones(4, 1, 1);
+F_CABF = sphericalseries_isf(f_OCF, Y_OAB);
+ans = size(F_CABF);
+#+END_SRC
+
+#+RESULTS:
+| 1 | 1 | 1 | 6 |
+
+*** Documenation                                                     :ignore:
+
+    #+name: sphericalseries_isf doc
+    #+BEGIN_SRC org
+    ,*** Syntax
+
+    ,*** Description
+
+    ,*** Input Arguments
+
+    ,*** Return Values
+
+    ,*** Examples
+
+    ,*** Tips
+
+    ,*** Alternatives
+
+    ,*** See Also
+    #+END_SRC
+
+    #+call: sphericalseries_isf doc[:output html]()
+
+
+** sphericalseries_sfc
+file:sphericalseries_sfc.m: returns the coefficients of spherical Fourier transform 
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalseries_sfc.m
+<<sphericalseries_sfc doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function C_OCFD = sphericalseries_sfc(A_OFD, B_OFD, r_C, R_src, k_F)
+
+  % Speicher klarmachen
+  O = size(A_OFD, 1);
+  F = size(A_OFD, 2);
+  D = size(A_OFD, 3);
+  C = length(r_C);
+  C_OCFD = zeros(O, C, F, D);
+  
+  % Wertebereich aufteilen
+  ind_ext  = find(r_C <= R_src); % exterior case
+  ind_int  = find(r_C >  R_src); % interior case
+
+  % entsprechende spezielle Funktionen berechnen
+  N_order = sqrt(O) - 1;
+  if ~isempty(ind_ext)
+    j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
+  end
+  if ~isempty(ind_int)
+    h_OCF = sphericalhankel(N_order, r_C(ind_int).'*k_F);
+  end
+  
+  % sph. fourier coeff. berechnet
+  for d = 1:D
+    for f = 1:F
+      for c = 1:length(ind_ext)
+        C_OCFD(:,ind_ext(c), f, d) = A_OFD(:,f,d) .* j_OCF(:,c,f);
+      end
+      for c = 1:length(ind_int)
+        C_OCFD(:,ind_int(c), f, d) = B_OFD(:,f,d) .* h_OCF(:,c,f);
+      end
+    end
+  end
+
+#+END_SRC
+
+*** Interface test                                                 :internal:
+
+*** Documenation                                                     :ignore:
+
+#+name: sphericalseries_sfc doc
+#+BEGIN_SRC org
+,*** Syntax
+
+: C_OCFD = sphericalseries_sfc(A_OFD, B_OFD, r_C, R_src, k_F)
+
+
+,*** Description
+
+,*** Input Arguments
+- A_OFD - matrix of HOA coefficients
+- B_OFD - matrix of HOA coefficients
+- r_C - radius ???
+- R_src - source radius
+- k_F - vector of a wave number values for a given frequency range
+
+,*** Return Values
+- C_OCFD - multi-dimensional matrix of the spherical FT coefficients
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+
+sphericalbessel, sphericalhankel
+#+END_SRC
+
+#+call: sphericalseries_sfc doc[:output html]()
+
+
+
+* Higher Order Ambisonics
+** Sphericalseries_hoa
+
+file:sphericalseries_hoa.m: returns result of HOA series
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalseries_hoa.m
+<<sphericalseries_hoa doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function p_CABF = sphericalseries_hoa(C_OF, F_OCABF, D_OF, G_OCABF)
+
+  if length(size(F_OCABF)) < 3
+    error('Function basis needs at least 3 dimensions.');
+  end
+  
+  % berechne Ergebnis der Reihenentwicklung mit Koeffizienten C mit
+  % Funktionsbasis F:
+  if ~isempty(F_OCABF)
+    p_CABF = sphericalseries(C_OF, F_OCABF);
+  else
+    p_CABF = [];
+  end
+  
+  % falls zwei Koeffzi. und Basen übergeben, weitere Berechnung:
+  if nargin == 4
+    
+    if ~isempty(G_OCABF)
+      q_CABF = sphericalseries(D_OF, G_OCABF);
+    else
+      q_CABF = [];
+    end
+
+    % concatiniere 8) Ergebnis: 
+    p_CABF = [p_CABF; q_CABF];
+  end
+  
+function p_CABF = sphericalseries(C_OF, F_OCABF)
+% bestimme Größe der Eingangsmatrizen 
+  C = size(F_OCABF, 2);
+  A = size(F_OCABF, 3);
+  B = size(F_OCABF, 4);
+  F = size(F_OCABF, 5);
+  p_CABF = zeros(C, A, B, F);
+  for f = 1:F
+    for c = 1:C
+      for a= 1:A
+        for b = 1:B
+          p_CABF(c, a, b, f) = C_OF(:,f).' *  F_OCABF(: ,c, a, b, f);
+        end
+      end
+    end
+  end
+
+#+END_SRC
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave
+C_OF = ones(4, 4);
+F_OCABF = ones(4, 1, 1, 1, 4);
+p_CABF = sphericalseries_hoa(C_OF, F_OCABF);
+ans = size(p_CABF);
+#+END_SRC
+
+#+RESULTS:
+| 1 | 1 | 1 | 4 |
+
+*** Documenation                                                     :ignore:
+
+#+name: sphericalseries_hoa doc
+#+BEGIN_SRC org
+,*** Syntax
+
+: p_CABF = sphericalseries_hoa(C_OF, F_OCABF, D_OF, G_OCABF)
+
+,*** Description
+
+Returns result of HOA series with coefficients C and D and basis functions F and G. 
+The second pair (D and G) is optional.
+The matrix of basis function should have at least 3 dimensions.
+
+,*** Input Arguments
+
+- C_OF :: ???????
+- F_OCABF :: basis function values matrix
+- D_OF :: ??????
+- G_OCABF :: basis function values matrix
+
+,*** Return Values
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+    #+END_SRC
+
+    #+call: sphericalseries_hoa doc[:output html]()
+
 ** Sphericalseries_hoa_plane
 
+file:sphericalseries_hoa_plane.m: calculates plane wave coefficients $A$ for a HOA representation.
+
+*** Octave definition                                              :internal:
+
+#+BEGIN_SRC octave :tangle sphericalseries_hoa_plane.m
+<<sphericalseries_hoa_plane doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+
+function A_OFD = sphericalseries_hoa_plane(N_order, theta_D, phi_D, ...
+                                           S_norm, S_type, F, ...
+                                           psi_D);
+  D = length(theta_D);
+  if nargin < 7
+    psi_D = ones(1, D);
+  end
+  
+  % Vorfaktor ebene Welle
+  %N_O = sphericalnormalisation(N_order, 'planewave_impinging');
+  N_O = sphericalnormalisation(N_order, 'planewave');
+  
+  % Modenmatrix für alle Einfallsrichtungen
+  Psi_OD = sphericalmodematrix(N_order, theta_D, phi_D, ...
+                               S_norm, S_type);
+
+  % return: Die Koeffzi. der ebenen Welle sind frequenzunabhängig, nur
+  % rein formal wird Dimension F mit aufgefüllt.
+  A_OFD = zeros((N_order+1)^2, F, D);
+  for f = 1:F
+    for d = 1:D
+      A_OFD(:,f,d) = psi_D(d) * (N_O .* Psi_OD(:,d));
+    end
+  end
+
+
+#+END_SRC
+
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave
+N_order = 2;
+theta_D = pi;
+phi_D = pi;
+S_norm = 'N3D';
+S_type = 'complex';
+F = 1;
+psi_D = 1;
+A_OFD = sphericalseries_hoa_plane(N_order, theta_D, phi_D, S_norm, S_type, F, psi_D);
+ans = size(A_OFD);
+#+END_SRC
+
+#+RESULTS:
+| 9 | 1 |
+
+*** Documenation                                                     :ignore:
+
+#+name: sphericalseries_hoa_plane doc
+#+BEGIN_SRC org
+,*** Syntax
+: A_OFD = sphericalseries_hoa_plane(N_order, theta_D, phi_D, S_norm, S_type, F, psi_D)
+
+,*** Description
+calculates plane wave coefficients $A$ for a HOA representation.
+
+,*** Input Arguments
+- N_order :: Ambisonics order
+- theta_D ::  vector representing the calculation range of inclination theta
+- phi_D :: vector representing the calculation range of azimuth phi
+- S_norm :: string with type of normalization: 
+            | 'norm'                | fully normalized;                     |
+            | 'N3D'                 | normalized;                           |
+            | 'sch0' or 'SN3D'      | seminormalazed                        |
+            | 'sch1'                | Schmidt-Semi-normalized (Matlab)      |
+            | 'sconv'               | norm. over all spherical convolutions |
+            | 'planewave_impinging' | norm. for plane waves                 |
+- S_type :: type of the spherical harmonic: 'real', 'real_signed', 'real_unsigned'  or 'complex'
+- F :: number of frequency bins (having all the same value)
+- psi_D :: weights for D input direction (optional argument)
+
+,*** Return Values
+- A_OFD :: matrix of HOA coefficients
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+sphericalnormalisation, sphericalmodematrix
+#+END_SRC
+
+#+call: sphericalseries_hoa_plane doc[:output html]()
 
 #+name: spherical series hoa planewave test
 #+BEGIN_SRC octave
@@ -876,17 +1595,12 @@ Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
 % ISF im Frequenzbereich
 P_CABF = sphericalseries_isf(C_OCF, Y_OAB);
 
-% ISF im Zeitbereich
-c_OCF = ifft(C_OCF, [], 3);
-p_CABF = sphericalseries_isf(c_OCF, Y_OAB);
-      
-
 % malen
 % -------------------------------------------------------------------
 if 1
   for f = 1:F
     figure(f);
-    vectorgrid_surface(gg_CAB, squeeze(abs(real(P_CABF(:,:,:,f)))));
+    surface(gg_CAB, squeeze(abs(real(P_CABF(:,:,:,f)))));
     axis('equal');
     grid('on');
     view([30 30]);
@@ -894,6 +1608,8 @@ if 1
 end
 
 #+END_SRC
+
+#+RESULTS: spherical series hoa planewave test
 
 ** sphericalseries_hoa_spherical
 ** sphericalseries_hoa_basis
@@ -910,9 +1626,9 @@ function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
                                                vg_CAB, k_F, ...
                                                S_norm, S_type)
 
-  if strcmp(vectorgrid_type(vg_CAB), 'spherical')
+  if strcmp(type(vg_CAB), 'spherical')
     
-    [r_C, theta_A, phi_B] = vectorgrid_grid(vg_CAB);
+    [r_C, theta_A, phi_B] = grid(vg_CAB);
     
     ind_ext  = find(r_C <= R_src); % exterior case
     ind_int  = find(r_C >  R_src); % interior case
@@ -925,7 +1641,7 @@ function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
     if ~isempty(ind_ext)
       j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
       R_OCABF = sphericalseries_isfs(j_OCF, Y_OAB);
-    else 
+    else
       R_OCABF = [];
     end
 
@@ -939,7 +1655,29 @@ function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
     error('Vectorgrid need to be spherical (at least in a way...).');
   end
 #+END_SRC
+
+#+RESULTS:
+
 *** Interface test                                                 :internal:
+#+BEGIN_SRC octave
+N_order = 1;
+R_src = 1;
+A = 20; B = 30; C = 40;
+x_A = linspace(-3, 3, A);
+y_B = linspace(-2, 2, B);
+z_C = linspace(-4, 4, C);
+k_F = 1;
+S_norm = 'N3D';
+S_type = 'complex';
+vg_ABC = vectorgrid(x_A, y_B, z_C, 'spherical');
+[R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
+					       vg_ABC, k_F, ...
+					       S_norm, S_type);
+ans = size(R_OCABF);
+#+END_SRC
+
+#+RESULTS:
+| 4 | 13 | 30 | 40 |
 
 *** Documenation                                                     :ignore:
 #+name: sphericalseries_hoa_basis doc
@@ -968,88 +1706,3 @@ returns spherical basis functions R = j_n Y and S = h_n Y
 
 #+call: sphericalseries_hoa_basis doc[:output html]()
 
-** sphericalseries_hoa
-
-file:sphericalseries_hoa.m: calculates something for given argument
-
-*** Octave definition                                              :internal:
-
-#+BEGIN_SRC octave :tangle sphericalseries_hoa.m
-<<sphericalseries_hoa doc[:results ascii :post octave comment(s=*this*)]()>>
-<<copyright>>
-function p_CABF = sphericalseries_hoa(C_OF, F_OCABF, D_OF, G_OCABF)
-  
-  if length(size(F_OCABF)) < 3
-    error('Function basis needs at least 3 dimensions.');
-  end
-  
-  % berechne Ergebnis der Reihenentwicklung mit Koeffizienten C mit
-  % Funktionsbasis F:
-  if ~isempty(F_OCABF)
-    p_CABF = sphericalseries(C_OF, F_OCABF);
-  else
-    p_CABF = [];
-  end
-  
-  % falls zwei Koeffzi. und Basen übergeben, weitere Berechnung:
-  if nargin == 4
-    
-    if ~isempty(G_OCABF)
-      q_CABF = sphericalseries(D_OF, G_OCABF);
-    else
-      q_CABF = [];
-    end
-
-    % concatiniere 8) Ergebnis: 
-    p_CABF = [p_CABF; q_CABF];
-  end
-  
-function p_CABF = sphericalseries(C_OF, F_OCABF)
-% bestimme Größe der Eingangsmatrizen 
-  C = size(F_OCABF, 2);
-  A = size(F_OCABF, 3);
-  B = size(F_OCABF, 4);
-  F = size(F_OCABF, 5);
-  p_CABF = zeros(C, A, B, F);
-  for f = 1:F
-    for c = 1:C
-      for a= 1:A
-        for b = 1:B
-          p_CABF(c, a, b, f) = C_OF(:,f).' *  F_OCABF(: ,c, a, b, f);
-        end
-      end
-    end
-  end
-#+END_SRC
-*** Interface test                                                 :internal:
-*** Documenation                                                     :ignore:
-
-#+name: sphericalseries_hoa doc
-#+BEGIN_SRC org
-,*** Syntax
-
-: p_CABF = sphericalseries_hoa(C_OF, F_OCBAF, D_OF, G_OCBAF)
-
-,*** Description
-
-returns result of HOA series with coefficients C and D und basis
-functions F and G. The second pair (D and G) is optional.
-
-,*** Input Arguments
-
-,*** Return Values
-
-,*** Examples
-
-,*** Tips
-
-,*** Alternatives
-
-,*** See Also
-#+END_SRC
-
-#+call: sphericalseries_hoa doc[:output html]()
-
-
-** sphericalseries_sfc
-* Examples

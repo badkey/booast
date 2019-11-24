@@ -62,9 +62,9 @@ function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
                                                vg_CAB, k_F, ...
                                                S_norm, S_type)
 
-  if strcmp(vectorgrid_type(vg_CAB), 'spherical')
+  if strcmp(type(vg_CAB), 'spherical')
     
-    [r_C, theta_A, phi_B] = vectorgrid_grid(vg_CAB);
+    [r_C, theta_A, phi_B] = grid(vg_CAB);
     
     ind_ext  = find(r_C <= R_src); % exterior case
     ind_int  = find(r_C >  R_src); % interior case
@@ -77,7 +77,7 @@ function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
     if ~isempty(ind_ext)
       j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
       R_OCABF = sphericalseries_isfs(j_OCF, Y_OAB);
-    else 
+    else
       R_OCABF = [];
     end
 
