@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2019-11-24 16:28:22 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2019-11-24 23:23:29 jbatke>
 #+PROPERTY: header-args:octave :noweb yes :eval export
 #+setupfile: booast.setup
 
@@ -11,36 +11,41 @@ for simulating acoustic problems using Octave or Matlab(tm).
 
 In particular, it provides two new matlab/octave classes, *vector* and
 *vectorgrid*. These can be used to implement arrays of vectors
-pointing to a location in R^3.
+pointing to a location in $\mathbb R^3$.
 
 - Visit section [[*Installation][Installation]] for setup (directory creation, etc) and
   installation.
-- The file [[file:acoustics.org::*Acoustic%20Waves][Acoustics]] contains some application examples for booast.
+- [[file:acoustics.org::*Acoustic%20Waves][Acoustics]] contains some application examples for booast.
+- [[file:sphericalseries.org][Sphericalseries]] contains some stuff for using spherical series
+  approximations of a sound field, AKA Higher Order Ambisonics.
 
 ** Naming conventions
 
-Some naming conventions are used throughout the documentation.
+Some naming conventions for octave variables are used throughout the
+documentation. 
 
 *** Variables
 
-| N         | constant             |
-| n         | variable             |
-| n_A       | vector with A values |
-| n_AB      | matrix AxB           |
-| n_ABC...Z | matrix AxBx...xZ     |
+| N         | constant                                                 |
+| n         | variable                                                 |
+| n_A       | vector containing $A$ values                             |
+| n_AB      | matrix with dimensions $A\times B$                       |
+| n_ABC...Z | matrix with dimensions $A\times B\times \ldots \times Z$ |
 
 *** Coordinate Systems
 
-| system    | variables 2D | variables 3D   |
-|-----------+--------------+----------------|
-| cartesian | x,y          | x,y,z          |
-| polar     | r, \phi      | r, \phi, z     |
-| spherical | -            | r,\theta, \phi |
-|-----------+--------------+----------------|
+| system    | variables 2D | variables 3D     |
+|-----------+--------------+------------------|
+| cartesian | $x,y$        | $x,y,z$          |
+| polar     | $r, \phi$    | $r, \phi, z$     |
+| spherical | -            | $r,\theta, \phi$ |
+|-----------+--------------+------------------|
 
 * Vector
+
 A new class vector is defined. It servers to handle 3-dimensional
 information using mathematical vectors or matrizes of vectors.
+
 ** Class
 *** Definition                                                     :internal:
     We define a point in the 3-dimensional space as a vector.
@@ -1164,7 +1169,7 @@ function [g1, g2, g3] = grid(st)
 
 Transform a vectorgrid to a meshgrid.
 
-*WARNING* meshgrid is restricted to 3D for the time being!
+*WARNING* meshgrid is restricted to 3D application for the time being!
 
 #+name: vectorgrid mesgrid
 #+BEGIN_SRC octave :tangle @vectorgrid/meshgrid.m
@@ -1214,6 +1219,7 @@ Test dimensions of output
 #+RESULTS: vectorgrid meshgrid default test
 
 ***** 3D
+
 Test dimensions of output
 #+name: vectorgrid mesgrid default test
 #+begin_src octave :results output
@@ -1253,18 +1259,17 @@ Matlab-Konvention getauscht werden.
 Bei 3D-meshgrids sollen toolbox und matlab/octave das gleiche Ergebnis
 bringen:
 #+BEGIN_SRC octave :results output
-  % matlab meshgrid
-    A = 1; B = 2; C = 3;
-    x_A = linspace(0, 1, A);
-    y_B = linspace(2, 3, B);
-    z_C = linspace(4, 5, C);
-    [x_BAC, y_BAC, z_BAC] = meshgrid(x_A, y_B, z_C);
+A = 1; B = 2; C = 3;
+x_A = linspace(0, 1, A);
+y_B = linspace(2, 3, B);
+z_C = linspace(4, 5, C);
+[x_BAC, y_BAC, z_BAC] = meshgrid(x_A, y_B, z_C);
 
-    g_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
-    [gx_BAC, gy_BAC, gz_BAC] = meshgrid(g_ABC);
+g_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
+[gx_BAC, gy_BAC, gz_BAC] = meshgrid(g_ABC);
 
-    z_BAC
-    gz_BAC
+z_BAC
+gz_BAC
 #+END_SRC
 
 #+RESULTS:
@@ -1373,27 +1378,25 @@ An excursion to the Matlab/Octave meshgrid:
 
 ***** 2D-Meshgrid using Matlab/Octave
 
-#+name: meshgrid from matlab x_BA y_BA
+A meshgrid in matlab/octave in 2D is defined like so:
+#+name: matlab meshgrid x_BA y_BA
 #+BEGIN_SRC octave
-  A = 20; B = 30;
-  x_A = linspace(-3, 3, A);
-  y_B = linspace(-2, 2, B);
-  [x_BA, y_BA] = meshgrid(x_A, y_B);
+A = 20; B = 30;
+x_A = linspace(-3, 3, A);
+y_B = linspace(-2, 2, B);
+[x_BA, y_BA] = meshgrid(x_A, y_B);
 #+END_SRC
-
-#+RESULTS: meshgrid from matlab x_BA y_BA
-: 0
 
 ***** 3D-Meshgrid using Matlab/Octave
 
-#+name: meshgrid from matlab x_BAC y_BAC z_BAC
+A meshgrid in matlab/octave in 3D is defined like so:
+#+name: matlab meshgrid x_BAC y_BAC z_BAC
 #+BEGIN_SRC octave
-  % matlab meshgrid
-    A = 10; B = 20; C = 30;
-    x_A = linspace(0, 3, A);
-    y_B = linspace(0, 2, B);
-    z_C = linspace(0, 1, C);
-    [x_BAC, y_BAC, z_BAC] = meshgrid(x_A, y_B, z_C);
+A = 10; B = 20; C = 30;
+x_A = linspace(0, 3, A);
+y_B = linspace(0, 2, B);
+z_C = linspace(0, 1, C);
+[x_BAC, y_BAC, z_BAC] = meshgrid(x_A, y_B, z_C);
 #+END_SRC
 
 *** subsref
@@ -1490,52 +1493,52 @@ the grid and restrict to a singular value for one axis.
 
 #+name: vectorgrid surface
 #+BEGIN_SRC octave :tangle @vectorgrid/surface.m
-  function surface(g_slice, s_slice, c_slice, S_flag)
+function surface(g_slice, s_slice, c_slice, S_flag)
 
   %% proc input arguments  
-    if nargin < 4
-      S_flag = 'independendSurface';
+  if nargin < 4
+    S_flag = 'independendSurface';
+  end
+  if nargin < 3
+    c_slice = [];
+  end
+  if nargin < 2 
+    s_slice = [];
+  end
+
+  %% test g_slice for dims
+  assert(numel(size(g_slice))==3, 'g_slice is expected to have 3 dimensions.');
+
+  %% get matlab meshgrid from vectorgrid; this is the surface we plot
+  [x, y, z] = meshgrid(g_slice);
+
+  %% as we operate on a matlab meshgrid, we can savely squeeze them
+  x = squeeze(x);
+  y = squeeze(y);
+  z = squeeze(z);
+
+  if ~isempty(s_slice)
+
+    %% preserve dims
+    s_slice_size = size(s_slice);
+
+    if numel(s_slice_size) == 2
+      %% meshgrid reshapes accordingly to matlab meshgrid; do the same for
+      %function s_slice
+      s_slice = s_slice.';
+    else
+      %% ensure dims for s_slice
+      s_slice = squeeze(s_slice);
     end
-    if nargin < 3
-      c_slice = [];
-    end
-    if nargin < 2 
-      s_slice = [];
-    end
+  end
 
-    %% test g_slice for dims
-    assert(numel(size(g_slice))==3, 'g_slice is expected to have 3 dimensions.');
+  %% create new surface if surface is dependend on grid
+  if ~isempty(s_slice) && strcmp(S_flag, 'dependendSurface')
 
-    %% get matlab meshgrid from vectorgrid; this is the surface we plot
-    [x, y, z] = meshgrid(g_slice);
+    %% for surface creation we need to determine which dimension is singular
+    slice_size = size(g_slice);
 
-    %% as we operate on a matlab meshgrid, we can savely squeeze them
-    x = squeeze(x);
-    y = squeeze(y);
-    z = squeeze(z);
-
-    if ~isempty(s_slice)
-
-      %% preserve dims
-      s_slice_size = size(s_slice);
-
-      if numel(s_slice_size) == 2
-        %% meshgrid reshapes accordingly to matlab meshgrid; do the same for
-        %function s_slice
-        s_slice = s_slice.';
-      else
-        %% ensure dims for s_slice
-        s_slice = squeeze(s_slice);
-      end
-    end
-
-    %% create new surface if surface is dependend on grid
-    if ~isempty(s_slice) && strcmp(S_flag, 'dependendSurface')
-
-      %% for surface creation we need to determine which dimension is singular
-      slice_size = size(g_slice);
-
-      switch g_slice.S_type
+    switch g_slice.S_type
 	case 'cartesian'
 
 	  if slice_size(1) == 1
@@ -1563,26 +1566,26 @@ the grid and restrict to a singular value for one axis.
 	  end
 	otherwise
 	  error('Unknown coordinate type.');
-      end
     end
+  end
 
-    %% draw the surface finally
-    if isempty(c_slice)
-      if isempty(s_slice)
+  %% draw the surface finally
+  if isempty(c_slice)
+    if isempty(s_slice)
 	surface(x, y, z);
-      else
-	surface(x, y, z, s_slice);
-      end
     else
-      surface(x, y, z, c_slice);
+	surface(x, y, z, s_slice);
     end
+  else
+    surface(x, y, z, c_slice);
+  end
 
 #+END_SRC
 
 **** Examples
 This example illustrates the use of the method =surface= for
-=vectorgrid=. The section ref:sec:surfacealternatives discusses similar
-examples using Octave/Matlab's surface function.  
+=vectorgrid=. The section ref:sec:surfacealternatives discusses
+similar examples using Octave/Matlab's surface function.
 
 ***** 2D in 3D
 
@@ -1672,11 +1675,11 @@ surface() colors the slice defined by =g_AB1= by values =s_AB=.
 
 ***** TODO 3D in 3D Spherical
 
-**** COMMENT Alternatives label:surfacealternatives
+**** Alternatives label:sec:surfacealternatives
 As an alternative, we do the examples as tests solely using
 Octave/matlab's =surface= function.
 
-We use the meshgrid shown in section ref:meshgridalternatives. A
+We use the meshgrid as shown in section ref:meshgridalternatives. A
 function =z_BA= is defined using the grid information.
 #+name: Beispielfunktion 3D
 #+BEGIN_SRC octave
@@ -1700,7 +1703,7 @@ space. Therefore, we need to
     #+BEGIN_SRC octave
     surface(x_A, y_B, z_BA, s_BA);
     #+END_SRC
-This results in a figure like shown in Figure ref:alternative_2d_in_3d_surface.
+ This results in a figure like shown in Figure ref:fig:alternative_2d_in_3d_surface.
 
 #+name: alternative 2d in 3d figure
 #+BEGIN_SRC octave :results file :tangle 2d_in_3d_surface_colored_octave.m :exports results :var S_file="img/2d_in_3d_surface_colored_octave.png"
@@ -1713,7 +1716,7 @@ This results in a figure like shown in Figure ref:alternative_2d_in_3d_surface.
 #+END_SRC
 
 #+caption: A 2D surface in 3D space showing a function $f(x,y)$ for $z = 0$ using colors. 
-#+caption: label:alternative_2d_in_3d_surface
+#+caption: label:fig:alternative_2d_in_3d_surface
 #+RESULTS: alternative 2d in 3d figure
 file:img/2d_in_3d_surface_colored_octave.png
 
@@ -2104,7 +2107,18 @@ Darstellung immer ein Ausschnitt zu wählen.
 [[file:img/exa_meshgrid.png]]
 
 * Installation
-** Directory setup
+** Matlab/Octave Installation
+
+1. Check out the git repository to some directory, e.g.
+   : git clone https://github.com/badkey/booast
+2. Add the path to Octave/Matlab where you cloned booast. E.g.
+   : addpath('path/to/booast/');
+
+** Emacs tangling
+
+Booast is setup using Emacs's org mode. If you want to tangle yourself,
+Inside the installation directory, cleaning up everything belonging to
+the classes vector and vectorgrid might be necessary:
 #+name: cleanup directories
 #+BEGIN_SRC shell
 rm -rf @vector @vectorgrid img
@@ -2112,23 +2126,25 @@ rm -rf @vector @vectorgrid img
 
 #+RESULTS: cleanup directories
 
+Then create output directories for tangling files:
 #+name: setup directories
 #+BEGIN_SRC shell
 mkdir @vector @vectorgrid img
 #+END_SRC
 
 #+RESULTS: setup directories
-** Matlab/Octave Installation
-Add the path to Octave/Matlab where you installed booast. E.g.
-: addpath('path/to/booast/');
 
 ** TODO Octave tests
-Do some automatic tests like in
+
+We would like to do some automatic tests like in
 https://orgmode.org/worg/org-contrib/babel/intro.html
 
+** Misc 
+
+This toolbox was tested with octave version:
 #+begin_src octave
 version
 #+end_src
 
 #+RESULTS:
-: 4.2.1
+: 5.1.0

@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-24 16:13:30 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-24 22:18:46 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -10,7 +10,7 @@
 #+setupfile: booast.setup
 #+exclude_tags: internal
 #+property: header-args:org               :eval export :exports results
-#+PROPERTY: header-args:octave :noweb yes :eval export
+#+PROPERTY: header-args:octave :noweb yes :eval no-export
 
 * General Information
 This is all about Higher Order Ambisonics.
@@ -1118,7 +1118,6 @@ sphericalharmonic
 
 #+call: sphericalmodematrix doc[:output html]()
 
-
 * Spherical Fourier Transform
 ** sphericalseries_isfs
 file:sphericalseries_isfs.m: calculates something for given argument
@@ -1346,7 +1345,6 @@ sphericalbessel, sphericalhankel
 #+call: sphericalseries_sfc doc[:output html]()
 
 
-
 * Higher Order Ambisonics
 ** Sphericalseries_hoa
 
@@ -1549,17 +1547,17 @@ sphericalnormalisation, sphericalmodematrix
 % -------------------------------------------------------------------
 
 % conus
-if 1
+if 0
   R_max = 1.5;
-  C = 30; r_C = linspace(0, R_max, C);
+  C = 50; r_C = linspace(0, R_max, C);
   A = 1;  theta_A = linspace(pi/2, pi/2, A);
-  B = 40; phi_B = linspace(0, 2*pi,    B);
+  B = 50; phi_B = linspace(0, 2*pi,    B);
   gg_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
 end
 
 % sphere
-if 0
-  R_max = 0.15;
+if 1
+  R_max = .15;
   C = 1; r_C = linspace(R_max, R_max, C);
   A = 30;  theta_A = linspace(0, pi, A);
   B = 40; phi_B = linspace(0, 2*pi,  B);
@@ -1568,14 +1566,14 @@ end
 
 % Spherical stuff
 % -------------------------------------------------------------------
-N_order = 4;
-F = 1;
+N_order = 7;
+F = 4;
 f_F = linspace(100, 1000, F); % Frequenzen
 k_F = -2*pi*f_F/342; % Wellenzahl
 
 % ebene Welle
 % -------------------------------------------------------------------
-Theta_i = pi/3;
+Theta_i = pi/2;
 Phi_i = pi/2;
 S_norm = 'norm';
 S_type = 'complex';
@@ -1603,13 +1601,14 @@ if 1
     surface(gg_CAB, squeeze(abs(real(P_CABF(:,:,:,f)))));
     axis('equal');
     grid('on');
-    view([30 30]);
+    view([30 40]);
   end
 end
 
 #+END_SRC
 
 #+RESULTS: spherical series hoa planewave test
+: 0
 
 ** sphericalseries_hoa_spherical
 ** sphericalseries_hoa_basis

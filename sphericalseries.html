@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-11-02 Sa 22:18 -->
+<!-- 2019-11-24 So 22:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Spherical Series</title>
@@ -275,122 +275,213 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgadf8fb9">1. General Information</a></li>
-<li><a href="#orgb455be6">2. Spherical Series Mathematics</a></li>
-<li><a href="#org97c1140">3. Spherical Harmonics</a>
+<li><a href="#org25eb94d">1. General Information</a></li>
+<li><a href="#org19ca5da">2. Spherical Mathematics</a>
 <ul>
-<li><a href="#orge1dd38b">3.1. sphericalnormalisation</a>
-<ul>
-<li><a href="#org852fb26">3.1.1. Syntax</a></li>
-<li><a href="#org34ad180">3.1.2. Description</a></li>
-<li><a href="#orgb828fa9">3.1.3. Input Arguments</a></li>
-<li><a href="#org86978ac">3.1.4. Return Values</a></li>
-<li><a href="#orgf228435">3.1.5. Examples</a></li>
-<li><a href="#org48319d6">3.1.6. Tips</a></li>
-<li><a href="#org73fff9d">3.1.7. Alternatives</a></li>
-<li><a href="#orgd043297">3.1.8. See Also</a></li>
+<li><a href="#org3ff86b6">2.1. Fourier Bessel Series</a></li>
+<li><a href="#orge271b81">2.2. HOA Series</a></li>
+<li><a href="#org2b24e96">2.3. Spherical Fourier Transform</a></li>
 </ul>
 </li>
-<li><a href="#org9813c48">3.2. sphericallegendre</a>
+<li><a href="#org23c738f">3. Spherical Functions</a>
 <ul>
-<li><a href="#orgae9b1f6">3.2.1. Syntax</a></li>
-<li><a href="#org16052cf">3.2.2. Description</a></li>
-<li><a href="#org0676c98">3.2.3. Input Arguments</a></li>
-<li><a href="#org8ad72b4">3.2.4. Return Values</a></li>
-<li><a href="#orgf72e02c">3.2.5. See Also</a></li>
-</ul>
-</li>
-<li><a href="#orgbb5c4ae">3.3. trg</a>
+<li><a href="#orgd0fab98">3.1. sphericalbesselj</a>
 <ul>
-<li><a href="#org9144124">3.3.1. Syntax</a></li>
-<li><a href="#org4e27898">3.3.2. Description</a></li>
-<li><a href="#orga336e77">3.3.3. Input Arguments</a></li>
-<li><a href="#orgbecce9f">3.3.4. Return Values</a></li>
-<li><a href="#orgab1e100">3.3.5. Examples</a></li>
-<li><a href="#orgb1f9a1b">3.3.6. Tips</a></li>
-<li><a href="#org4cd2a05">3.3.7. Alternatives</a></li>
-<li><a href="#orgd6b193c">3.3.8. See Also</a></li>
+<li><a href="#org82005b3">3.1.1. Syntax</a></li>
+<li><a href="#orge8eb62e">3.1.2. Description</a></li>
+<li><a href="#orgd28f7ba">3.1.3. Input Arguments</a></li>
+<li><a href="#org7654320">3.1.4. Return Values</a></li>
+<li><a href="#org4c7fcf5">3.1.5. Examples</a></li>
+<li><a href="#org0404aec">3.1.6. Tips</a></li>
+<li><a href="#orgd921ab1">3.1.7. Alternatives</a></li>
+<li><a href="#orgd03f39f">3.1.8. See Also</a></li>
 </ul>
 </li>
-<li><a href="#orga268988">3.4. trh</a>
+<li><a href="#org89192c6">3.2. sphericalbessel</a>
 <ul>
-<li><a href="#orge32ba02">3.4.1. Syntax</a></li>
-<li><a href="#orgfa671ac">3.4.2. Description</a></li>
-<li><a href="#orgeada3f2">3.4.3. Input Arguments</a></li>
-<li><a href="#orge04138b">3.4.4. Return Values</a></li>
-<li><a href="#org101f327">3.4.5. Examples</a></li>
-<li><a href="#org7874dc1">3.4.6. Tips</a></li>
-<li><a href="#org12306d1">3.4.7. Alternatives</a></li>
-<li><a href="#orga5e7090">3.4.8. See Also</a></li>
+<li><a href="#org6b31a2c">3.2.1. Syntax</a></li>
+<li><a href="#org6dfb12c">3.2.2. Description</a></li>
+<li><a href="#org89512f1">3.2.3. Input Arguments</a></li>
+<li><a href="#orgbc597f4">3.2.4. Return Values</a></li>
+<li><a href="#orgd7ae605">3.2.5. Examples</a></li>
+<li><a href="#org0f22672">3.2.6. Tips</a></li>
+<li><a href="#org7b3a914">3.2.7. Alternatives</a></li>
+<li><a href="#orgaa01604">3.2.8. See Also</a></li>
 </ul>
 </li>
-<li><a href="#org87aaf83">3.5. sphericalazimuth</a>
+<li><a href="#orgb9ce898">3.3. sphericalbessely</a>
 <ul>
-<li><a href="#org2234e29">3.5.1. Syntax</a></li>
-<li><a href="#org6571c53">3.5.2. Description</a></li>
-<li><a href="#org2dee34d">3.5.3. Input Arguments</a></li>
-<li><a href="#org3c505fd">3.5.4. Return Values</a></li>
-<li><a href="#org5246aa5">3.5.5. Examples</a></li>
-<li><a href="#orgf759c59">3.5.6. Tips</a></li>
-<li><a href="#org6e28e0e">3.5.7. Alternatives</a></li>
-<li><a href="#orgda34195">3.5.8. See Also</a></li>
+<li><a href="#org1fd6b9b">3.3.1. Syntax</a></li>
+<li><a href="#orgc97b55d">3.3.2. Description</a></li>
+<li><a href="#orgbc5ca57">3.3.3. Input Arguments</a></li>
+<li><a href="#org762b3d1">3.3.4. Return Values</a></li>
+<li><a href="#org8e59c3f">3.3.5. Examples</a></li>
+<li><a href="#org32b5ca5">3.3.6. Tips</a></li>
+<li><a href="#org62b5f30">3.3.7. Alternatives</a></li>
+<li><a href="#orgedb810b">3.3.8. See Also</a></li>
 </ul>
 </li>
-<li><a href="#orgf32d230">3.6. sphericalharmonic</a>
+<li><a href="#org3979f7f">3.4. sphericalneumann</a>
 <ul>
-<li><a href="#org1c31f67">3.6.1. Documentation</a></li>
-<li><a href="#org2329464">3.6.2. Syntax</a></li>
-<li><a href="#orgf21f6b0">3.6.3. Description</a></li>
-<li><a href="#org941d163">3.6.4. Input Arguments</a></li>
-<li><a href="#org248eede">3.6.5. Return Values</a></li>
-<li><a href="#orgfdb1fdf">3.6.6. Examples</a></li>
-<li><a href="#org3229ece">3.6.7. Tips</a></li>
-<li><a href="#orgb9133ad">3.6.8. Alternatives</a></li>
-<li><a href="#orgba847ba">3.6.9. See Also</a></li>
+<li><a href="#org312aac7">3.4.1. Syntax</a></li>
+<li><a href="#orgb8eb6a6">3.4.2. Description</a></li>
+<li><a href="#org8621561">3.4.3. Input Arguments</a></li>
+<li><a href="#org93f8633">3.4.4. Return Values</a></li>
+<li><a href="#org252e5dd">3.4.5. Examples</a></li>
+<li><a href="#org4fabbbc">3.4.6. Tips</a></li>
+<li><a href="#orgb034983">3.4.7. Alternatives</a></li>
+<li><a href="#org6f284da">3.4.8. See Also</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="#org7d69f0a">4. Spherical Series</a>
+<li><a href="#org5d6a571">3.5. sphericalhankel</a>
 <ul>
-<li><a href="#org51b9f00">4.1. sphericalseries<sub>isfs</sub></a>
+<li><a href="#org65bcde1">3.5.1. Syntax</a></li>
+<li><a href="#org246e6c6">3.5.2. Description</a></li>
+<li><a href="#org051f82a">3.5.3. Input Arguments</a></li>
+<li><a href="#org497d97c">3.5.4. Return Values</a></li>
+<li><a href="#org3452ee0">3.5.5. Examples</a></li>
+<li><a href="#orgfcc7a9a">3.5.6. Tips</a></li>
+<li><a href="#org9b56f58">3.5.7. Alternatives</a></li>
+<li><a href="#org4303884">3.5.8. See Also</a></li>
+</ul>
+</li>
+<li><a href="#org6b0f35d">3.6. sphericalnormalisation</a>
 <ul>
-<li><a href="#org8d55595">4.1.1. Syntax</a></li>
-<li><a href="#orgf1a2c40">4.1.2. Description</a></li>
-<li><a href="#org0c50ac9">4.1.3. Input Arguments</a></li>
-<li><a href="#org42c1923">4.1.4. Return Values</a></li>
-<li><a href="#orgbff48cc">4.1.5. Examples</a></li>
-<li><a href="#org1ccee5d">4.1.6. Tips</a></li>
-<li><a href="#org3704a2e">4.1.7. Alternatives</a></li>
-<li><a href="#org86fa96d">4.1.8. See Also</a></li>
+<li><a href="#org9dfca66">3.6.1. Syntax</a></li>
+<li><a href="#orgf89d935">3.6.2. Description</a></li>
+<li><a href="#org8a1ab5c">3.6.3. Input Arguments</a></li>
+<li><a href="#orgd86734b">3.6.4. Return Values</a></li>
+<li><a href="#org3d1d28b">3.6.5. Examples</a></li>
+<li><a href="#org7187d10">3.6.6. Tips</a></li>
+<li><a href="#orgba6e14f">3.6.7. Alternatives</a></li>
+<li><a href="#orgbfa3a67">3.6.8. See Also</a></li>
 </ul>
 </li>
-<li><a href="#orgc963c66">4.2. sphericalseries<sub>basis</sub></a>
+<li><a href="#org07eaf40">3.7. sphericallegendre</a>
 <ul>
-<li><a href="#orgf43fb07">4.2.1. Syntax</a></li>
-<li><a href="#orgc04ae67">4.2.2. Description</a></li>
-<li><a href="#org2b3fe59">4.2.3. Input Arguments</a></li>
-<li><a href="#orgbfec5c8">4.2.4. Return Values</a></li>
-<li><a href="#orgde84127">4.2.5. Examples</a></li>
-<li><a href="#orga410555">4.2.6. Tips</a></li>
-<li><a href="#org2e92c60">4.2.7. Alternatives</a></li>
-<li><a href="#org202a693">4.2.8. See Also</a></li>
+<li><a href="#orgc5b0efc">3.7.1. Syntax</a></li>
+<li><a href="#org4e4551b">3.7.2. Description</a></li>
+<li><a href="#orge57475a">3.7.3. Input Arguments</a></li>
+<li><a href="#org8c227f5">3.7.4. Return Values</a></li>
+<li><a href="#org2faa017">3.7.5. See Also</a></li>
 </ul>
 </li>
-<li><a href="#org0b51a22">4.3. sphericalseries<sub>hoa</sub></a></li>
-<li><a href="#org1ddb8cf">4.4. sphericalseries<sub>isf</sub></a></li>
-<li><a href="#orgb23ca44">4.5. sphericalseries<sub>sfc</sub></a></li>
-<li><a href="#org869307a">4.6. sphericalseries<sub>hoa</sub><sub>spherical</sub></a></li>
-<li><a href="#org719e421">4.7. Sphericalseries<sub>hoa</sub><sub>plane</sub></a></li>
+<li><a href="#org99096bf">3.8. trg</a>
+<ul>
+<li><a href="#org8c04bef">3.8.1. Syntax</a></li>
+<li><a href="#org06d5839">3.8.2. Description</a></li>
+<li><a href="#org6eb0358">3.8.3. Input Arguments</a></li>
+<li><a href="#org37bb526">3.8.4. Return Values</a></li>
+<li><a href="#orga73f203">3.8.5. Examples</a></li>
+<li><a href="#orgb326e14">3.8.6. Tips</a></li>
+<li><a href="#org6ef7928">3.8.7. Alternatives</a></li>
+<li><a href="#orga48cac1">3.8.8. See Also</a></li>
 </ul>
 </li>
-<li><a href="#org971c4a8">5. Examples</a></li>
+<li><a href="#orgf723493">3.9. trh</a>
+<ul>
+<li><a href="#org68a0485">3.9.1. Syntax</a></li>
+<li><a href="#org7e4af64">3.9.2. Description</a></li>
+<li><a href="#orge47f731">3.9.3. Input Arguments</a></li>
+<li><a href="#org715d4e6">3.9.4. Return Values</a></li>
+<li><a href="#org16a4941">3.9.5. Examples</a></li>
+<li><a href="#org1db6e71">3.9.6. Tips</a></li>
+<li><a href="#org8b31962">3.9.7. Alternatives</a></li>
+<li><a href="#orgb6e36e0">3.9.8. See Also</a></li>
+</ul>
+</li>
+<li><a href="#org900e435">3.10. sphericalazimuth</a>
+<ul>
+<li><a href="#org76403af">3.10.1. Syntax</a></li>
+<li><a href="#org06e76ac">3.10.2. Description</a></li>
+<li><a href="#org853f45d">3.10.3. Input Arguments</a></li>
+<li><a href="#org499eabc">3.10.4. Return Values</a></li>
+<li><a href="#orgb2d668e">3.10.5. Examples</a></li>
+<li><a href="#org2782870">3.10.6. Tips</a></li>
+<li><a href="#org6d74ee2">3.10.7. Alternatives</a></li>
+<li><a href="#org89ffacf">3.10.8. See Also</a></li>
+</ul>
+</li>
+<li><a href="#org8e76f5c">3.11. sphericalharmonic</a>
+<ul>
+<li><a href="#org75d577e">3.11.1. Syntax</a></li>
+<li><a href="#orgd52e88c">3.11.2. Description</a></li>
+<li><a href="#org77c1cb5">3.11.3. Input Arguments</a></li>
+<li><a href="#org3c9f410">3.11.4. Return Values</a></li>
+<li><a href="#orgc62c342">3.11.5. Examples</a></li>
+<li><a href="#org324e819">3.11.6. Tips</a></li>
+<li><a href="#org762d1c1">3.11.7. Alternatives</a></li>
+<li><a href="#org8d9ee38">3.11.8. See Also</a></li>
+</ul>
+</li>
+<li><a href="#orgedf1012">3.12. sphericalmodematrix</a>
+<ul>
+<li><a href="#org3aa7651">3.12.1. Syntax</a></li>
+<li><a href="#orgd54f0f2">3.12.2. Description</a></li>
+<li><a href="#org5b92080">3.12.3. Input Arguments</a></li>
+<li><a href="#org12ceab6">3.12.4. Return Values</a></li>
+<li><a href="#org772ebb8">3.12.5. Examples</a></li>
+<li><a href="#orgc143917">3.12.6. Tips</a></li>
+<li><a href="#org0116eca">3.12.7. Alternatives</a></li>
+<li><a href="#org9b20c1c">3.12.8. See Also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org6575af2">4. Spherical Fourier Transform</a>
+<ul>
+<li><a href="#org4025287">4.1. sphericalseries<sub>isfs</sub></a></li>
+<li><a href="#org5543301">4.2. sphericalseries<sub>isf</sub></a></li>
+<li><a href="#org7367aa6">4.3. sphericalseries<sub>sfc</sub></a>
+<ul>
+<li><a href="#org93da8e4">4.3.1. Syntax</a></li>
+<li><a href="#orge60fc66">4.3.2. Description</a></li>
+<li><a href="#orgdd94ac7">4.3.3. Input Arguments</a></li>
+<li><a href="#org5232228">4.3.4. Return Values</a></li>
+<li><a href="#org296993b">4.3.5. Examples</a></li>
+<li><a href="#org8aec6f1">4.3.6. Tips</a></li>
+<li><a href="#orge9c15f4">4.3.7. Alternatives</a></li>
+<li><a href="#org2b11455">4.3.8. See Also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org16022fb">5. Higher Order Ambisonics</a>
+<ul>
+<li><a href="#org7b7623a">5.1. Sphericalseries<sub>hoa</sub></a></li>
+<li><a href="#org053af26">5.2. Sphericalseries<sub>hoa</sub><sub>plane</sub></a>
+<ul>
+<li><a href="#orgc1078e6">5.2.1. Syntax</a></li>
+<li><a href="#org6a03bcd">5.2.2. Description</a></li>
+<li><a href="#org3e2ce4a">5.2.3. Input Arguments</a></li>
+<li><a href="#org429d01a">5.2.4. Return Values</a></li>
+<li><a href="#orgf884b7e">5.2.5. Examples</a></li>
+<li><a href="#org9eec085">5.2.6. Tips</a></li>
+<li><a href="#org76b692d">5.2.7. Alternatives</a></li>
+<li><a href="#orga76865a">5.2.8. See Also</a></li>
+</ul>
+</li>
+<li><a href="#org66481c5">5.3. sphericalseries<sub>hoa</sub><sub>spherical</sub></a></li>
+<li><a href="#org3fca629">5.4. sphericalseries<sub>hoa</sub><sub>basis</sub></a>
+<ul>
+<li><a href="#org804f976">5.4.1. Syntax</a></li>
+<li><a href="#orge2b6f76">5.4.2. Description</a></li>
+<li><a href="#orgd4bf0ce">5.4.3. Input Arguments</a></li>
+<li><a href="#orgec75fbd">5.4.4. Return Values</a></li>
+<li><a href="#org5eff4df">5.4.5. Examples</a></li>
+<li><a href="#org0c35cbc">5.4.6. Tips</a></li>
+<li><a href="#org05ed9bf">5.4.7. Alternatives</a></li>
+<li><a href="#org5272af3">5.4.8. See Also</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgadf8fb9" class="outline-2">
-<h2 id="orgadf8fb9"><span class="section-number-2">1</span> General Information</h2>
+<div id="outline-container-org25eb94d" class="outline-2">
+<h2 id="org25eb94d"><span class="section-number-2">1</span> General Information</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This is all about Higher Order Ambisonics.
@@ -401,9 +492,13 @@ We need to implement some math.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb455be6" class="outline-2">
-<h2 id="orgb455be6"><span class="section-number-2">2</span> Spherical Series Mathematics</h2>
+<div id="outline-container-org19ca5da" class="outline-2">
+<h2 id="org19ca5da"><span class="section-number-2">2</span> Spherical Mathematics</h2>
 <div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org3ff86b6" class="outline-3">
+<h3 id="org3ff86b6"><span class="section-number-3">2.1</span> Fourier Bessel Series</h3>
+<div class="outline-text-3" id="text-2-1">
 <p>
 Spherical Series provides means to calculate the "Fourier Bessel
 Series".  The form of this series is
@@ -430,10 +525,17 @@ In particular, we have
 <li>\(k = \omega/\mathrm c\) wavenumber</li>
 <li>\(\mathrm c\) speed of sound</li>
 </ul>
+</div>
+</div>
+
+<div id="outline-container-orge271b81" class="outline-3">
+<h3 id="orge271b81"><span class="section-number-3">2.2</span> HOA Series</h3>
+<div class="outline-text-3" id="text-2-2">
 <p>
-Terms \(j_n(kr) \, Y_{n}^{m}(\theta, \phi)\) are often combined to a basefunction \(R_n^m(r, \theta, \phi, k)\) and \(h_n(kr) \,
-Y_{n}^{m}(\theta, \phi)\) are combined to basefunction \(S_n^m(r, \theta, \phi, k)\)
-yielding 
+The product \(j_n(kr) \, Y_{n}^{m}(\theta, \phi)\) may combined to a
+basefunction \(R_n^m(r, \theta, \phi, k)\) and \(h_n(kr) \,
+Y_{n}^{m}(\theta, \phi)\) is combined to basefunction \(S_n^m(r, \theta,
+\phi, k)\) yielding
 </p>
 \begin{equation}
   \label{eq:1r}
@@ -446,30 +548,372 @@ yielding
 </div>
 </div>
 
-<div id="outline-container-org97c1140" class="outline-2">
-<h2 id="org97c1140"><span class="section-number-2">3</span> Spherical Harmonics</h2>
+<div id="outline-container-org2b24e96" class="outline-3">
+<h3 id="org2b24e96"><span class="section-number-3">2.3</span> Spherical Fourier Transform</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Combination of \(A_{n}^{m}(k)\) and \(j_n(kr)\) results in 
+</p>
+\begin{equation}
+  \label{eq:sfs}
+  P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
+  \left\{\begin{array}{ll}
+  C_{n}^{m}(k,r) \\
+  D_{n}^{m}(k,r) \\
+  \end{array}\right\}
+  Y_{n}^{m}(\theta, \phi).
+\end{equation}
+</div>
+</div>
+</div>
+
+<div id="outline-container-org23c738f" class="outline-2">
+<h2 id="org23c738f"><span class="section-number-2">3</span> Spherical Functions</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orge1dd38b" class="outline-3">
-<h3 id="orge1dd38b"><span class="section-number-3">3.1</span> sphericalnormalisation</h3>
+<div id="outline-container-orgd0fab98" class="outline-3">
+<h3 id="orgd0fab98"><span class="section-number-3">3.1</span> sphericalbesselj</h3>
 <div class="outline-text-3" id="text-3-1">
+<p>
+<a href="sphericalbesselj.m">sphericalbesselj.m</a>: calculates spherical bessel function at order N
+</p>
+</div>
+
+<div id="outline-container-org82005b3" class="outline-4">
+<h4 id="org82005b3"><span class="section-number-4">3.1.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<pre class="example">
+J_sph_CF = sphericalbesselj(N_order, x_CF);
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orge8eb62e" class="outline-4">
+<h4 id="orge8eb62e"><span class="section-number-4">3.1.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<p>
+spherical bessel function at order N
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd28f7ba" class="outline-4">
+<h4 id="orgd28f7ba"><span class="section-number-4">3.1.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-1-3">
+<dl class="org-dl">
+<dt>x<sub>CF</sub></dt><dd>C x F matrix</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org7654320" class="outline-4">
+<h4 id="org7654320"><span class="section-number-4">3.1.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-1-4">
+<dl class="org-dl">
+<dt>J<sub>sph</sub><sub>CF</sub></dt><dd>C x F matrix</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org4c7fcf5" class="outline-4">
+<h4 id="org4c7fcf5"><span class="section-number-4">3.1.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-org0404aec" class="outline-4">
+<h4 id="org0404aec"><span class="section-number-4">3.1.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-orgd921ab1" class="outline-4">
+<h4 id="orgd921ab1"><span class="section-number-4">3.1.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-orgd03f39f" class="outline-4">
+<h4 id="orgd03f39f"><span class="section-number-4">3.1.8</span> See Also</h4>
+</div>
+</div>
+
+<div id="outline-container-org89192c6" class="outline-3">
+<h3 id="org89192c6"><span class="section-number-3">3.2</span> sphericalbessel</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+<a href="sphericalbessel.m">sphericalbessel.m</a>: wrapper for sphericalbesselj, return all orders up to N
+</p>
+</div>
+
+<div id="outline-container-org6b31a2c" class="outline-4">
+<h4 id="org6b31a2c"><span class="section-number-4">3.2.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<pre class="example">
+J_sph_OCF = sphericalbessel(N_order, x_CF)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org6dfb12c" class="outline-4">
+<h4 id="org6dfb12c"><span class="section-number-4">3.2.2</span> Description</h4>
+</div>
+
+<div id="outline-container-org89512f1" class="outline-4">
+<h4 id="org89512f1"><span class="section-number-4">3.2.3</span> Input Arguments</h4>
+</div>
+
+<div id="outline-container-orgbc597f4" class="outline-4">
+<h4 id="orgbc597f4"><span class="section-number-4">3.2.4</span> Return Values</h4>
+</div>
+
+<div id="outline-container-orgd7ae605" class="outline-4">
+<h4 id="orgd7ae605"><span class="section-number-4">3.2.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-org0f22672" class="outline-4">
+<h4 id="org0f22672"><span class="section-number-4">3.2.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-org7b3a914" class="outline-4">
+<h4 id="org7b3a914"><span class="section-number-4">3.2.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-orgaa01604" class="outline-4">
+<h4 id="orgaa01604"><span class="section-number-4">3.2.8</span> See Also</h4>
+</div>
+</div>
+
+<div id="outline-container-orgb9ce898" class="outline-3">
+<h3 id="orgb9ce898"><span class="section-number-3">3.3</span> sphericalbessely</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+<a href="sphericalbessely.m">sphericalbessely.m</a>: compute the spherical Bessel's function of the second kind
+</p>
+</div>
+
+<div id="outline-container-org1fd6b9b" class="outline-4">
+<h4 id="org1fd6b9b"><span class="section-number-4">3.3.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<pre class="example">
+N_sph = sphericalbessely(n, x)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgc97b55d" class="outline-4">
+<h4 id="orgc97b55d"><span class="section-number-4">3.3.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+2nd kind Bessel function is computed for each element of x.If the input argument
+(element of a matrix x) is = 0, the output has a value NaN.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbc5ca57" class="outline-4">
+<h4 id="orgbc5ca57"><span class="section-number-4">3.3.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<ul class="org-ul">
+<li>n - Ambisonics order</li>
+<li>x - matrix to return the result (should not have more than 2 dimensions)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org762b3d1" class="outline-4">
+<h4 id="org762b3d1"><span class="section-number-4">3.3.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-3-4">
+<ul class="org-ul">
+<li>N<sub>sph</sub> - matrix of the 2nd kind Bessel function values</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8e59c3f" class="outline-4">
+<h4 id="org8e59c3f"><span class="section-number-4">3.3.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-org32b5ca5" class="outline-4">
+<h4 id="org32b5ca5"><span class="section-number-4">3.3.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-org62b5f30" class="outline-4">
+<h4 id="org62b5f30"><span class="section-number-4">3.3.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-orgedb810b" class="outline-4">
+<h4 id="orgedb810b"><span class="section-number-4">3.3.8</span> See Also</h4>
+<div class="outline-text-4" id="text-3-3-8">
+<p>
+bessely
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org3979f7f" class="outline-3">
+<h3 id="org3979f7f"><span class="section-number-3">3.4</span> sphericalneumann</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+<a href="sphericalneumann.m">sphericalneumann.m</a>: 2nd kind Bessel function for Ambisonics
+coefficients are given as a vector
+</p>
+</div>
+
+<div id="outline-container-org312aac7" class="outline-4">
+<h4 id="org312aac7"><span class="section-number-4">3.4.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<pre class="example">
+N_sph_OCF = sphericalneumann(N_order, x_CF)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgb8eb6a6" class="outline-4">
+<h4 id="orgb8eb6a6"><span class="section-number-4">3.4.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-4-2">
+<p>
+First derivative of the 2nd kind Bessel function is computed for each
+element of x.If the input argument (element of a matrix x) is = 0, the
+output has a value NaN.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8621561" class="outline-4">
+<h4 id="org8621561"><span class="section-number-4">3.4.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-4-3">
+<ul class="org-ul">
+<li>N<sub>order</sub> - Ambisonics order</li>
+<li>x<sub>CF</sub> - matrix to return the result (should not have more than 2 dimensions)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org93f8633" class="outline-4">
+<h4 id="org93f8633"><span class="section-number-4">3.4.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-4-4">
+<ul class="org-ul">
+<li>N<sub>sph</sub><sub>OCF</sub> - multi-dimensional matrix with Neumann function calculation results</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org252e5dd" class="outline-4">
+<h4 id="org252e5dd"><span class="section-number-4">3.4.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-org4fabbbc" class="outline-4">
+<h4 id="org4fabbbc"><span class="section-number-4">3.4.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-orgb034983" class="outline-4">
+<h4 id="orgb034983"><span class="section-number-4">3.4.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-org6f284da" class="outline-4">
+<h4 id="org6f284da"><span class="section-number-4">3.4.8</span> See Also</h4>
+<div class="outline-text-4" id="text-3-4-8">
+<p>
+sphericalbessely
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org5d6a571" class="outline-3">
+<h3 id="org5d6a571"><span class="section-number-3">3.5</span> sphericalhankel</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+<a href="sphericalhankel.m">sphericalhankel.m</a>: returns the Bessel function of the 3rd kind (Hankel function)
+</p>
+</div>
+
+<div id="outline-container-org65bcde1" class="outline-4">
+<h4 id="org65bcde1"><span class="section-number-4">3.5.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-5-1">
+<pre class="example">
+h_OCF = sphericalhankel(n, x_CF)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org246e6c6" class="outline-4">
+<h4 id="org246e6c6"><span class="section-number-4">3.5.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-5-2">
+<p>
+According to the mathematical definition, Hankel function is obtained be combining two linearly 
+independent solutions of Bessel's differential equation (Wikipedia). This is done by means of 
+summation spherical bessel function of the 1st kind with spherical bessel function of the 2nd kind,
+multiplyed by the imaginary unit.
+</p>
+
+<p>
+This calculation is done for all elements of the matrix x<sub>Cf</sub>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org051f82a" class="outline-4">
+<h4 id="org051f82a"><span class="section-number-4">3.5.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-5-3">
+<ul class="org-ul">
+<li>n - Ambisonics order</li>
+<li>x<sub>CF</sub> -  matrix to return the result (should not have more than 2 dimensions)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org497d97c" class="outline-4">
+<h4 id="org497d97c"><span class="section-number-4">3.5.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-5-4">
+<ul class="org-ul">
+<li>h<sub>OCF</sub> - multi-dimensional matrix of calculation results</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3452ee0" class="outline-4">
+<h4 id="org3452ee0"><span class="section-number-4">3.5.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-orgfcc7a9a" class="outline-4">
+<h4 id="orgfcc7a9a"><span class="section-number-4">3.5.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-org9b56f58" class="outline-4">
+<h4 id="org9b56f58"><span class="section-number-4">3.5.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-org4303884" class="outline-4">
+<h4 id="org4303884"><span class="section-number-4">3.5.8</span> See Also</h4>
+<div class="outline-text-4" id="text-3-5-8">
+<p>
+sphericalbessel, sphericalneumann
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org6b0f35d" class="outline-3">
+<h3 id="org6b0f35d"><span class="section-number-3">3.6</span> sphericalnormalisation</h3>
+<div class="outline-text-3" id="text-3-6">
 <p>
 <code>sphericalnormalisation</code> - calculates the normalization factor 
 <a href="./sphericalnormalisation.m">./sphericalnormalisation.m</a>
 </p>
 </div>
-<div id="outline-container-org852fb26" class="outline-4">
-<h4 id="org852fb26"><span class="section-number-4">3.1.1</span> Syntax</h4>
-<div class="outline-text-4" id="text-3-1-1">
+
+<div id="outline-container-org9dfca66" class="outline-4">
+<h4 id="org9dfca66"><span class="section-number-4">3.6.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-6-1">
 <pre class="example">
 N_O = sphericalnormalisation(N_order, norm)
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org34ad180" class="outline-4">
-<h4 id="org34ad180"><span class="section-number-4">3.1.2</span> Description</h4>
-<div class="outline-text-4" id="text-3-1-2">
+<div id="outline-container-orgf89d935" class="outline-4">
+<h4 id="orgf89d935"><span class="section-number-4">3.6.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-6-2">
 <p>
 Calculates the normalization factor for a given harmonic order and
 normalization type.  If the type of normalization is not defined at
@@ -478,9 +922,9 @@ the output, full normalization 'norm' will be performed.
 </div>
 </div>
 
-<div id="outline-container-orgb828fa9" class="outline-4">
-<h4 id="orgb828fa9"><span class="section-number-4">3.1.3</span> Input Arguments</h4>
-<div class="outline-text-4" id="text-3-1-3">
+<div id="outline-container-org8a1ab5c" class="outline-4">
+<h4 id="org8a1ab5c"><span class="section-number-4">3.6.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-6-3">
 <dl class="org-dl">
 <dt>N<sub>order</sub></dt><dd>order of a spherical harmonic</dd>
 <dt>norm</dt><dd><p>
@@ -530,49 +974,49 @@ type of normalization:
 </div>
 </div>
 
-<div id="outline-container-org86978ac" class="outline-4">
-<h4 id="org86978ac"><span class="section-number-4">3.1.4</span> Return Values</h4>
-<div class="outline-text-4" id="text-3-1-4">
+<div id="outline-container-orgd86734b" class="outline-4">
+<h4 id="orgd86734b"><span class="section-number-4">3.6.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-6-4">
 <ul class="org-ul">
 <li>N<sub>O</sub> - corresponding normalization factor</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgf228435" class="outline-4">
-<h4 id="orgf228435"><span class="section-number-4">3.1.5</span> Examples</h4>
+<div id="outline-container-org3d1d28b" class="outline-4">
+<h4 id="org3d1d28b"><span class="section-number-4">3.6.5</span> Examples</h4>
 </div>
-<div id="outline-container-org48319d6" class="outline-4">
-<h4 id="org48319d6"><span class="section-number-4">3.1.6</span> Tips</h4>
+<div id="outline-container-org7187d10" class="outline-4">
+<h4 id="org7187d10"><span class="section-number-4">3.6.6</span> Tips</h4>
 </div>
-<div id="outline-container-org73fff9d" class="outline-4">
-<h4 id="org73fff9d"><span class="section-number-4">3.1.7</span> Alternatives</h4>
+<div id="outline-container-orgba6e14f" class="outline-4">
+<h4 id="orgba6e14f"><span class="section-number-4">3.6.7</span> Alternatives</h4>
 </div>
-<div id="outline-container-orgd043297" class="outline-4">
-<h4 id="orgd043297"><span class="section-number-4">3.1.8</span> See Also</h4>
+<div id="outline-container-orgbfa3a67" class="outline-4">
+<h4 id="orgbfa3a67"><span class="section-number-4">3.6.8</span> See Also</h4>
 </div>
 </div>
 
-<div id="outline-container-org9813c48" class="outline-3">
-<h3 id="org9813c48"><span class="section-number-3">3.2</span> sphericallegendre</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-org07eaf40" class="outline-3">
+<h3 id="org07eaf40"><span class="section-number-3">3.7</span> sphericallegendre</h3>
+<div class="outline-text-3" id="text-3-7">
 <p>
 <a href="sphericallegendre.m">sphericallegendre.m</a>: calculates spherical Legendre functions
 </p>
 </div>
 
-<div id="outline-container-orgae9b1f6" class="outline-4">
-<h4 id="orgae9b1f6"><span class="section-number-4">3.2.1</span> Syntax</h4>
-<div class="outline-text-4" id="text-3-2-1">
+<div id="outline-container-orgc5b0efc" class="outline-4">
+<h4 id="orgc5b0efc"><span class="section-number-4">3.7.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-7-1">
 <pre class="example">
 P_OA = sphericallegendre(N_order, theta_A)
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org16052cf" class="outline-4">
-<h4 id="org16052cf"><span class="section-number-4">3.2.2</span> Description</h4>
-<div class="outline-text-4" id="text-3-2-2">
+<div id="outline-container-org4e4551b" class="outline-4">
+<h4 id="org4e4551b"><span class="section-number-4">3.7.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-7-2">
 <p>
 Resulting matrix of Legendre function values has the dimensions ((N<sub>order</sub>+1)<sup>2</sup>+1)xlength(theta<sub>A</sub>).
 For positive odd m a negative sign is used.
@@ -595,9 +1039,9 @@ equivalent to (using legendre polynomial notation without Condon-Shortley phase)
 </div>
 </div>
 
-<div id="outline-container-org0676c98" class="outline-4">
-<h4 id="org0676c98"><span class="section-number-4">3.2.3</span> Input Arguments</h4>
-<div class="outline-text-4" id="text-3-2-3">
+<div id="outline-container-orge57475a" class="outline-4">
+<h4 id="orge57475a"><span class="section-number-4">3.7.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-7-3">
 <dl class="org-dl">
 <dt>N<sub>order</sub></dt><dd>order of the spherical harmonic</dd>
 <dt>theta<sub>A</sub></dt><dd>vector representing the calculation range of inclination theta</dd>
@@ -605,18 +1049,18 @@ equivalent to (using legendre polynomial notation without Condon-Shortley phase)
 </div>
 </div>
 
-<div id="outline-container-org8ad72b4" class="outline-4">
-<h4 id="org8ad72b4"><span class="section-number-4">3.2.4</span> Return Values</h4>
-<div class="outline-text-4" id="text-3-2-4">
+<div id="outline-container-org8c227f5" class="outline-4">
+<h4 id="org8c227f5"><span class="section-number-4">3.7.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-7-4">
 <dl class="org-dl">
 <dt>P<sub>OA</sub></dt><dd>matrix of Legendre function values</dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-orgf72e02c" class="outline-4">
-<h4 id="orgf72e02c"><span class="section-number-4">3.2.5</span> See Also</h4>
-<div class="outline-text-4" id="text-3-2-5">
+<div id="outline-container-org2faa017" class="outline-4">
+<h4 id="org2faa017"><span class="section-number-4">3.7.5</span> See Also</h4>
+<div class="outline-text-4" id="text-3-7-5">
 <p>
 legendre 
 </p>
@@ -624,28 +1068,29 @@ legendre
 </div>
 </div>
 
-<div id="outline-container-orgbb5c4ae" class="outline-3">
-<h3 id="orgbb5c4ae"><span class="section-number-3">3.3</span> trg</h3>
-<div class="outline-text-3" id="text-3-3">
+<div id="outline-container-org99096bf" class="outline-3">
+<h3 id="org99096bf"><span class="section-number-3">3.8</span> trg</h3>
+<div class="outline-text-3" id="text-3-8">
 <p>
 <a href="trg.m">trg.m</a>: calculates something for given argument
 </p>
 </div>
-<div id="outline-container-org9144124" class="outline-4">
-<h4 id="org9144124"><span class="section-number-4">3.3.1</span> Syntax</h4>
-<div class="outline-text-4" id="text-3-3-1">
+
+<div id="outline-container-org8c04bef" class="outline-4">
+<h4 id="org8c04bef"><span class="section-number-4">3.8.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-8-1">
 <pre class="example">
 y = trg(m, x)
 </pre>
 </div>
 </div>
-<div id="outline-container-org4e27898" class="outline-4">
-<h4 id="org4e27898"><span class="section-number-4">3.3.2</span> Description</h4>
+<div id="outline-container-org06d5839" class="outline-4">
+<h4 id="org06d5839"><span class="section-number-4">3.8.2</span> Description</h4>
 </div>
 
-<div id="outline-container-orga336e77" class="outline-4">
-<h4 id="orga336e77"><span class="section-number-4">3.3.3</span> Input Arguments</h4>
-<div class="outline-text-4" id="text-3-3-3">
+<div id="outline-container-org6eb0358" class="outline-4">
+<h4 id="org6eb0358"><span class="section-number-4">3.8.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-8-3">
 <ul class="org-ul">
 <li>x : numeric argument</li>
 <li>m : order</li>
@@ -653,27 +1098,27 @@ y = trg(m, x)
 </div>
 </div>
 
-<div id="outline-container-orgbecce9f" class="outline-4">
-<h4 id="orgbecce9f"><span class="section-number-4">3.3.4</span> Return Values</h4>
-<div class="outline-text-4" id="text-3-3-4">
+<div id="outline-container-org37bb526" class="outline-4">
+<h4 id="org37bb526"><span class="section-number-4">3.8.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-8-4">
 <p>
 y
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgab1e100" class="outline-4">
-<h4 id="orgab1e100"><span class="section-number-4">3.3.5</span> Examples</h4>
+<div id="outline-container-orga73f203" class="outline-4">
+<h4 id="orga73f203"><span class="section-number-4">3.8.5</span> Examples</h4>
 </div>
-<div id="outline-container-orgb1f9a1b" class="outline-4">
-<h4 id="orgb1f9a1b"><span class="section-number-4">3.3.6</span> Tips</h4>
+<div id="outline-container-orgb326e14" class="outline-4">
+<h4 id="orgb326e14"><span class="section-number-4">3.8.6</span> Tips</h4>
 </div>
-<div id="outline-container-org4cd2a05" class="outline-4">
-<h4 id="org4cd2a05"><span class="section-number-4">3.3.7</span> Alternatives</h4>
+<div id="outline-container-org6ef7928" class="outline-4">
+<h4 id="org6ef7928"><span class="section-number-4">3.8.7</span> Alternatives</h4>
 </div>
-<div id="outline-container-orgd6b193c" class="outline-4">
-<h4 id="orgd6b193c"><span class="section-number-4">3.3.8</span> See Also</h4>
-<div class="outline-text-4" id="text-3-3-8">
+<div id="outline-container-orga48cac1" class="outline-4">
+<h4 id="orga48cac1"><span class="section-number-4">3.8.8</span> See Also</h4>
+<div class="outline-text-4" id="text-3-8-8">
 <p>
 trh
 </p>
@@ -681,19 +1126,20 @@ trh
 </div>
 </div>
 
-<div id="outline-container-orga268988" class="outline-3">
-<h3 id="orga268988"><span class="section-number-3">3.4</span> trh</h3>
-<div class="outline-text-3" id="text-3-4">
+<div id="outline-container-orgf723493" class="outline-3">
+<h3 id="orgf723493"><span class="section-number-3">3.9</span> trh</h3>
+<div class="outline-text-3" id="text-3-9">
 <p>
 <a href="trh.m">trh.m</a>: calculates something for given argument
 </p>
 </div>
-<div id="outline-container-orge32ba02" class="outline-4">
-<h4 id="orge32ba02"><span class="section-number-4">3.4.1</span> Syntax</h4>
+
+<div id="outline-container-org68a0485" class="outline-4">
+<h4 id="org68a0485"><span class="section-number-4">3.9.1</span> Syntax</h4>
 </div>
-<div id="outline-container-orgfa671ac" class="outline-4">
-<h4 id="orgfa671ac"><span class="section-number-4">3.4.2</span> Description</h4>
-<div class="outline-text-4" id="text-3-4-2">
+<div id="outline-container-org7e4af64" class="outline-4">
+<h4 id="org7e4af64"><span class="section-number-4">3.9.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-9-2">
 <p>
 real-valued circular harmonics 2D normalised (N2D) of degree m and azimuth x
 </p>
@@ -712,9 +1158,9 @@ AES 23rd International Conference, 2003
 </div>
 </div>
 
-<div id="outline-container-orgeada3f2" class="outline-4">
-<h4 id="orgeada3f2"><span class="section-number-4">3.4.3</span> Input Arguments</h4>
-<div class="outline-text-4" id="text-3-4-3">
+<div id="outline-container-orge47f731" class="outline-4">
+<h4 id="orge47f731"><span class="section-number-4">3.9.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-9-3">
 <dl class="org-dl">
 <dt>m</dt><dd>degree</dd>
 <dt>x</dt><dd>azimuth</dd>
@@ -722,27 +1168,27 @@ AES 23rd International Conference, 2003
 </div>
 </div>
 
-<div id="outline-container-orge04138b" class="outline-4">
-<h4 id="orge04138b"><span class="section-number-4">3.4.4</span> Return Values</h4>
-<div class="outline-text-4" id="text-3-4-4">
+<div id="outline-container-org715d4e6" class="outline-4">
+<h4 id="org715d4e6"><span class="section-number-4">3.9.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-9-4">
 <dl class="org-dl">
 <dt>y</dt><dd>circular harmonic</dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-org101f327" class="outline-4">
-<h4 id="org101f327"><span class="section-number-4">3.4.5</span> Examples</h4>
+<div id="outline-container-org16a4941" class="outline-4">
+<h4 id="org16a4941"><span class="section-number-4">3.9.5</span> Examples</h4>
 </div>
-<div id="outline-container-org7874dc1" class="outline-4">
-<h4 id="org7874dc1"><span class="section-number-4">3.4.6</span> Tips</h4>
+<div id="outline-container-org1db6e71" class="outline-4">
+<h4 id="org1db6e71"><span class="section-number-4">3.9.6</span> Tips</h4>
 </div>
-<div id="outline-container-org12306d1" class="outline-4">
-<h4 id="org12306d1"><span class="section-number-4">3.4.7</span> Alternatives</h4>
+<div id="outline-container-org8b31962" class="outline-4">
+<h4 id="org8b31962"><span class="section-number-4">3.9.7</span> Alternatives</h4>
 </div>
-<div id="outline-container-orga5e7090" class="outline-4">
-<h4 id="orga5e7090"><span class="section-number-4">3.4.8</span> See Also</h4>
-<div class="outline-text-4" id="text-3-4-8">
+<div id="outline-container-orgb6e36e0" class="outline-4">
+<h4 id="orgb6e36e0"><span class="section-number-4">3.9.8</span> See Also</h4>
+<div class="outline-text-4" id="text-3-9-8">
 <p>
 trh
 </p>
@@ -750,26 +1196,26 @@ trh
 </div>
 </div>
 
-<div id="outline-container-org87aaf83" class="outline-3">
-<h3 id="org87aaf83"><span class="section-number-3">3.5</span> sphericalazimuth</h3>
-<div class="outline-text-3" id="text-3-5">
+<div id="outline-container-org900e435" class="outline-3">
+<h3 id="org900e435"><span class="section-number-3">3.10</span> sphericalazimuth</h3>
+<div class="outline-text-3" id="text-3-10">
 <p>
 <a href="sphericalazimuth.m">sphericalazimuth.m</a>: calculates spherical azimuth of order N for angle phi 
 </p>
 </div>
 
-<div id="outline-container-org2234e29" class="outline-4">
-<h4 id="org2234e29"><span class="section-number-4">3.5.1</span> Syntax</h4>
-<div class="outline-text-4" id="text-3-5-1">
+<div id="outline-container-org76403af" class="outline-4">
+<h4 id="org76403af"><span class="section-number-4">3.10.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-10-1">
 <pre class="example">
 D_OB = sphericalazimuth(N_order, phi_B, S_type)
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org6571c53" class="outline-4">
-<h4 id="org6571c53"><span class="section-number-4">3.5.2</span> Description</h4>
-<div class="outline-text-4" id="text-3-5-2">
+<div id="outline-container-org06e76ac" class="outline-4">
+<h4 id="org06e76ac"><span class="section-number-4">3.10.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-10-2">
 <p>
 spherical azimuth of order N for angle phi 
 </p>
@@ -781,9 +1227,9 @@ for S<sub>type</sub> = 'complex' case.
 </div>
 </div>
 
-<div id="outline-container-org2dee34d" class="outline-4">
-<h4 id="org2dee34d"><span class="section-number-4">3.5.3</span> Input Arguments</h4>
-<div class="outline-text-4" id="text-3-5-3">
+<div id="outline-container-org853f45d" class="outline-4">
+<h4 id="org853f45d"><span class="section-number-4">3.10.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-10-3">
 <dl class="org-dl">
 <dt>N<sub>order</sub></dt><dd>order of the spherical harmonic</dd>
 <dt>phi<sub>B</sub></dt><dd>vector representing the calculation range of azimuth phi ?</dd>
@@ -792,18 +1238,18 @@ for S<sub>type</sub> = 'complex' case.
 </div>
 </div>
 
-<div id="outline-container-org3c505fd" class="outline-4">
-<h4 id="org3c505fd"><span class="section-number-4">3.5.4</span> Return Values</h4>
-<div class="outline-text-4" id="text-3-5-4">
+<div id="outline-container-org499eabc" class="outline-4">
+<h4 id="org499eabc"><span class="section-number-4">3.10.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-10-4">
 <dl class="org-dl">
 <dt>D<sub>OB</sub></dt><dd>matrix with o orders and B angles</dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-org5246aa5" class="outline-4">
-<h4 id="org5246aa5"><span class="section-number-4">3.5.5</span> Examples</h4>
-<div class="outline-text-4" id="text-3-5-5">
+<div id="outline-container-orgb2d668e" class="outline-4">
+<h4 id="orgb2d668e"><span class="section-number-4">3.10.5</span> Examples</h4>
+<div class="outline-text-4" id="text-3-10-5">
 
 <div class="figure">
 <p><img src="img/sphericalazimuth.png" alt="sphericalazimuth.png" />
@@ -811,15 +1257,15 @@ for S<sub>type</sub> = 'complex' case.
 </div>
 </div>
 </div>
-<div id="outline-container-orgf759c59" class="outline-4">
-<h4 id="orgf759c59"><span class="section-number-4">3.5.6</span> Tips</h4>
+<div id="outline-container-org2782870" class="outline-4">
+<h4 id="org2782870"><span class="section-number-4">3.10.6</span> Tips</h4>
 </div>
-<div id="outline-container-org6e28e0e" class="outline-4">
-<h4 id="org6e28e0e"><span class="section-number-4">3.5.7</span> Alternatives</h4>
+<div id="outline-container-org6d74ee2" class="outline-4">
+<h4 id="org6d74ee2"><span class="section-number-4">3.10.7</span> Alternatives</h4>
 </div>
-<div id="outline-container-orgda34195" class="outline-4">
-<h4 id="orgda34195"><span class="section-number-4">3.5.8</span> See Also</h4>
-<div class="outline-text-4" id="text-3-5-8">
+<div id="outline-container-org89ffacf" class="outline-4">
+<h4 id="org89ffacf"><span class="section-number-4">3.10.8</span> See Also</h4>
+<div class="outline-text-4" id="text-3-10-8">
 <p>
 trg, trh
 </p>
@@ -827,34 +1273,26 @@ trg, trh
 </div>
 </div>
 
-
-<div id="outline-container-orgf32d230" class="outline-3">
-<h3 id="orgf32d230"><span class="section-number-3">3.6</span> sphericalharmonic</h3>
-<div class="outline-text-3" id="text-3-6">
-</div>
-<div id="outline-container-org1c31f67" class="outline-4">
-<h4 id="org1c31f67"><span class="section-number-4">3.6.1</span> Documentation</h4>
-<div class="outline-text-4" id="text-3-6-1">
+<div id="outline-container-org8e76f5c" class="outline-3">
+<h3 id="org8e76f5c"><span class="section-number-3">3.11</span> sphericalharmonic</h3>
+<div class="outline-text-3" id="text-3-11">
 <p>
 <a href="sphericalharmonic.m">sphericalharmonic.m</a>: returns a spherical harmonic of given order,
 type and normalization
 </p>
 </div>
-</div>
 
-<div class="outline-text-3" id="text-3-6">
-</div>
-<div id="outline-container-org2329464" class="outline-4">
-<h4 id="org2329464"><span class="section-number-4">3.6.2</span> Syntax</h4>
-<div class="outline-text-4" id="text-3-6-2">
+<div id="outline-container-org75d577e" class="outline-4">
+<h4 id="org75d577e"><span class="section-number-4">3.11.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-11-1">
 <pre class="example">
 Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, norm, type)
 </pre>
 </div>
 </div>
-<div id="outline-container-orgf21f6b0" class="outline-4">
-<h4 id="orgf21f6b0"><span class="section-number-4">3.6.3</span> Description</h4>
-<div class="outline-text-4" id="text-3-6-3">
+<div id="outline-container-orgd52e88c" class="outline-4">
+<h4 id="orgd52e88c"><span class="section-number-4">3.11.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-11-2">
 <p>
 If the number of input arguments is &lt; 5, the calculation would be done
 for a 'complex' type of a spherical harmonic. If the number of input
@@ -869,9 +1307,9 @@ m = 1) after e.g. Poletti.
 </div>
 </div>
 
-<div id="outline-container-org941d163" class="outline-4">
-<h4 id="org941d163"><span class="section-number-4">3.6.4</span> Input Arguments</h4>
-<div class="outline-text-4" id="text-3-6-4">
+<div id="outline-container-org77c1cb5" class="outline-4">
+<h4 id="org77c1cb5"><span class="section-number-4">3.11.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-11-3">
 <dl class="org-dl">
 <dt>N<sub>order</sub></dt><dd>Ambisonics order</dd>
 <dt>theta<sub>A</sub></dt><dd>vector representing the calculation range of inclination theta</dd>
@@ -937,20 +1375,20 @@ type of the spherical harmonic:
 </dl>
 </div>
 </div>
-<div id="outline-container-org248eede" class="outline-4">
-<h4 id="org248eede"><span class="section-number-4">3.6.5</span> Return Values</h4>
-<div class="outline-text-4" id="text-3-6-5">
+<div id="outline-container-org3c9f410" class="outline-4">
+<h4 id="org3c9f410"><span class="section-number-4">3.11.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-11-4">
 <dl class="org-dl">
 <dt>Y<sub>OAB</sub></dt><dd>matrix of the spherical harmonics values</dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-orgfdb1fdf" class="outline-4">
-<h4 id="orgfdb1fdf"><span class="section-number-4">3.6.6</span> Examples</h4>
-<div class="outline-text-4" id="text-3-6-6">
+<div id="outline-container-orgc62c342" class="outline-4">
+<h4 id="orgc62c342"><span class="section-number-4">3.11.5</span> Examples</h4>
+<div class="outline-text-4" id="text-3-11-5">
 <div class="org-src-container">
-<pre class="src src-octave" id="org35c785e"><span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">spherical harmonics</span>
+<pre class="src src-octave" id="org5e47c40"><span style="color: #8D8D84;">%% </span><span style="color: #8D8D84; font-style: italic;">spherical harmonics</span>
 N_order <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">;</span>
 A <span style="color: #006FE0;">=</span> 50<span style="color: #006FE0;">;</span> theta_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> pi<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
 B <span style="color: #006FE0;">=</span> 150<span style="color: #006FE0;">;</span> phi_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
@@ -986,165 +1424,447 @@ ans <span style="color: #006FE0;">=</span> S_file<span style="color: #006FE0;">;
 </div>
 </div>
 
-<div id="outline-container-org3229ece" class="outline-4">
-<h4 id="org3229ece"><span class="section-number-4">3.6.7</span> Tips</h4>
+<div id="outline-container-org324e819" class="outline-4">
+<h4 id="org324e819"><span class="section-number-4">3.11.6</span> Tips</h4>
 </div>
-<div id="outline-container-orgb9133ad" class="outline-4">
-<h4 id="orgb9133ad"><span class="section-number-4">3.6.8</span> Alternatives</h4>
+<div id="outline-container-org762d1c1" class="outline-4">
+<h4 id="org762d1c1"><span class="section-number-4">3.11.7</span> Alternatives</h4>
 </div>
-<div id="outline-container-orgba847ba" class="outline-4">
-<h4 id="orgba847ba"><span class="section-number-4">3.6.9</span> See Also</h4>
-<div class="outline-text-4" id="text-3-6-9">
+<div id="outline-container-org8d9ee38" class="outline-4">
+<h4 id="org8d9ee38"><span class="section-number-4">3.11.8</span> See Also</h4>
+<div class="outline-text-4" id="text-3-11-8">
 <p>
 sphericalnormalisation, sphericallegendre, sphericalazimuth
 </p>
 </div>
 </div>
 </div>
+
+
+<div id="outline-container-orgedf1012" class="outline-3">
+<h3 id="orgedf1012"><span class="section-number-3">3.12</span> sphericalmodematrix</h3>
+<div class="outline-text-3" id="text-3-12">
+<p>
+<a href="sphericalmodematrix.m">sphericalmodematrix.m</a>: calculates something for given argument
+</p>
 </div>
 
 
+<div id="outline-container-org3aa7651" class="outline-4">
+<h4 id="org3aa7651"><span class="section-number-4">3.12.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-3-12-1">
+<pre class="example">
+Psi_OL = sphericalmodematrix(N_order, theta_L, phi_L, S_norm, S_type)
+</pre>
 
 
-<div id="outline-container-org7d69f0a" class="outline-2">
-<h2 id="org7d69f0a"><span class="section-number-2">4</span> Spherical Series</h2>
+
+<p>
+% \(Id\)
+</p>
+</div>
+</div>
+<div id="outline-container-orgd54f0f2" class="outline-4">
+<h4 id="orgd54f0f2"><span class="section-number-4">3.12.2</span> Description</h4>
+<div class="outline-text-4" id="text-3-12-2">
+<p>
+sphericalmodematrix - returns Ambisonics complex conjugate values
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5b92080" class="outline-4">
+<h4 id="org5b92080"><span class="section-number-4">3.12.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-3-12-3">
+<ul class="org-ul">
+<li>N<sub>order</sub> -  Ambisonics order</li>
+<li>theta<sub>L</sub> - vector representing the calculation range of inclination theta</li>
+<li>phi<sub>L</sub> - vector representing the calculation range of azimuth phi</li>
+<li>S<sub>norm</sub> - string with type of normalization: 'norm' - fully normalized; 
+'N3D'- normalized; 
+'sch0' or 'SN3D'- seminormalazed
+'sch1'- Schmidt-Semi-normalized (Matlab)
+'sconv' - norm. over all spherical convolutions
+'planewave<sub>impinging</sub>' - norm. for plane waves</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org12ceab6" class="outline-4">
+<h4 id="org12ceab6"><span class="section-number-4">3.12.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-3-12-4">
+<ul class="org-ul">
+<li>Psi<sub>OL</sub> - matrix of complex conjugate spherical harmonics values</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org772ebb8" class="outline-4">
+<h4 id="org772ebb8"><span class="section-number-4">3.12.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-orgc143917" class="outline-4">
+<h4 id="orgc143917"><span class="section-number-4">3.12.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-org0116eca" class="outline-4">
+<h4 id="org0116eca"><span class="section-number-4">3.12.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-org9b20c1c" class="outline-4">
+<h4 id="org9b20c1c"><span class="section-number-4">3.12.8</span> See Also</h4>
+<div class="outline-text-4" id="text-3-12-8">
+<p>
+sphericalharmonic
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6575af2" class="outline-2">
+<h2 id="org6575af2"><span class="section-number-2">4</span> Spherical Fourier Transform</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org51b9f00" class="outline-3">
-<h3 id="org51b9f00"><span class="section-number-3">4.1</span> sphericalseries<sub>isfs</sub></h3>
+<div id="outline-container-org4025287" class="outline-3">
+<h3 id="org4025287"><span class="section-number-3">4.1</span> sphericalseries<sub>isfs</sub></h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 <a href="sphericalseries_isfs.m">sphericalseries_isfs.m</a>: calculates something for given argument
 </p>
-</div>
-<div id="outline-container-org8d55595" class="outline-4">
-<h4 id="org8d55595"><span class="section-number-4">4.1.1</span> Syntax</h4>
-<div class="outline-text-4" id="text-4-1-1">
-<pre class="example">
-F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
-</pre>
-</div>
-</div>
-
-<div id="outline-container-orgf1a2c40" class="outline-4">
-<h4 id="orgf1a2c40"><span class="section-number-4">4.1.2</span> Description</h4>
-<div class="outline-text-4" id="text-4-1-2">
 <p>
-needed to calculate function basis
+<b>*</b> Syntax
+</p>
+
+<p>
+<b>*</b> Description
+</p>
+
+<p>
+<b>*</b> Input Arguments
+</p>
+
+<p>
+<b>*</b> Return Values
+</p>
+
+<p>
+<b>*</b> Examples
+</p>
+
+<p>
+<b>*</b> Tips
+</p>
+
+<p>
+<b>*</b> Alternatives
+</p>
+
+<p>
+<b>*</b> See Also
 </p>
 </div>
 </div>
 
-<div id="outline-container-org0c50ac9" class="outline-4">
-<h4 id="org0c50ac9"><span class="section-number-4">4.1.3</span> Input Arguments</h4>
-</div>
 
-<div id="outline-container-org42c1923" class="outline-4">
-<h4 id="org42c1923"><span class="section-number-4">4.1.4</span> Return Values</h4>
-</div>
-
-<div id="outline-container-orgbff48cc" class="outline-4">
-<h4 id="orgbff48cc"><span class="section-number-4">4.1.5</span> Examples</h4>
-</div>
-
-<div id="outline-container-org1ccee5d" class="outline-4">
-<h4 id="org1ccee5d"><span class="section-number-4">4.1.6</span> Tips</h4>
-</div>
-
-<div id="outline-container-org3704a2e" class="outline-4">
-<h4 id="org3704a2e"><span class="section-number-4">4.1.7</span> Alternatives</h4>
-</div>
-
-<div id="outline-container-org86fa96d" class="outline-4">
-<h4 id="org86fa96d"><span class="section-number-4">4.1.8</span> See Also</h4>
-</div>
-</div>
-
-<div id="outline-container-orgc963c66" class="outline-3">
-<h3 id="orgc963c66"><span class="section-number-3">4.2</span> sphericalseries<sub>basis</sub></h3>
+<div id="outline-container-org5543301" class="outline-3">
+<h3 id="org5543301"><span class="section-number-3">4.2</span> sphericalseries<sub>isf</sub></h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
-<a href="sphericalseries_basis.m">sphericalseries_basis.m</a>: returns spherical basis functions R = j<sub>n</sub> Y and S = h<sub>n</sub> Y
+<a href="sphericalseries_isf.m">sphericalseries_isf.m</a>: calculates something for given argument
+</p>
+<p>
+<b>*</b> Syntax
+</p>
+
+<p>
+<b>*</b> Description
+</p>
+
+<p>
+<b>*</b> Input Arguments
+</p>
+
+<p>
+<b>*</b> Return Values
+</p>
+
+<p>
+<b>*</b> Examples
+</p>
+
+<p>
+<b>*</b> Tips
+</p>
+
+<p>
+<b>*</b> Alternatives
+</p>
+
+<p>
+<b>*</b> See Also
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org7367aa6" class="outline-3">
+<h3 id="org7367aa6"><span class="section-number-3">4.3</span> sphericalseries<sub>sfc</sub></h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+<a href="sphericalseries_sfc.m">sphericalseries_sfc.m</a>: returns the coefficients of spherical Fourier transform 
 </p>
 </div>
 
-<div id="outline-container-orgf43fb07" class="outline-4">
-<h4 id="orgf43fb07"><span class="section-number-4">4.2.1</span> Syntax</h4>
+<div id="outline-container-org93da8e4" class="outline-4">
+<h4 id="org93da8e4"><span class="section-number-4">4.3.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-4-3-1">
+<pre class="example">
+C_OCFD = sphericalseries_sfc(A_OFD, B_OFD, r_C, R_src, k_F)
+</pre>
+</div>
 </div>
 
-<div id="outline-container-orgc04ae67" class="outline-4">
-<h4 id="orgc04ae67"><span class="section-number-4">4.2.2</span> Description</h4>
-<div class="outline-text-4" id="text-4-2-2">
+
+<div id="outline-container-orge60fc66" class="outline-4">
+<h4 id="orge60fc66"><span class="section-number-4">4.3.2</span> Description</h4>
+</div>
+
+<div id="outline-container-orgdd94ac7" class="outline-4">
+<h4 id="orgdd94ac7"><span class="section-number-4">4.3.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-4-3-3">
+<ul class="org-ul">
+<li>A<sub>OFD</sub> - matrix of HOA coefficients</li>
+<li>B<sub>OFD</sub> - matrix of HOA coefficients</li>
+<li>r<sub>C</sub> - radius ???</li>
+<li>R<sub>src</sub> - source radius</li>
+<li>k<sub>F</sub> - vector of a wave number values for a given frequency range</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5232228" class="outline-4">
+<h4 id="org5232228"><span class="section-number-4">4.3.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-4-3-4">
+<ul class="org-ul">
+<li>C<sub>OCFD</sub> - multi-dimensional matrix of the spherical FT coefficients</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org296993b" class="outline-4">
+<h4 id="org296993b"><span class="section-number-4">4.3.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-org8aec6f1" class="outline-4">
+<h4 id="org8aec6f1"><span class="section-number-4">4.3.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-orge9c15f4" class="outline-4">
+<h4 id="orge9c15f4"><span class="section-number-4">4.3.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-org2b11455" class="outline-4">
+<h4 id="org2b11455"><span class="section-number-4">4.3.8</span> See Also</h4>
+<div class="outline-text-4" id="text-4-3-8">
+<p>
+sphericalbessel, sphericalhankel
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org16022fb" class="outline-2">
+<h2 id="org16022fb"><span class="section-number-2">5</span> Higher Order Ambisonics</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org7b7623a" class="outline-3">
+<h3 id="org7b7623a"><span class="section-number-3">5.1</span> Sphericalseries<sub>hoa</sub></h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+<a href="sphericalseries_hoa.m">sphericalseries_hoa.m</a>: returns result of HOA series
+</p>
+<p>
+<b>*</b> Syntax
+</p>
+
 <pre class="example">
-[R_OCABF, S_OCABF] = sphericalseries_basis(N_order, R_src, ...
-                                           vg_CAB, k_F, ...
-                                           S_norm, S_type)
+p_CABF = sphericalseries_hoa(C_OF, F_OCABF, D_OF, G_OCABF)
 </pre>
 
 
 <p>
-returns spherical basis functions R = j<sub>n</sub> Y and S = h<sub>n</sub> Y
+<b>*</b> Description
+</p>
+
+<p>
+Returns result of HOA series with coefficients C and D and basis functions F and G. 
+The second pair (D and G) is optional.
+The matrix of basis function should have at least 3 dimensions.
+</p>
+
+<p>
+<b>*</b> Input Arguments
+</p>
+
+<dl class="org-dl">
+<dt>C<sub>OF</sub></dt><dd>???????</dd>
+<dt>F<sub>OCABF</sub></dt><dd>basis function values matrix</dd>
+<dt>D<sub>OF</sub></dt><dd>??????</dd>
+<dt>G<sub>OCABF</sub></dt><dd>basis function values matrix</dd>
+</dl>
+
+<p>
+<b>*</b> Return Values
+</p>
+
+<p>
+<b>*</b> Examples
+</p>
+
+<p>
+<b>*</b> Tips
+</p>
+
+<p>
+<b>*</b> Alternatives
+</p>
+
+<p>
+<b>*</b> See Also
 </p>
 </div>
 </div>
 
-<div id="outline-container-org2b3fe59" class="outline-4">
-<h4 id="org2b3fe59"><span class="section-number-4">4.2.3</span> Input Arguments</h4>
+<div id="outline-container-org053af26" class="outline-3">
+<h3 id="org053af26"><span class="section-number-3">5.2</span> Sphericalseries<sub>hoa</sub><sub>plane</sub></h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+<a href="sphericalseries_hoa_plane.m">sphericalseries_hoa_plane.m</a>: calculates plane wave coefficients \(A\) for a HOA representation.
+</p>
 </div>
 
-<div id="outline-container-orgbfec5c8" class="outline-4">
-<h4 id="orgbfec5c8"><span class="section-number-4">4.2.4</span> Return Values</h4>
-</div>
-
-<div id="outline-container-orgde84127" class="outline-4">
-<h4 id="orgde84127"><span class="section-number-4">4.2.5</span> Examples</h4>
-</div>
-
-<div id="outline-container-orga410555" class="outline-4">
-<h4 id="orga410555"><span class="section-number-4">4.2.6</span> Tips</h4>
-</div>
-
-<div id="outline-container-org2e92c60" class="outline-4">
-<h4 id="org2e92c60"><span class="section-number-4">4.2.7</span> Alternatives</h4>
-</div>
-
-<div id="outline-container-org202a693" class="outline-4">
-<h4 id="org202a693"><span class="section-number-4">4.2.8</span> See Also</h4>
+<div id="outline-container-orgc1078e6" class="outline-4">
+<h4 id="orgc1078e6"><span class="section-number-4">5.2.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-5-2-1">
+<pre class="example">
+A_OFD = sphericalseries_hoa_plane(N_order, theta_D, phi_D, S_norm, S_type, F, psi_D)
+</pre>
 </div>
 </div>
 
+<div id="outline-container-org6a03bcd" class="outline-4">
+<h4 id="org6a03bcd"><span class="section-number-4">5.2.2</span> Description</h4>
+<div class="outline-text-4" id="text-5-2-2">
+<p>
+calculates plane wave coefficients \(A\) for a HOA representation.
+</p>
+</div>
+</div>
 
-<div id="outline-container-org0b51a22" class="outline-3">
-<h3 id="org0b51a22"><span class="section-number-3">4.3</span> sphericalseries<sub>hoa</sub></h3>
+<div id="outline-container-org3e2ce4a" class="outline-4">
+<h4 id="org3e2ce4a"><span class="section-number-4">5.2.3</span> Input Arguments</h4>
+<div class="outline-text-4" id="text-5-2-3">
+<dl class="org-dl">
+<dt>N<sub>order</sub></dt><dd>Ambisonics order</dd>
+<dt>theta<sub>D</sub></dt><dd>vector representing the calculation range of inclination theta</dd>
+<dt>phi<sub>D</sub></dt><dd>vector representing the calculation range of azimuth phi</dd>
+<dt>S<sub>norm</sub></dt><dd><p>
+string with type of normalization: 
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">'norm'</td>
+<td class="org-left">fully normalized;</td>
+</tr>
+
+<tr>
+<td class="org-left">'N3D'</td>
+<td class="org-left">normalized;</td>
+</tr>
+
+<tr>
+<td class="org-left">'sch0' or 'SN3D'</td>
+<td class="org-left">seminormalazed</td>
+</tr>
+
+<tr>
+<td class="org-left">'sch1'</td>
+<td class="org-left">Schmidt-Semi-normalized (Matlab)</td>
+</tr>
+
+<tr>
+<td class="org-left">'sconv'</td>
+<td class="org-left">norm. over all spherical convolutions</td>
+</tr>
+
+<tr>
+<td class="org-left">'planewave<sub>impinging</sub>'</td>
+<td class="org-left">norm. for plane waves</td>
+</tr>
+</tbody>
+</table></dd>
+<dt>S<sub>type</sub></dt><dd>type of the spherical harmonic: 'real', 'real<sub>signed</sub>', 'real<sub>unsigned</sub>'  or 'complex'</dd>
+<dt>F</dt><dd>number of frequency bins (having all the same value)</dd>
+<dt>psi<sub>D</sub></dt><dd>weights for D input direction (optional argument)</dd>
+</dl>
 </div>
-<div id="outline-container-org1ddb8cf" class="outline-3">
-<h3 id="org1ddb8cf"><span class="section-number-3">4.4</span> sphericalseries<sub>isf</sub></h3>
 </div>
-<div id="outline-container-orgb23ca44" class="outline-3">
-<h3 id="orgb23ca44"><span class="section-number-3">4.5</span> sphericalseries<sub>sfc</sub></h3>
+
+<div id="outline-container-org429d01a" class="outline-4">
+<h4 id="org429d01a"><span class="section-number-4">5.2.4</span> Return Values</h4>
+<div class="outline-text-4" id="text-5-2-4">
+<dl class="org-dl">
+<dt>A<sub>OFD</sub></dt><dd>matrix of HOA coefficients</dd>
+</dl>
 </div>
-<div id="outline-container-org869307a" class="outline-3">
-<h3 id="org869307a"><span class="section-number-3">4.6</span> sphericalseries<sub>hoa</sub><sub>spherical</sub></h3>
 </div>
-<div id="outline-container-org719e421" class="outline-3">
-<h3 id="org719e421"><span class="section-number-3">4.7</span> Sphericalseries<sub>hoa</sub><sub>plane</sub></h3>
-<div class="outline-text-3" id="text-4-7">
+
+<div id="outline-container-orgf884b7e" class="outline-4">
+<h4 id="orgf884b7e"><span class="section-number-4">5.2.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-org9eec085" class="outline-4">
+<h4 id="org9eec085"><span class="section-number-4">5.2.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-org76b692d" class="outline-4">
+<h4 id="org76b692d"><span class="section-number-4">5.2.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-orga76865a" class="outline-4">
+<h4 id="orga76865a"><span class="section-number-4">5.2.8</span> See Also</h4>
+<div class="outline-text-4" id="text-5-2-8">
+<p>
+sphericalnormalisation, sphericalmodematrix
+</p>
+
 <div class="org-src-container">
-<pre class="src src-octave" id="orge157d4c"><span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">Rasta</span>
+<pre class="src src-octave" id="org7a9fcef"><span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">Rasta</span>
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">-------------------------------------------------------------------</span>
 
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">conus</span>
-<span style="color: #0000FF;">if</span> 1
+<span style="color: #0000FF;">if</span> 0
   R_max <span style="color: #006FE0;">=</span> 1.5<span style="color: #006FE0;">;</span>
-  C <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span> r_C <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> R_max<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">;</span>
+  C <span style="color: #006FE0;">=</span> 50<span style="color: #006FE0;">;</span> r_C <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> R_max<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">;</span>
   A <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>  theta_A <span style="color: #006FE0;">=</span> linspace(pi<span style="color: #006FE0;">/</span>2<span style="color: #006FE0;">,</span> pi<span style="color: #006FE0;">/</span>2<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
-  B <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span> phi_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">,</span>    B)<span style="color: #006FE0;">;</span>
+  B <span style="color: #006FE0;">=</span> 50<span style="color: #006FE0;">;</span> phi_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">,</span>    B)<span style="color: #006FE0;">;</span>
   gg_CAB <span style="color: #006FE0;">=</span> vectorgrid(r_C<span style="color: #006FE0;">,</span> theta_A<span style="color: #006FE0;">,</span> phi_B<span style="color: #006FE0;">,</span> <span style="color: #008000;">'spherical'</span>)<span style="color: #006FE0;">;</span>
 <span style="color: #0000FF;">end</span>
 
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">sphere</span>
-<span style="color: #0000FF;">if</span> 0
-  R_max <span style="color: #006FE0;">=</span> 0.15<span style="color: #006FE0;">;</span>
+<span style="color: #0000FF;">if</span> 1
+  R_max <span style="color: #006FE0;">=</span> .15<span style="color: #006FE0;">;</span>
   C <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span> r_C <span style="color: #006FE0;">=</span> linspace(R_max<span style="color: #006FE0;">,</span> R_max<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">;</span>
   A <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span>  theta_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> pi<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
   B <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span> phi_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">,</span>  B)<span style="color: #006FE0;">;</span>
@@ -1153,14 +1873,14 @@ returns spherical basis functions R = j<sub>n</sub> Y and S = h<sub>n</sub> Y
 
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">Spherical stuff</span>
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">-------------------------------------------------------------------</span>
-N_order <span style="color: #006FE0;">=</span> 4<span style="color: #006FE0;">;</span>
-F <span style="color: #006FE0;">=</span> 8<span style="color: #006FE0;">;</span>
+N_order <span style="color: #006FE0;">=</span> 7<span style="color: #006FE0;">;</span>
+F <span style="color: #006FE0;">=</span> 4<span style="color: #006FE0;">;</span>
 f_F <span style="color: #006FE0;">=</span> linspace(100<span style="color: #006FE0;">,</span> 1000<span style="color: #006FE0;">,</span> F)<span style="color: #006FE0;">;</span> <span style="color: #8D8D84; font-style: italic;">% Frequenzen</span>
 k_F <span style="color: #006FE0;">=</span> <span style="color: #006FE0;">-</span>2<span style="color: #006FE0;">*</span>pi<span style="color: #006FE0;">*</span>f_F<span style="color: #006FE0;">/</span>342<span style="color: #006FE0;">;</span> <span style="color: #8D8D84; font-style: italic;">% Wellenzahl</span>
 
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">ebene Welle</span>
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">-------------------------------------------------------------------</span>
-Theta_i <span style="color: #006FE0;">=</span> pi<span style="color: #006FE0;">/</span>3<span style="color: #006FE0;">;</span>
+Theta_i <span style="color: #006FE0;">=</span> pi<span style="color: #006FE0;">/</span>2<span style="color: #006FE0;">;</span>
 Phi_i <span style="color: #006FE0;">=</span> pi<span style="color: #006FE0;">/</span>2<span style="color: #006FE0;">;</span>
 S_norm <span style="color: #006FE0;">=</span> <span style="color: #008000;">'norm'</span><span style="color: #006FE0;">;</span>
 S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'complex'</span><span style="color: #006FE0;">;</span>
@@ -1180,20 +1900,15 @@ Y_OAB <span style="color: #006FE0;">=</span> sphericalharmonic(N_order<span styl
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">ISF im Frequenzbereich</span>
 P_CABF <span style="color: #006FE0;">=</span> sphericalseries_isf(C_OCF<span style="color: #006FE0;">,</span> Y_OAB)<span style="color: #006FE0;">;</span>
 
-<span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">ISF im Zeitbereich</span>
-c_OCF <span style="color: #006FE0;">=</span> ifft(C_OCF<span style="color: #006FE0;">,</span> []<span style="color: #006FE0;">,</span> 3)<span style="color: #006FE0;">;</span>
-p_CABF <span style="color: #006FE0;">=</span> sphericalseries_isf(c_OCF<span style="color: #006FE0;">,</span> Y_OAB)<span style="color: #006FE0;">;</span>
-      
-
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">malen</span>
 <span style="color: #8D8D84;">% </span><span style="color: #8D8D84; font-style: italic;">-------------------------------------------------------------------</span>
 <span style="color: #0000FF;">if</span> 1
   <span style="color: #0000FF;">for</span> f <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">:</span>F
     figure(f)<span style="color: #006FE0;">;</span>
-    vectorgrid_surface(gg_CAB<span style="color: #006FE0;">,</span> squeeze(abs(real(P_CABF(<span style="color: #006FE0;">:,:,:,</span>f)))))<span style="color: #006FE0;">;</span>
+    surface(gg_CAB<span style="color: #006FE0;">,</span> squeeze(abs(real(P_CABF(<span style="color: #006FE0;">:,:,:,</span>f)))))<span style="color: #006FE0;">;</span>
     axis(<span style="color: #008000;">'equal'</span>)<span style="color: #006FE0;">;</span>
     grid(<span style="color: #008000;">'on'</span>)<span style="color: #006FE0;">;</span>
-    view([30 30])<span style="color: #006FE0;">;</span>
+    view([30 40])<span style="color: #006FE0;">;</span>
   <span style="color: #0000FF;">end</span>
 <span style="color: #0000FF;">end</span>
 
@@ -1202,14 +1917,68 @@ p_CABF <span style="color: #006FE0;">=</span> sphericalseries_isf(c_OCF<span sty
 </div>
 </div>
 </div>
-<div id="outline-container-org971c4a8" class="outline-2">
-<h2 id="org971c4a8"><span class="section-number-2">5</span> Examples</h2>
+
+<div id="outline-container-org66481c5" class="outline-3">
+<h3 id="org66481c5"><span class="section-number-3">5.3</span> sphericalseries<sub>hoa</sub><sub>spherical</sub></h3>
+</div>
+<div id="outline-container-org3fca629" class="outline-3">
+<h3 id="org3fca629"><span class="section-number-3">5.4</span> sphericalseries<sub>hoa</sub><sub>basis</sub></h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+<a href="sphericalseries_hoa_basis.m">sphericalseries_hoa_basis.m</a>: returns spherical basis functions R = j<sub>n</sub> Y and S = h<sub>n</sub> Y
+</p>
+</div>
+
+<div id="outline-container-org804f976" class="outline-4">
+<h4 id="org804f976"><span class="section-number-4">5.4.1</span> Syntax</h4>
+</div>
+
+<div id="outline-container-orge2b6f76" class="outline-4">
+<h4 id="orge2b6f76"><span class="section-number-4">5.4.2</span> Description</h4>
+<div class="outline-text-4" id="text-5-4-2">
+<pre class="example">
+[R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
+                                           vg_CAB, k_F, ...
+                                           S_norm, S_type)
+</pre>
+
+
+<p>
+returns spherical basis functions R = j<sub>n</sub> Y and S = h<sub>n</sub> Y
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd4bf0ce" class="outline-4">
+<h4 id="orgd4bf0ce"><span class="section-number-4">5.4.3</span> Input Arguments</h4>
+</div>
+
+<div id="outline-container-orgec75fbd" class="outline-4">
+<h4 id="orgec75fbd"><span class="section-number-4">5.4.4</span> Return Values</h4>
+</div>
+
+<div id="outline-container-org5eff4df" class="outline-4">
+<h4 id="org5eff4df"><span class="section-number-4">5.4.5</span> Examples</h4>
+</div>
+
+<div id="outline-container-org0c35cbc" class="outline-4">
+<h4 id="org0c35cbc"><span class="section-number-4">5.4.6</span> Tips</h4>
+</div>
+
+<div id="outline-container-org05ed9bf" class="outline-4">
+<h4 id="org05ed9bf"><span class="section-number-4">5.4.7</span> Alternatives</h4>
+</div>
+
+<div id="outline-container-org5272af3" class="outline-4">
+<h4 id="org5272af3"><span class="section-number-4">5.4.8</span> See Also</h4>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-11-23 Do&gt; </span></span> Rev. Time-stamp: <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-11-02 Sa 22:18&gt;</span></span></p>
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-11-23 Do&gt; </span></span> Rev. Time-stamp: <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-11-24 So 22:04&gt;</span></span></p>
 <p class="author">Author: Johann-Markus Batke</p>
-<p class="date">Created: 2019-11-02 Sa 22:18</p>
+<p class="date">Created: 2019-11-24 So 22:12</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

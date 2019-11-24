@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-11-01 Fr 11:31 -->
+<!-- 2019-11-24 So 23:06 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Bad OO Acoustics simulation toolbox (booast)</title>
@@ -275,80 +275,83 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org69aa285">1. General Information</a>
+<li><a href="#orgbcc2953">1. General Information</a>
 <ul>
-<li><a href="#org552be64">1.1. Naming conventions</a>
+<li><a href="#orge7ea8bc">1.1. Naming conventions</a>
 <ul>
-<li><a href="#orgd5c32ce">1.1.1. Variables</a></li>
-<li><a href="#orgcd0a7d9">1.1.2. Coordinate Systems</a></li>
+<li><a href="#org27e397d">1.1.1. Variables</a></li>
+<li><a href="#org006870a">1.1.2. Coordinate Systems</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgfba2f93">2. Vector</a>
+<li><a href="#orgd5ea1ee">2. Vector</a>
 <ul>
-<li><a href="#orgeb6a909">2.1. Class</a>
+<li><a href="#org4b6daae">2.1. Class</a>
 <ul>
-<li><a href="#org9d90221">2.1.1. Syntax</a></li>
-<li><a href="#org7bf9578">2.1.2. Description</a></li>
-<li><a href="#orgda2f8c4">2.1.3. Input Arguments</a></li>
-<li><a href="#org6603e7c">2.1.4. Return Values</a></li>
-<li><a href="#org7023ea7">2.1.5. Examples</a></li>
+<li><a href="#orgbc9d261">2.1.1. Syntax</a></li>
+<li><a href="#org52cecf4">2.1.2. Description</a></li>
+<li><a href="#org30b7462">2.1.3. Input Arguments</a></li>
+<li><a href="#org17cc5e8">2.1.4. Return Values</a></li>
+<li><a href="#org659a669">2.1.5. Examples</a></li>
 </ul>
 </li>
-<li><a href="#org9d78809">2.2. Methods</a>
+<li><a href="#org5b0d568">2.2. Methods</a>
 <ul>
-<li><a href="#org43b3561">2.2.1. display</a></li>
-<li><a href="#orgc719298">2.2.2. size</a></li>
-<li><a href="#org34b1c84">2.2.3. numel</a></li>
-<li><a href="#org4f5c060">2.2.4. dimensions</a></li>
-<li><a href="#orga0f8be1">2.2.5. get</a></li>
-<li><a href="#org97bb0aa">2.2.6. set</a></li>
-<li><a href="#orga87d34e">2.2.7. normalize</a></li>
-<li><a href="#org2e60337">2.2.8. scale</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orgeb303d2">3. Vectorgrid</a>
-<ul>
-<li><a href="#org8bfc4a6">3.1. Class</a>
-<ul>
-<li><a href="#org0d8ab6c">3.1.1. Syntax</a></li>
-<li><a href="#orgfd32366">3.1.2. Description</a></li>
-<li><a href="#org83731f2">3.1.3. Input Arguments</a></li>
-<li><a href="#org8cbaf4a">3.1.4. Return Values</a></li>
-<li><a href="#org8efa5e1">3.1.5. Examples</a></li>
-<li><a href="#org4e8d17f">3.1.6. See Also</a></li>
-</ul>
-</li>
-<li><a href="#org6a9651d">3.2. Methods</a>
-<ul>
-<li><a href="#org5f67ef1">3.2.1. size</a></li>
-<li><a href="#org41470e3">3.2.2. display</a></li>
-<li><a href="#orgb8c1b26">3.2.3. get</a></li>
-<li><a href="#org3f279e4">3.2.4. reshape</a></li>
-<li><a href="#org0dbf521">3.2.5. meshgrid</a></li>
-<li><a href="#org894951f">3.2.6. subsref</a></li>
-<li><a href="#org9b9e26f">3.2.7. <span class="todo TODO">TODO</span> end (index)</a></li>
-<li><a href="#org772753f">3.2.8. surface</a></li>
+<li><a href="#org8aa4400">2.2.1. display</a></li>
+<li><a href="#org5457d13">2.2.2. size</a></li>
+<li><a href="#org74fa978">2.2.3. numel</a></li>
+<li><a href="#org23b3e83">2.2.4. dimensions</a></li>
+<li><a href="#org2361024">2.2.5. get</a></li>
+<li><a href="#orga2874b5">2.2.6. set</a></li>
+<li><a href="#orge87debc">2.2.7. normalize</a></li>
+<li><a href="#orgd3ca77c">2.2.8. scale</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org9842114">4. Installation</a>
+<li><a href="#org1a31690">3. Vectorgrid</a>
 <ul>
-<li><a href="#org6fee0b4">4.1. Directory setup</a></li>
-<li><a href="#org31a5bb9">4.2. Matlab/Octave Installation</a></li>
-<li><a href="#org9eb3700">4.3. <span class="todo TODO">TODO</span> Octave tests</a></li>
+<li><a href="#org63e5338">3.1. Class</a>
+<ul>
+<li><a href="#org61a4b6d">3.1.1. Syntax</a></li>
+<li><a href="#orgfc87bec">3.1.2. Description</a></li>
+<li><a href="#orgcaba05a">3.1.3. Input Arguments</a></li>
+<li><a href="#orgb31f8ae">3.1.4. Return Values</a></li>
+<li><a href="#orgeaaac27">3.1.5. Examples</a></li>
+<li><a href="#org4045af5">3.1.6. See Also</a></li>
+</ul>
+</li>
+<li><a href="#org3d90282">3.2. Methods</a>
+<ul>
+<li><a href="#orgedf1aca">3.2.1. size</a></li>
+<li><a href="#orge67ba87">3.2.2. display</a></li>
+<li><a href="#org61e8a21">3.2.3. type</a></li>
+<li><a href="#orgcf11fbf">3.2.4. get</a></li>
+<li><a href="#org1dd5cdf">3.2.5. reshape</a></li>
+<li><a href="#orgb1c7040">3.2.6. grid</a></li>
+<li><a href="#org30e9ae4">3.2.7. meshgrid</a></li>
+<li><a href="#org2e75a2f">3.2.8. subsref</a></li>
+<li><a href="#org981087f">3.2.9. <span class="todo TODO">TODO</span> end (index)</a></li>
+<li><a href="#orgb2bba89">3.2.10. surface</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orge6f6427">4. Installation</a>
+<ul>
+<li><a href="#org0832c9c">4.1. Matlab/Octave Installation</a></li>
+<li><a href="#orgfe1eaa6">4.2. Directory setup</a></li>
+<li><a href="#org62edf42">4.3. <span class="todo TODO">TODO</span> Octave tests</a></li>
+<li><a href="#org6b06952">4.4. Misc</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org69aa285" class="outline-2">
-<h2 id="org69aa285"><span class="section-number-2">1</span> General Information</h2>
+<div id="outline-container-orgbcc2953" class="outline-2">
+<h2 id="orgbcc2953"><span class="section-number-2">1</span> General Information</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The <b>Bad OO Acoustics simulation toolbox (booast)</b> provides some means
@@ -358,26 +361,29 @@ for simulating acoustic problems using Octave or Matlab(tm).
 <p>
 In particular, it provides two new matlab/octave classes, <b>vector</b> and
 <b>vectorgrid</b>. These can be used to implement arrays of vectors
-pointing to a location in R<sup>3</sup>.
+pointing to a location in \(\mathbb R^3\).
 </p>
 
 <ul class="org-ul">
-<li>Visit section <a href="#org9842114">Installation</a> for setup (directory creation, etc) and
+<li>Visit section <a href="#orge6f6427">Installation</a> for setup (directory creation, etc) and
 installation.</li>
-<li>The file <a href="acoustics.html#MissingReference">Acoustics</a> contains some application examples for booast.</li>
+<li><a href="acoustics.html#MissingReference">Acoustics</a> contains some application examples for booast.</li>
+<li><a href="sphericalseries.html">Sphericalseries</a> contains some stuff for using spherical series
+approximations of a sound field, AKA Higher Order Ambisonics.</li>
 </ul>
 </div>
 
-<div id="outline-container-org552be64" class="outline-3">
-<h3 id="org552be64"><span class="section-number-3">1.1</span> Naming conventions</h3>
+<div id="outline-container-orge7ea8bc" class="outline-3">
+<h3 id="orge7ea8bc"><span class="section-number-3">1.1</span> Naming conventions</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-Some naming conventions are used throughout the documentation.
+Some naming conventions for octave variables are used throughout the
+documentation. 
 </p>
 </div>
 
-<div id="outline-container-orgd5c32ce" class="outline-4">
-<h4 id="orgd5c32ce"><span class="section-number-4">1.1.1</span> Variables</h4>
+<div id="outline-container-org27e397d" class="outline-4">
+<h4 id="org27e397d"><span class="section-number-4">1.1.1</span> Variables</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -400,25 +406,25 @@ Some naming conventions are used throughout the documentation.
 
 <tr>
 <td class="org-left">n<sub>A</sub></td>
-<td class="org-left">vector with A values</td>
+<td class="org-left">vector containing \(A\) values</td>
 </tr>
 
 <tr>
 <td class="org-left">n<sub>AB</sub></td>
-<td class="org-left">matrix AxB</td>
+<td class="org-left">matrix with dimensions \(A\times B\)</td>
 </tr>
 
 <tr>
 <td class="org-left">n<sub>ABC&#x2026;Z</sub></td>
-<td class="org-left">matrix AxBx&#x2026;xZ</td>
+<td class="org-left">matrix with dimensions \(A\times B\times \ldots \times Z\)</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 
-<div id="outline-container-orgcd0a7d9" class="outline-4">
-<h4 id="orgcd0a7d9"><span class="section-number-4">1.1.2</span> Coordinate Systems</h4>
+<div id="outline-container-org006870a" class="outline-4">
+<h4 id="org006870a"><span class="section-number-4">1.1.2</span> Coordinate Systems</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -440,20 +446,20 @@ Some naming conventions are used throughout the documentation.
 <tbody>
 <tr>
 <td class="org-left">cartesian</td>
-<td class="org-left">x,y</td>
-<td class="org-left">x,y,z</td>
+<td class="org-left">\(x,y\)</td>
+<td class="org-left">\(x,y,z\)</td>
 </tr>
 
 <tr>
 <td class="org-left">polar</td>
-<td class="org-left">r, &phi;</td>
-<td class="org-left">r, &phi;, z</td>
+<td class="org-left">\(r, \phi\)</td>
+<td class="org-left">\(r, \phi, z\)</td>
 </tr>
 
 <tr>
 <td class="org-left">spherical</td>
 <td class="org-left">-</td>
-<td class="org-left">r,&theta;, &phi;</td>
+<td class="org-left">\(r,\theta, \phi\)</td>
 </tr>
 </tbody>
 </table>
@@ -462,20 +468,21 @@ Some naming conventions are used throughout the documentation.
 </div>
 </div>
 
-<div id="outline-container-orgfba2f93" class="outline-2">
-<h2 id="orgfba2f93"><span class="section-number-2">2</span> Vector</h2>
+<div id="outline-container-orgd5ea1ee" class="outline-2">
+<h2 id="orgd5ea1ee"><span class="section-number-2">2</span> Vector</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 A new class vector is defined. It servers to handle 3-dimensional
 information using mathematical vectors or matrizes of vectors.
 </p>
 </div>
-<div id="outline-container-orgeb6a909" class="outline-3">
-<h3 id="orgeb6a909"><span class="section-number-3">2.1</span> Class</h3>
+
+<div id="outline-container-org4b6daae" class="outline-3">
+<h3 id="org4b6daae"><span class="section-number-3">2.1</span> Class</h3>
 <div class="outline-text-3" id="text-2-1">
 </div>
-<div id="outline-container-org9d90221" class="outline-4">
-<h4 id="org9d90221"><span class="section-number-4">2.1.1</span> Syntax</h4>
+<div id="outline-container-orgbc9d261" class="outline-4">
+<h4 id="orgbc9d261"><span class="section-number-4">2.1.1</span> Syntax</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <pre class="example">
 v = vector(s, S_type);
@@ -486,8 +493,8 @@ v = vector(s1, s2, s3, ..., S_type);
 </div>
 </div>
 
-<div id="outline-container-org7bf9578" class="outline-4">
-<h4 id="org7bf9578"><span class="section-number-4">2.1.2</span> Description</h4>
+<div id="outline-container-org52cecf4" class="outline-4">
+<h4 id="org52cecf4"><span class="section-number-4">2.1.2</span> Description</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 <code>vector()</code> returns a vector <code>v</code> of class <code>vector</code>.
@@ -495,8 +502,8 @@ v = vector(s1, s2, s3, ..., S_type);
 </div>
 </div>
 
-<div id="outline-container-orgda2f8c4" class="outline-4">
-<h4 id="orgda2f8c4"><span class="section-number-4">2.1.3</span> Input Arguments</h4>
+<div id="outline-container-org30b7462" class="outline-4">
+<h4 id="org30b7462"><span class="section-number-4">2.1.3</span> Input Arguments</h4>
 <div class="outline-text-4" id="text-2-1-3">
 <ul class="org-ul">
 <li><code>s1, s2, ...</code> are matrices</li>
@@ -506,8 +513,8 @@ or 'polar')</li>
 </div>
 </div>
 
-<div id="outline-container-org6603e7c" class="outline-4">
-<h4 id="org6603e7c"><span class="section-number-4">2.1.4</span> Return Values</h4>
+<div id="outline-container-org17cc5e8" class="outline-4">
+<h4 id="org17cc5e8"><span class="section-number-4">2.1.4</span> Return Values</h4>
 <div class="outline-text-4" id="text-2-1-4">
 <ul class="org-ul">
 <li><code>v</code> vector object</li>
@@ -515,15 +522,15 @@ or 'polar')</li>
 </div>
 </div>
 
-<div id="outline-container-org7023ea7" class="outline-4">
-<h4 id="org7023ea7"><span class="section-number-4">2.1.5</span> Examples</h4>
+<div id="outline-container-org659a669" class="outline-4">
+<h4 id="org659a669"><span class="section-number-4">2.1.5</span> Examples</h4>
 <div class="outline-text-4" id="text-2-1-5">
 <dl class="org-dl">
 <dt>four parameter input</dt><dd><p>
 single values for each dimension
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="orge4a2f45">    x <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">;</span> z <span style="color: #006FE0;">=</span> 3<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgc047cd4">    x <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">;</span> z <span style="color: #006FE0;">=</span> 3<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
     v <span style="color: #006FE0;">=</span> vector(x<span style="color: #006FE0;">,</span> y<span style="color: #006FE0;">,</span> z<span style="color: #006FE0;">,</span> S_type)<span style="color: #006FE0;">;</span>
     isavector <span style="color: #006FE0;">=</span> isa(v<span style="color: #006FE0;">,</span> <span style="color: #008000;">'vector'</span>)
 </pre>
@@ -534,7 +541,7 @@ vector positions in a matrix
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave" id="org7c59e55">    x <span style="color: #006FE0;">=</span> [1<span style="color: #006FE0;">;</span> 2<span style="color: #006FE0;">;</span> 3]<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org55fabee">    x <span style="color: #006FE0;">=</span> [1<span style="color: #006FE0;">;</span> 2<span style="color: #006FE0;">;</span> 3]<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
     v <span style="color: #006FE0;">=</span> vector(x<span style="color: #006FE0;">,</span> S_type)<span style="color: #006FE0;">;</span>
     ans <span style="color: #006FE0;">=</span> isobject(v)<span style="color: #006FE0;">;</span>
 </pre>
@@ -544,7 +551,7 @@ vector positions in a matrix
 As long the first dimension is 3, we can input matrices of any dimension.
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org6cb44ae">    x <span style="color: #006FE0;">=</span> rand(3<span style="color: #006FE0;">,</span> 4<span style="color: #006FE0;">,</span> 6<span style="color: #006FE0;">,</span> 7)<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgb6abd99">    x <span style="color: #006FE0;">=</span> rand(3<span style="color: #006FE0;">,</span> 4<span style="color: #006FE0;">,</span> 6<span style="color: #006FE0;">,</span> 7)<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
     v <span style="color: #006FE0;">=</span> vector(x<span style="color: #006FE0;">,</span> S_type)<span style="color: #006FE0;">;</span>
     ans <span style="color: #006FE0;">=</span> size(v)<span style="color: #006FE0;">;</span>
 </pre>
@@ -554,7 +561,7 @@ As long the first dimension is 3, we can input matrices of any dimension.
 we use vectorgrid as input type
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org656a404">    x <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span>10<span style="color: #006FE0;">,</span> 10)<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> x<span style="color: #006FE0;">;</span> z <span style="color: #006FE0;">=</span> x<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org6f386b7">    x <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span>10<span style="color: #006FE0;">,</span> 10)<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> x<span style="color: #006FE0;">;</span> z <span style="color: #006FE0;">=</span> x<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
     g <span style="color: #006FE0;">=</span> vectorgrid(x<span style="color: #006FE0;">,</span> y<span style="color: #006FE0;">,</span> z<span style="color: #006FE0;">,</span> S_type)<span style="color: #006FE0;">;</span>
     v <span style="color: #006FE0;">=</span> vector(g)<span style="color: #006FE0;">;</span>
     ans <span style="color: #006FE0;">=</span> size(v)<span style="color: #006FE0;">;</span>
@@ -565,19 +572,19 @@ we use vectorgrid as input type
 </div>
 </div>
 
-<div id="outline-container-org9d78809" class="outline-3">
-<h3 id="org9d78809"><span class="section-number-3">2.2</span> Methods</h3>
+<div id="outline-container-org5b0d568" class="outline-3">
+<h3 id="org5b0d568"><span class="section-number-3">2.2</span> Methods</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 Methods for class <code>vector</code>.
 </p>
 </div>
-<div id="outline-container-org43b3561" class="outline-4">
-<h4 id="org43b3561"><span class="section-number-4">2.2.1</span> display</h4>
+<div id="outline-container-org8aa4400" class="outline-4">
+<h4 id="org8aa4400"><span class="section-number-4">2.2.1</span> display</h4>
 <div class="outline-text-4" id="text-2-2-1">
 </div>
 <ol class="org-ol">
-<li><a id="orge9bfd95"></a>Syntax<br />
+<li><a id="org5280141"></a>Syntax<br />
 <div class="outline-text-5" id="text-2-2-1-1">
 <pre class="example">
 display(v)
@@ -589,7 +596,7 @@ display content of vector <code>v</code>
 </div>
 </li>
 
-<li><a id="orgad751a7"></a>Example<br />
+<li><a id="org1f24987"></a>Example<br />
 <div class="outline-text-5" id="text-2-2-1-2">
 <div class="org-src-container">
 <pre class="src src-octave"> x <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">;</span> z <span style="color: #006FE0;">=</span> 3<span style="color: #006FE0;">;</span> 
@@ -607,12 +614,12 @@ v = 1.000000 2.000000 3.000000
 </ol>
 </div>
 
-<div id="outline-container-orgc719298" class="outline-4">
-<h4 id="orgc719298"><span class="section-number-4">2.2.2</span> size</h4>
+<div id="outline-container-org5457d13" class="outline-4">
+<h4 id="org5457d13"><span class="section-number-4">2.2.2</span> size</h4>
 <div class="outline-text-4" id="text-2-2-2">
 </div>
 <ol class="org-ol">
-<li><a id="org5c680e3"></a>Examples<br />
+<li><a id="orgdcf9d3c"></a>Examples<br />
 <div class="outline-text-5" id="text-2-2-2-1">
 <p>
 If arrays are in use:
@@ -645,12 +652,12 @@ If arrays are in use:
 </ol>
 </div>
 
-<div id="outline-container-org34b1c84" class="outline-4">
-<h4 id="org34b1c84"><span class="section-number-4">2.2.3</span> numel</h4>
+<div id="outline-container-org74fa978" class="outline-4">
+<h4 id="org74fa978"><span class="section-number-4">2.2.3</span> numel</h4>
 <div class="outline-text-4" id="text-2-2-3">
 </div>
 <ol class="org-ol">
-<li><a id="orgeec9410"></a>Syntax<br />
+<li><a id="orgfc8e358"></a>Syntax<br />
 <div class="outline-text-5" id="text-2-2-3-1">
 <pre class="example">
 n = numel(v)
@@ -658,7 +665,7 @@ n = numel(v)
 </div>
 </li>
 
-<li><a id="org1e6380f"></a>Input Arguments<br />
+<li><a id="org379571c"></a>Input Arguments<br />
 <div class="outline-text-5" id="text-2-2-3-2">
 <p>
 <code>v</code> vector 
@@ -666,7 +673,7 @@ n = numel(v)
 </div>
 </li>
 
-<li><a id="org026bb64"></a>Return Values<br />
+<li><a id="orga6b5301"></a>Return Values<br />
 <div class="outline-text-5" id="text-2-2-3-3">
 <p>
 <code>n</code> is the integer number of elements.
@@ -674,7 +681,7 @@ n = numel(v)
 </div>
 </li>
 
-<li><a id="org55df533"></a>Description<br />
+<li><a id="org4d751c7"></a>Description<br />
 <div class="outline-text-5" id="text-2-2-3-4">
 <p>
 Returns the number of elements in <code>v</code>, e.g. vectors.
@@ -684,8 +691,8 @@ Returns the number of elements in <code>v</code>, e.g. vectors.
 </ol>
 </div>
 
-<div id="outline-container-org4f5c060" class="outline-4">
-<h4 id="org4f5c060"><span class="section-number-4">2.2.4</span> dimensions</h4>
+<div id="outline-container-org23b3e83" class="outline-4">
+<h4 id="org23b3e83"><span class="section-number-4">2.2.4</span> dimensions</h4>
 <div class="outline-text-4" id="text-2-2-4">
 <div class="org-src-container">
 <pre class="src src-octave">  <span style="color: #0000FF;">function</span> d <span style="color: #006FE0;">=</span> <span style="color: #006699;">dimensions</span>(st)
@@ -714,12 +721,12 @@ Returns the number of elements in <code>v</code>, e.g. vectors.
 </div>
 </div>
 </div>
-<div id="outline-container-orga0f8be1" class="outline-4">
-<h4 id="orga0f8be1"><span class="section-number-4">2.2.5</span> get</h4>
+<div id="outline-container-org2361024" class="outline-4">
+<h4 id="org2361024"><span class="section-number-4">2.2.5</span> get</h4>
 <div class="outline-text-4" id="text-2-2-5">
 </div>
 <ol class="org-ol">
-<li><a id="orgf175e60"></a>Description<br />
+<li><a id="org8f4703f"></a>Description<br />
 <div class="outline-text-5" id="text-2-2-5-1">
 <p>
 vector - returns the content of a vector object 
@@ -727,7 +734,7 @@ vector - returns the content of a vector object
 </div>
 </li>
 
-<li><a id="orgea00080"></a>Syntax<br />
+<li><a id="org616baed"></a>Syntax<br />
 <div class="outline-text-5" id="text-2-2-5-2">
 <pre class="example">
 a = get(v, S_type, D_dim)
@@ -735,7 +742,7 @@ a = get(v, S_type, D_dim)
 </div>
 </li>
 
-<li><a id="orgf3efaa8"></a>Input Arguments<br />
+<li><a id="orgab86f2a"></a>Input Arguments<br />
 <div class="outline-text-5" id="text-2-2-5-3">
 <ul class="org-ul">
 <li><code>v</code> vector object</li>
@@ -745,7 +752,7 @@ a = get(v, S_type, D_dim)
 </div>
 </li>
 
-<li><a id="org3b22cdb"></a>Return values<br />
+<li><a id="orgfb84c2f"></a>Return values<br />
 <div class="outline-text-5" id="text-2-2-5-4">
 <p>
 <code>a</code> matrix with 3 rows and elements according to <code>S_type</code> and <code>D_dim</code>
@@ -754,14 +761,14 @@ dimensions.
 </div>
 </li>
 
-<li><a id="orge814643"></a>Examples<br />
+<li><a id="org2b12859"></a>Examples<br />
 <div class="outline-text-5" id="text-2-2-5-5">
 <p>
 Known points on a sphere are easier to recognise, so let us test this
 (including some coordinate transformation):
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org8373805">   v <span style="color: #006FE0;">=</span> vector([0<span style="color: #006FE0;">,</span> 0<span style="color: #006FE0;">,</span> 1]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org3257fdf">   v <span style="color: #006FE0;">=</span> vector([0<span style="color: #006FE0;">,</span> 0<span style="color: #006FE0;">,</span> 1]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
    get(v<span style="color: #006FE0;">,</span> <span style="color: #008000;">'spherical'</span>)
 </pre>
 </div>
@@ -791,7 +798,7 @@ Known points on a sphere are easier to recognise, so let us test this
 &#x2026;or take the south pole
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org3cc8f7d">   v <span style="color: #006FE0;">=</span> vector([0<span style="color: #006FE0;">,</span> 0<span style="color: #006FE0;">,</span> <span style="color: #006FE0;">-</span>1]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgcc1206f">   v <span style="color: #006FE0;">=</span> vector([0<span style="color: #006FE0;">,</span> 0<span style="color: #006FE0;">,</span> <span style="color: #006FE0;">-</span>1]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
    get(v<span style="color: #006FE0;">,</span> <span style="color: #008000;">'spherical'</span>)
 </pre>
 </div>
@@ -821,7 +828,7 @@ Known points on a sphere are easier to recognise, so let us test this
 &#x2026;or hit the equator in the east
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="orgb8ce600">   v <span style="color: #006FE0;">=</span> vector([0<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> 0]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org2464a8f">   v <span style="color: #006FE0;">=</span> vector([0<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> 0]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
    get(v<span style="color: #006FE0;">,</span> <span style="color: #008000;">'spherical'</span>)
 </pre>
 </div>
@@ -851,7 +858,7 @@ Known points on a sphere are easier to recognise, so let us test this
 &#x2026;or, where is Africa?
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org9baa9f0">   v <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 0<span style="color: #006FE0;">,</span> 0]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org08f08b6">   v <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 0<span style="color: #006FE0;">,</span> 0]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
    get(v<span style="color: #006FE0;">,</span> <span style="color: #008000;">'spherical'</span>)
 </pre>
 </div>
@@ -878,7 +885,7 @@ Known points on a sphere are easier to recognise, so let us test this
 </table>
 
 <div class="org-src-container">
-<pre class="src src-octave" id="orgcc436fb">   v <span style="color: #006FE0;">=</span> vector(rand(3<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> 5<span style="color: #006FE0;">,</span> 6)<span style="color: #006FE0;">,</span> <span style="color: #008000;">'polar'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgdc1c08f">   v <span style="color: #006FE0;">=</span> vector(rand(3<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> 5<span style="color: #006FE0;">,</span> 6)<span style="color: #006FE0;">,</span> <span style="color: #008000;">'polar'</span>)<span style="color: #006FE0;">;</span>
    ans <span style="color: #006FE0;">=</span> size(get(v<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>))<span style="color: #006FE0;">;</span>
 </pre>
 </div>
@@ -909,12 +916,12 @@ Known points on a sphere are easier to recognise, so let us test this
 </ol>
 </div>
 
-<div id="outline-container-org97bb0aa" class="outline-4">
-<h4 id="org97bb0aa"><span class="section-number-4">2.2.6</span> set</h4>
+<div id="outline-container-orga2874b5" class="outline-4">
+<h4 id="orga2874b5"><span class="section-number-4">2.2.6</span> set</h4>
 <div class="outline-text-4" id="text-2-2-6">
 </div>
 <ol class="org-ol">
-<li><a id="org57c8bc2"></a>Description<br />
+<li><a id="orgc557299"></a>Description<br />
 <div class="outline-text-5" id="text-2-2-6-1">
 <p>
 <code>set</code> modifies the vector object
@@ -928,7 +935,7 @@ has a type according to the input value of <code>S_type</code>.
 </div>
 </li>
 
-<li><a id="org3bcd599"></a>Syntax<br />
+<li><a id="orga07aeb1"></a>Syntax<br />
 <div class="outline-text-5" id="text-2-2-6-2">
 <pre class="example">
 v = set(v, a, S_type)
@@ -936,7 +943,7 @@ v = set(v, a, S_type)
 </div>
 </li>
 
-<li><a id="orgc78d545"></a>Input Arguments<br />
+<li><a id="orgdf037c6"></a>Input Arguments<br />
 <div class="outline-text-5" id="text-2-2-6-3">
 <p>
 <code>v</code>      existing vector object
@@ -946,7 +953,7 @@ v = set(v, a, S_type)
 </div>
 </li>
 
-<li><a id="org68278e1"></a>Return Values<br />
+<li><a id="orga9255d9"></a>Return Values<br />
 <div class="outline-text-5" id="text-2-2-6-4">
 <p>
 <code>v</code> modified vector object
@@ -954,7 +961,7 @@ v = set(v, a, S_type)
 </div>
 </li>
 
-<li><a id="orgd5ffbad"></a>See also<br />
+<li><a id="org1c4985a"></a>See also<br />
 <div class="outline-text-5" id="text-2-2-6-5">
 <p>
 vector, reshape
@@ -964,12 +971,12 @@ vector, reshape
 </ol>
 </div>
 
-<div id="outline-container-orga87d34e" class="outline-4">
-<h4 id="orga87d34e"><span class="section-number-4">2.2.7</span> normalize</h4>
+<div id="outline-container-orge87debc" class="outline-4">
+<h4 id="orge87debc"><span class="section-number-4">2.2.7</span> normalize</h4>
 <div class="outline-text-4" id="text-2-2-7">
 </div>
 <ol class="org-ol">
-<li><a id="orgefa68a2"></a>Syntax<br />
+<li><a id="orgb8f3f9f"></a>Syntax<br />
 <div class="outline-text-5" id="text-2-2-7-1">
 <pre class="example">
 vb = normalize(va)
@@ -977,7 +984,7 @@ vb = normalize(va)
 </div>
 </li>
 
-<li><a id="org112c21e"></a>Input Arguments<br />
+<li><a id="org23087e9"></a>Input Arguments<br />
 <div class="outline-text-5" id="text-2-2-7-2">
 <p>
 <code>va</code> vector
@@ -985,7 +992,7 @@ vb = normalize(va)
 </div>
 </li>
 
-<li><a id="orgf3ee6e6"></a>Return Values<br />
+<li><a id="org9aa8b8d"></a>Return Values<br />
 <div class="outline-text-5" id="text-2-2-7-3">
 <p>
 <code>vb</code> is a vector with length one.
@@ -995,12 +1002,12 @@ vb = normalize(va)
 </ol>
 </div>
 
-<div id="outline-container-org2e60337" class="outline-4">
-<h4 id="org2e60337"><span class="section-number-4">2.2.8</span> scale</h4>
+<div id="outline-container-orgd3ca77c" class="outline-4">
+<h4 id="orgd3ca77c"><span class="section-number-4">2.2.8</span> scale</h4>
 <div class="outline-text-4" id="text-2-2-8">
 </div>
 <ol class="org-ol">
-<li><a id="orgb82a1ac"></a>Syntax<br />
+<li><a id="orga8892b5"></a>Syntax<br />
 <div class="outline-text-5" id="text-2-2-8-1">
 <pre class="example">
 vc_AB = vector_scale(a_A, vb_B)
@@ -1008,7 +1015,7 @@ vc_AB = vector_scale(a_A, vb_B)
 </div>
 </li>
 
-<li><a id="orgc963d6a"></a>Description<br />
+<li><a id="orged28c4a"></a>Description<br />
 <div class="outline-text-5" id="text-2-2-8-2">
 <p>
 <code>scale</code> scales all vector object coordinates (by vector's scalar values) 
@@ -1016,7 +1023,7 @@ vc_AB = vector_scale(a_A, vb_B)
 </div>
 </li>
 
-<li><a id="orgbcb8161"></a>Input Arguments<br />
+<li><a id="orgdd7ad9f"></a>Input Arguments<br />
 <div class="outline-text-5" id="text-2-2-8-3">
 <ul class="org-ul">
 <li><code>a_A</code> scalar value</li>
@@ -1025,7 +1032,7 @@ vc_AB = vector_scale(a_A, vb_B)
 </div>
 </li>
 
-<li><a id="org43dc3b7"></a>Return Values<br />
+<li><a id="org6efac33"></a>Return Values<br />
 <div class="outline-text-5" id="text-2-2-8-4">
 <ul class="org-ul">
 <li><code>vc_AB</code> - scaled vector (vector object)</li>
@@ -1033,7 +1040,7 @@ vc_AB = vector_scale(a_A, vb_B)
 </div>
 </li>
 
-<li><a id="org1cdbc4f"></a>Examples<br />
+<li><a id="orga2ef18d"></a>Examples<br />
 <div class="outline-text-5" id="text-2-2-8-5">
 <p>
 Fall: 1 Vektor, 1 Scalar, 1 Wort ;)
@@ -1052,19 +1059,19 @@ Fall: 1 Vektor, 1 Scalar, 1 Wort ;)
 </div>
 </div>
 
-<div id="outline-container-orgeb303d2" class="outline-2">
-<h2 id="orgeb303d2"><span class="section-number-2">3</span> Vectorgrid</h2>
+<div id="outline-container-org1a31690" class="outline-2">
+<h2 id="org1a31690"><span class="section-number-2">3</span> Vectorgrid</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 <code>vectorgrid</code> creates a grid of vectors.
 </p>
 </div>
-<div id="outline-container-org8bfc4a6" class="outline-3">
-<h3 id="org8bfc4a6"><span class="section-number-3">3.1</span> Class</h3>
+<div id="outline-container-org63e5338" class="outline-3">
+<h3 id="org63e5338"><span class="section-number-3">3.1</span> Class</h3>
 <div class="outline-text-3" id="text-3-1">
 </div>
-<div id="outline-container-org0d8ab6c" class="outline-4">
-<h4 id="org0d8ab6c"><span class="section-number-4">3.1.1</span> Syntax</h4>
+<div id="outline-container-org61a4b6d" class="outline-4">
+<h4 id="org61a4b6d"><span class="section-number-4">3.1.1</span> Syntax</h4>
 <div class="outline-text-4" id="text-3-1-1">
 <pre class="example">
 st = vectorgrid(s1, s2, varargin)
@@ -1073,8 +1080,8 @@ st = vectorgrid(s1, s2, s3, S_type)
 </pre>
 </div>
 </div>
-<div id="outline-container-orgfd32366" class="outline-4">
-<h4 id="orgfd32366"><span class="section-number-4">3.1.2</span> Description</h4>
+<div id="outline-container-orgfc87bec" class="outline-4">
+<h4 id="orgfc87bec"><span class="section-number-4">3.1.2</span> Description</h4>
 <div class="outline-text-4" id="text-3-1-2">
 <p>
 <code>vectorgrid</code> holds all information necessary to create vectors of
@@ -1089,8 +1096,8 @@ restrictions in <b>vector</b> only 3-dimensional grids are fully supported!
 </div>
 </div>
 
-<div id="outline-container-org83731f2" class="outline-4">
-<h4 id="org83731f2"><span class="section-number-4">3.1.3</span> Input Arguments</h4>
+<div id="outline-container-orgcaba05a" class="outline-4">
+<h4 id="orgcaba05a"><span class="section-number-4">3.1.3</span> Input Arguments</h4>
 <div class="outline-text-4" id="text-3-1-3">
 <ul class="org-ul">
 <li><code>s1, s2, s3</code> vectors of coordinate values</li>
@@ -1099,7 +1106,7 @@ or 'polar')</li>
 </ul>
 </div>
 <ol class="org-ol">
-<li><a id="org0c479d2"></a><span class="todo TODO">TODO</span> add support for 2D here!<br />
+<li><a id="orgf2b3963"></a><span class="todo TODO">TODO</span> add support for 2D here!<br />
 <div class="outline-text-5" id="text-3-1-3-1">
 <p>
 e.g. 
@@ -1108,8 +1115,8 @@ e.g.
 </li>
 </ol>
 </div>
-<div id="outline-container-org8cbaf4a" class="outline-4">
-<h4 id="org8cbaf4a"><span class="section-number-4">3.1.4</span> Return Values</h4>
+<div id="outline-container-orgb31f8ae" class="outline-4">
+<h4 id="orgb31f8ae"><span class="section-number-4">3.1.4</span> Return Values</h4>
 <div class="outline-text-4" id="text-3-1-4">
 <ul class="org-ul">
 <li><code>st</code> vectorgrid</li>
@@ -1117,18 +1124,18 @@ e.g.
 </div>
 </div>
 
-<div id="outline-container-org8efa5e1" class="outline-4">
-<h4 id="org8efa5e1"><span class="section-number-4">3.1.5</span> Examples</h4>
+<div id="outline-container-orgeaaac27" class="outline-4">
+<h4 id="orgeaaac27"><span class="section-number-4">3.1.5</span> Examples</h4>
 <div class="outline-text-4" id="text-3-1-5">
 </div>
 <ol class="org-ol">
-<li><a id="orgf7eadf9"></a><span class="todo TODO">TODO</span> 2D<br />
+<li><a id="orge664ada"></a><span class="todo TODO">TODO</span> 2D<br />
 <div class="outline-text-6" id="text-3-1-5-0-1">
 <p>
 We look at some axes like
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org7677527">  A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org781c8ca">  A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span>
   x_A <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>3<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
   y_B <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>2<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
 </pre>
@@ -1138,7 +1145,7 @@ We look at some axes like
 A 2D vectorgrid is created via
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org226835f">vg_AB <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org56fcfea">vg_AB <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 
@@ -1160,13 +1167,13 @@ Total is 51 elements using 817 bytes
 </div>
 </li>
 
-<li><a id="org4169a2a"></a>3D<br />
+<li><a id="orgb8b22fe"></a>3D<br />
 <div class="outline-text-6" id="text-3-1-5-0-2">
 <p>
 We look at some axes like
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="orgfa9e2a3">  A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org641d537">  A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span>
   x_A <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>3<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
   y_B <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>2<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
   z_C <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>4<span style="color: #006FE0;">,</span> 4<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">;</span>
@@ -1177,7 +1184,7 @@ We look at some axes like
 A 3D vectorgrid is created via
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org3966990">vg_ABC <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_C<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org38cd236">vg_ABC <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_C<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 
@@ -1202,8 +1209,8 @@ Total is 91 elements using 1457 bytes
 </ol>
 </div>
 
-<div id="outline-container-org4e8d17f" class="outline-4">
-<h4 id="org4e8d17f"><span class="section-number-4">3.1.6</span> See Also</h4>
+<div id="outline-container-org4045af5" class="outline-4">
+<h4 id="org4045af5"><span class="section-number-4">3.1.6</span> See Also</h4>
 <div class="outline-text-4" id="text-3-1-6">
 <p>
 meshgrid
@@ -1212,16 +1219,16 @@ meshgrid
 </div>
 </div>
 
-<div id="outline-container-org6a9651d" class="outline-3">
-<h3 id="org6a9651d"><span class="section-number-3">3.2</span> Methods</h3>
+<div id="outline-container-org3d90282" class="outline-3">
+<h3 id="org3d90282"><span class="section-number-3">3.2</span> Methods</h3>
 <div class="outline-text-3" id="text-3-2">
 </div>
-<div id="outline-container-org5f67ef1" class="outline-4">
-<h4 id="org5f67ef1"><span class="section-number-4">3.2.1</span> size</h4>
+<div id="outline-container-orgedf1aca" class="outline-4">
+<h4 id="orgedf1aca"><span class="section-number-4">3.2.1</span> size</h4>
 <div class="outline-text-4" id="text-3-2-1">
 </div>
 <ol class="org-ol">
-<li><a id="orge9c1617"></a>Syntax<br />
+<li><a id="org9d44c6c"></a>Syntax<br />
 <div class="outline-text-5" id="text-3-2-1-1">
 <pre class="example">
 Dim_g =  size(g);
@@ -1229,31 +1236,31 @@ Dim_g =  size(g);
 </div>
 </li>
 
-<li><a id="org8a6b4fc"></a>Description<br />
+<li><a id="org633c7af"></a>Description<br />
 <div class="outline-text-5" id="text-3-2-1-2">
 <p>
 return dimensions of the grid.
 </p>
 </div>
 </li>
-<li><a id="orgbf15e67"></a>Input Arguments<br />
+<li><a id="org65f3d0b"></a>Input Arguments<br />
 <div class="outline-text-5" id="text-3-2-1-3">
 <p>
 <code>g</code> is a vectorgrid.
 </p>
 </div>
 </li>
-<li><a id="orgdc83f57"></a>Output Arguments<br />
+<li><a id="orgf54eaec"></a>Output Arguments<br />
 <div class="outline-text-5" id="text-3-2-1-4">
 <p>
 <code>Dim_g</code> is a matrix containing the size information.
 </p>
 </div>
 </li>
-<li><a id="orge7136e5"></a>Examples<br />
+<li><a id="orgc267052"></a>Examples<br />
 <div class="outline-text-5" id="text-3-2-1-5">
 <div class="org-src-container">
-<pre class="src src-octave" id="orgb1206a7">  x <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span>10<span style="color: #006FE0;">,</span> 194)<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> x<span style="color: #006FE0;">;</span> z <span style="color: #006FE0;">=</span> x<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org53636ff">  x <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span>10<span style="color: #006FE0;">,</span> 194)<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> x<span style="color: #006FE0;">;</span> z <span style="color: #006FE0;">=</span> x<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
   g <span style="color: #006FE0;">=</span> vectorgrid(x<span style="color: #006FE0;">,</span> y(1<span style="color: #006FE0;">:</span>5)<span style="color: #006FE0;">,</span> z(1<span style="color: #006FE0;">:</span>2)<span style="color: #006FE0;">,</span> S_type)<span style="color: #006FE0;">;</span>
   Dim_g <span style="color: #006FE0;">=</span>  size(g)
 </pre>
@@ -1268,7 +1275,7 @@ Dim_g =
 </div>
 </li>
 
-<li><a id="orgdbf17ff"></a>Tips<br />
+<li><a id="orge882240"></a>Tips<br />
 <div class="outline-text-5" id="text-3-2-1-6">
 <p>
 To determine the number of elements in a grid, use
@@ -1279,9 +1286,9 @@ prod(Dim_g)
 </div>
 </li>
 
-<li><a id="org0a5b0b8"></a>Alternatives<br /></li>
+<li><a id="org6d7bc2f"></a>Alternatives<br /></li>
 
-<li><a id="org6e8adb7"></a>See Also<br />
+<li><a id="orgdfcf2f7"></a>See Also<br />
 <div class="outline-text-5" id="text-3-2-1-8">
 <p>
 display   
@@ -1291,12 +1298,12 @@ display
 </ol>
 </div>
 
-<div id="outline-container-org41470e3" class="outline-4">
-<h4 id="org41470e3"><span class="section-number-4">3.2.2</span> display</h4>
+<div id="outline-container-orge67ba87" class="outline-4">
+<h4 id="orge67ba87"><span class="section-number-4">3.2.2</span> display</h4>
 <div class="outline-text-4" id="text-3-2-2">
 </div>
 <ol class="org-ol">
-<li><a id="org6d5cd24"></a>Description<br />
+<li><a id="org744676c"></a>Description<br />
 <div class="outline-text-5" id="text-3-2-2-1">
 <p>
 show the content of vevtorgrid <code>vg</code>
@@ -1304,7 +1311,7 @@ show the content of vevtorgrid <code>vg</code>
 </div>
 </li>
 
-<li><a id="org5a0e9fc"></a>Syntax<br />
+<li><a id="orge5eefa1"></a>Syntax<br />
 <div class="outline-text-5" id="text-3-2-2-2">
 <pre class="example">
 display(vg)
@@ -1312,10 +1319,10 @@ display(vg)
 </div>
 </li>
 
-<li><a id="org619de92"></a>Example<br />
+<li><a id="org3c8365e"></a>Example<br />
 <div class="outline-text-5" id="text-3-2-2-3">
 <div class="org-src-container">
-<pre class="src src-octave" id="orgdf0a70a">  x <span style="color: #006FE0;">=</span> linspace(1<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 100)<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> x(1<span style="color: #006FE0;">:</span>3)<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orge0117a1">  x <span style="color: #006FE0;">=</span> linspace(1<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 100)<span style="color: #006FE0;">;</span> y <span style="color: #006FE0;">=</span> x(1<span style="color: #006FE0;">:</span>3)<span style="color: #006FE0;">;</span> S_type <span style="color: #006FE0;">=</span> <span style="color: #008000;">'cartesian'</span><span style="color: #006FE0;">;</span>
   g <span style="color: #006FE0;">=</span> vectorgrid(x<span style="color: #006FE0;">,</span> y<span style="color: #006FE0;">,</span> S_type)<span style="color: #006FE0;">;</span>
 display(g)<span style="color: #006FE0;">;</span>
 </pre>
@@ -1332,13 +1339,46 @@ The size is
 </ol>
 </div>
 
-<div id="outline-container-orgb8c1b26" class="outline-4">
-<h4 id="orgb8c1b26"><span class="section-number-4">3.2.3</span> get</h4>
+<div id="outline-container-org61e8a21" class="outline-4">
+<h4 id="org61e8a21"><span class="section-number-4">3.2.3</span> type</h4>
 <div class="outline-text-4" id="text-3-2-3">
 </div>
 <ol class="org-ol">
-<li><a id="orgdf34bf2"></a>Description<br />
+<li><a id="orgd7a0833"></a>Description<br />
 <div class="outline-text-5" id="text-3-2-3-1">
+<p>
+return type of vectorgrid 
+</p>
+</div>
+</li>
+
+<li><a id="org9ef313c"></a>Syntax<br />
+<div class="outline-text-5" id="text-3-2-3-2">
+<pre class="example">
+type(g)
+</pre>
+</div>
+</li>
+
+<li><a id="orga906600"></a>Example<br />
+<div class="outline-text-5" id="text-3-2-3-3">
+<div class="org-src-container">
+<pre class="src src-octave">g <span style="color: #006FE0;">=</span> vectorgrid([2<span style="color: #006FE0;">,</span>3]<span style="color: #006FE0;">,</span>[3<span style="color: #006FE0;">,</span>5]<span style="color: #006FE0;">,</span>[5<span style="color: #006FE0;">,</span>6]<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+type(g)
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-orgcf11fbf" class="outline-4">
+<h4 id="orgcf11fbf"><span class="section-number-4">3.2.4</span> get</h4>
+<div class="outline-text-4" id="text-3-2-4">
+</div>
+<ol class="org-ol">
+<li><a id="orgde4144a"></a>Description<br />
+<div class="outline-text-5" id="text-3-2-4-1">
 <p>
 Get an array with vector information as defined by the vectorgrid.
 </p>
@@ -1347,31 +1387,31 @@ Get an array with vector information as defined by the vectorgrid.
 </ol>
 </div>
 
-<div id="outline-container-org3f279e4" class="outline-4">
-<h4 id="org3f279e4"><span class="section-number-4">3.2.4</span> reshape</h4>
-<div class="outline-text-4" id="text-3-2-4">
+<div id="outline-container-org1dd5cdf" class="outline-4">
+<h4 id="org1dd5cdf"><span class="section-number-4">3.2.5</span> reshape</h4>
+<div class="outline-text-4" id="text-3-2-5">
 </div>
 <ol class="org-ol">
-<li><a id="org82494aa"></a>Syntax<br />
-<div class="outline-text-5" id="text-3-2-4-1">
+<li><a id="orgb895b89"></a>Syntax<br />
+<div class="outline-text-5" id="text-3-2-5-1">
 <pre class="example">
 [a_reshaped, S_type] = reshape(g, shape)
 </pre>
 </div>
 </li>
 
-<li><a id="org8450079"></a>Description<br />
-<div class="outline-text-5" id="text-3-2-4-2">
+<li><a id="org3d0ad26"></a>Description<br />
+<div class="outline-text-5" id="text-3-2-5-2">
 <p>
 Get a reshaped matrix <code>a_reshaped</code> from vectorgrid <code>g</code> with shape <code>shape</code>.
 </p>
 </div>
 </li>
 
-<li><a id="org95c9bf5"></a>Examples<br />
-<div class="outline-text-5" id="text-3-2-4-3">
+<li><a id="org5086ba1"></a>Examples<br />
+<div class="outline-text-5" id="text-3-2-5-3">
 <div class="org-src-container">
-<pre class="src src-octave" id="org99761f8">  g <span style="color: #006FE0;">=</span> vectorgrid([2<span style="color: #006FE0;">,</span>3]<span style="color: #006FE0;">,</span>[3<span style="color: #006FE0;">,</span>5]<span style="color: #006FE0;">,</span>[5<span style="color: #006FE0;">,</span>6]<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgfee0b7e">  g <span style="color: #006FE0;">=</span> vectorgrid([2<span style="color: #006FE0;">,</span>3]<span style="color: #006FE0;">,</span>[3<span style="color: #006FE0;">,</span>5]<span style="color: #006FE0;">,</span>[5<span style="color: #006FE0;">,</span>6]<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
   [n<span style="color: #006FE0;">,</span> S_type] <span style="color: #006FE0;">=</span> get(g<span style="color: #006FE0;">,</span> [1<span style="color: #006FE0;">,</span> 8])<span style="color: #006FE0;">;</span>
   whos
 </pre>
@@ -1379,8 +1419,8 @@ Get a reshaped matrix <code>a_reshaped</code> from vectorgrid <code>g</code> wit
 </div>
 </li>
 
-<li><a id="org3b4b67d"></a>See Also<br />
-<div class="outline-text-5" id="text-3-2-4-4">
+<li><a id="org7db9670"></a>See Also<br />
+<div class="outline-text-5" id="text-3-2-5-4">
 <p>
 get
 </p>
@@ -1389,21 +1429,24 @@ get
 </ol>
 </div>
 
-<div id="outline-container-org0dbf521" class="outline-4">
-<h4 id="org0dbf521"><span class="section-number-4">3.2.5</span> meshgrid</h4>
-<div class="outline-text-4" id="text-3-2-5">
+<div id="outline-container-orgb1c7040" class="outline-4">
+<h4 id="orgb1c7040"><span class="section-number-4">3.2.6</span> grid</h4>
+</div>
+<div id="outline-container-org30e9ae4" class="outline-4">
+<h4 id="org30e9ae4"><span class="section-number-4">3.2.7</span> meshgrid</h4>
+<div class="outline-text-4" id="text-3-2-7">
 </div>
 <ol class="org-ol">
-<li><a id="org6dc58a8"></a>Syntax<br />
-<div class="outline-text-5" id="text-3-2-5-1">
+<li><a id="org78b911d"></a>Syntax<br />
+<div class="outline-text-5" id="text-3-2-7-1">
 <pre class="example">
 [x_YXZ, y_YXZ, z_YXZ] = meshgrid(st, S_type)
 </pre>
 </div>
 </li>
 
-<li><a id="orga01a3e6"></a>Input arguments<br />
-<div class="outline-text-5" id="text-3-2-5-2">
+<li><a id="org749c96d"></a>Input arguments<br />
+<div class="outline-text-5" id="text-3-2-7-2">
 <ul class="org-ul">
 <li><code>st</code> vectorgrid object</li>
 <li><code>S_type</code> coordinate system; defaults to 'cartesian'.</li>
@@ -1411,18 +1454,18 @@ get
 </div>
 </li>
 
-<li><a id="orgddafc24"></a>Return values<br />
-<div class="outline-text-5" id="text-3-2-5-3">
+<li><a id="orgdb6a31c"></a>Return values<br />
+<div class="outline-text-5" id="text-3-2-7-3">
 <ul class="org-ul">
 <li><code>x_YXZ, y_YXZ, z_YXZ</code> matrices of grid values</li>
 </ul>
 </div>
 </li>
 
-<li><a id="orge48c4f5"></a>Examples <div id="meshgridbooast"></div><br />
+<li><a id="org3b7360f"></a>Examples <div id="meshgridbooast"></div><br />
 <ol class="org-ol">
-<li><a id="org6ecc5d3"></a>3D<br />
-<div class="outline-text-6" id="text-3-2-5-4-1">
+<li><a id="org18b2dab"></a>3D<br />
+<div class="outline-text-6" id="text-3-2-7-4-1">
 <p>
 We could take the vectorgrid example as given by
 </p>
@@ -1439,7 +1482,7 @@ vg_ABC <span style="color: #006FE0;">=</span> vectorgrid(x_A<span style="color: 
 and convert is to a meshgrid like this:
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="orge3a277e">[X_BAC<span style="color: #006FE0;">,</span> Y_BAC<span style="color: #006FE0;">,</span> Z_BAC] <span style="color: #006FE0;">=</span> meshgrid(vg_ABC)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org2999e5a">[X_BAC<span style="color: #006FE0;">,</span> Y_BAC<span style="color: #006FE0;">,</span> Z_BAC] <span style="color: #006FE0;">=</span> meshgrid(vg_ABC)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 <p>
@@ -1460,35 +1503,40 @@ dimensions have changed due to the Octave/Matlab conventions.
 </ol>
 </li>
 
-<li><a id="org34e7615"></a>Alternatives <div id="meshgridalternatives"></div><br />
-<div class="outline-text-5" id="text-3-2-5-5">
+<li><a id="org7bc64e4"></a>Alternatives <div id="meshgridalternatives"></div><br />
+<div class="outline-text-5" id="text-3-2-7-5">
 <p>
 An excursion to the Matlab/Octave meshgrid:
 </p>
 </div>
 
 <ol class="org-ol">
-<li><a id="org95b1e55"></a>2D-Meshgrid using Matlab/Octave<br />
-<div class="outline-text-6" id="text-3-2-5-5-1">
+<li><a id="org834cacc"></a>2D-Meshgrid using Matlab/Octave<br />
+<div class="outline-text-6" id="text-3-2-7-5-1">
+<p>
+A meshgrid in matlab/octave in 2D is defined like so:
+</p>
 <div class="org-src-container">
-<pre class="src src-octave" id="orgd87bac1">  A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span>
-  x_A <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>3<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
-  y_B <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>2<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
-  [x_BA<span style="color: #006FE0;">,</span> y_BA] <span style="color: #006FE0;">=</span> meshgrid(x_A<span style="color: #006FE0;">,</span> y_B)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org42f5816">A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span>
+x_A <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>3<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
+y_B <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>2<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
+[x_BA<span style="color: #006FE0;">,</span> y_BA] <span style="color: #006FE0;">=</span> meshgrid(x_A<span style="color: #006FE0;">,</span> y_B)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 </div>
 </li>
 
-<li><a id="orga84d190"></a>3D-Meshgrid using Matlab/Octave<br />
-<div class="outline-text-6" id="text-3-2-5-5-2">
+<li><a id="org984cf51"></a>3D-Meshgrid using Matlab/Octave<br />
+<div class="outline-text-6" id="text-3-2-7-5-2">
+<p>
+A meshgrid in matlab/octave in 3D is defined like so:
+</p>
 <div class="org-src-container">
-<pre class="src src-octave" id="orgc2492c5">  <span style="color: #8D8D84; font-style: italic;">% matlab meshgrid</span>
-    A <span style="color: #006FE0;">=</span> 10<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span>
-    x_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
-    y_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
-    z_C <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">;</span>
-    [x_BAC<span style="color: #006FE0;">,</span> y_BAC<span style="color: #006FE0;">,</span> z_BAC] <span style="color: #006FE0;">=</span> meshgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_C)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org147477e">A <span style="color: #006FE0;">=</span> 10<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span>
+x_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
+y_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
+z_C <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">;</span>
+[x_BAC<span style="color: #006FE0;">,</span> y_BAC<span style="color: #006FE0;">,</span> z_BAC] <span style="color: #006FE0;">=</span> meshgrid(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_C)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 </div>
@@ -1498,13 +1546,13 @@ An excursion to the Matlab/Octave meshgrid:
 </ol>
 </div>
 
-<div id="outline-container-org894951f" class="outline-4">
-<h4 id="org894951f"><span class="section-number-4">3.2.6</span> subsref</h4>
-<div class="outline-text-4" id="text-3-2-6">
+<div id="outline-container-org2e75a2f" class="outline-4">
+<h4 id="org2e75a2f"><span class="section-number-4">3.2.8</span> subsref</h4>
+<div class="outline-text-4" id="text-3-2-8">
 </div>
 <ol class="org-ol">
-<li><a id="org51cde22"></a>Syntax<br />
-<div class="outline-text-5" id="text-3-2-6-1">
+<li><a id="orge19d260"></a>Syntax<br />
+<div class="outline-text-5" id="text-3-2-8-1">
 <pre class="example">
 g(n,m, ...)
 g(1:n, ...)
@@ -1517,8 +1565,8 @@ matrix as usually given on Octave/Matlab.
 </div>
 </li>
 
-<li><a id="org190e98a"></a>Example<br />
-<div class="outline-text-5" id="text-3-2-6-2">
+<li><a id="orgba73bdd"></a>Example<br />
+<div class="outline-text-5" id="text-3-2-8-2">
 <p>
 Let us look for a portion of a vectorgrid as follows:
 </p>
@@ -1580,17 +1628,17 @@ To get the vector information from the vectorgrid, you need to use <code>vector<
 </ol>
 </div>
 
-<div id="outline-container-org9b9e26f" class="outline-4">
-<h4 id="org9b9e26f"><span class="section-number-4">3.2.7</span> <span class="todo TODO">TODO</span> end (index)</h4>
+<div id="outline-container-org981087f" class="outline-4">
+<h4 id="org981087f"><span class="section-number-4">3.2.9</span> <span class="todo TODO">TODO</span> end (index)</h4>
 </div>
 
-<div id="outline-container-org772753f" class="outline-4">
-<h4 id="org772753f"><span class="section-number-4">3.2.8</span> surface</h4>
-<div class="outline-text-4" id="text-3-2-8">
+<div id="outline-container-orgb2bba89" class="outline-4">
+<h4 id="orgb2bba89"><span class="section-number-4">3.2.10</span> surface</h4>
+<div class="outline-text-4" id="text-3-2-10">
 </div>
 <ol class="org-ol">
-<li><a id="org11ec20a"></a>Description<br />
-<div class="outline-text-5" id="text-3-2-8-1">
+<li><a id="org1411aaf"></a>Description<br />
+<div class="outline-text-5" id="text-3-2-10-1">
 <p>
 <code>surface</code> takes a vectorgrid as input argument and some values to
 display as a surface accordingly to the vectorgrid definition.
@@ -1603,23 +1651,23 @@ the grid and restrict to a singular value for one axis.
 </div>
 </li>
 
-<li><a id="org7ce700a"></a>Examples<br />
-<div class="outline-text-5" id="text-3-2-8-2">
+<li><a id="org03a7e2e"></a>Examples<br />
+<div class="outline-text-5" id="text-3-2-10-2">
 <p>
 This example illustrates the use of the method <code>surface</code> for
-<code>vectorgrid</code>. The section <a href="#surfacealternatives">surfacealternatives</a> discusses similar
-examples using Octave/Matlab's surface function.  
+<code>vectorgrid</code>. The section <a href="#sec:surfacealternatives">sec:surfacealternatives</a> discusses
+similar examples using Octave/Matlab's surface function.
 </p>
 </div>
 
 <ol class="org-ol">
-<li><a id="org257e37f"></a>2D in 3D<br />
-<div class="outline-text-6" id="text-3-2-8-2-1">
+<li><a id="org9677280"></a>2D in 3D<br />
+<div class="outline-text-6" id="text-3-2-10-2-1">
 <p>
 We first create a vectorgrid to define some function.
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="orga4d90d1">  A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgc779293">  A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 2<span style="color: #006FE0;">;</span>
   g_ABC <span style="color: #006FE0;">=</span> vectorgrid(linspace(<span style="color: #006FE0;">-</span>3<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">,</span> linspace(<span style="color: #006FE0;">-</span>2<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">,</span> linspace(0<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> C)<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
@@ -1629,22 +1677,22 @@ Now we invent some function. It should be defined for \(z =
 0\). Therefore we slice this space from the grid:
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org1ef69c5">g_AB1 <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>1)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org6cda251">g_AB1 <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>1)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 
 <p>
 The function should look like the example in the alternatives section
-<a href="#surfacealternatives">surfacealternatives</a>. Here we define the function the booasty way.
+<a href="#sec:surfacealternatives">sec:surfacealternatives</a>. Here we define the function the booasty way:
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org4a78102">r_xyz_AB <span style="color: #006FE0;">=</span> get(vector(g_AB1)<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org79b608a">r_xyz_AB <span style="color: #006FE0;">=</span> get(vector(g_AB1)<span style="color: #006FE0;">,</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
 s_AB <span style="color: #006FE0;">=</span> squeeze(sum(r_xyz_AB(1<span style="color: #006FE0;">:</span>2<span style="color: #006FE0;">,</span> <span style="color: #006FE0;">:,</span> <span style="color: #006FE0;">:</span>)<span style="color: #006FE0;">.^</span>2<span style="color: #006FE0;">,</span> 1))<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 
 <p>
-The same is achieved by
+The same is achieved in an Octave/Matlab manner by
 </p>
 <div class="org-src-container">
 <pre class="src src-octave">[X_BA<span style="color: #006FE0;">,</span> Y_BA<span style="color: #006FE0;">,</span> Z_BA] <span style="color: #006FE0;">=</span> meshgrid(g_AB1)<span style="color: #006FE0;">;</span>
@@ -1657,11 +1705,11 @@ easier in this case&#x2026;
 </p>
 
 <p>
-Finally the results yields Figure <a href="#surface_example_2d_3d">surface_example_2d_3d</a> after
+Finally the results yields Figure <a href="#fig:surface_example_2d_3d">fig:surface_example_2d_3d</a> after
 stating
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="org7b21cba">surface(g_AB1<span style="color: #006FE0;">,</span> s_AB)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="org2326be5">surface(g_AB1<span style="color: #006FE0;">,</span> s_AB)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
 <p>
@@ -1672,22 +1720,24 @@ so surface colors the slice defined by <code>g_AB1</code> by values <code>s_AB</
 <div class="figure">
 <p><img src="img/2d_in_3d_surface_colored_booast.png" alt="2d_in_3d_surface_colored_booast.png" />
 </p>
-<p><span class="figure-number">Figure 1: </span>A surface defined using booast. <div id="surface_example_2d_3d"></div></p>
+<p><span class="figure-number">Figure 1: </span>A surface defined using booast. <div id="fig:surface_example_2d_3d"></div></p>
 </div>
 </div>
 </li>
 
-<li><a id="orga807146"></a>3D in 3D<br />
-<div class="outline-text-6" id="text-3-2-8-2-2">
+<li><a id="orgb92cea7"></a>3D in 3D<br />
+<div class="outline-text-6" id="text-3-2-10-2-2">
 <p>
-Using
+Using 'dependendSurface' we can show the data as a 3D plane in the 3D
+space. So we state
 </p>
 <div class="org-src-container">
-<pre class="src src-octave" id="orgfe72f9c">surface(g_AB1<span style="color: #006FE0;">,</span> s_AB<span style="color: #006FE0;">,</span> []<span style="color: #006FE0;">,</span> <span style="color: #008000;">'dependendSurface'</span>)<span style="color: #006FE0;">;</span>
+<pre class="src src-octave" id="orgd11184a">surface(g_AB1<span style="color: #006FE0;">,</span> s_AB<span style="color: #006FE0;">,</span> []<span style="color: #006FE0;">,</span> <span style="color: #008000;">'dependendSurface'</span>)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
+
 <p>
-so surface colors the slice defined by <code>g_AB1</code> by values <code>s_AB</code>.
+surface() colors the slice defined by <code>g_AB1</code> by values <code>s_AB</code>.
 </p>
 
 
@@ -1699,10 +1749,111 @@ so surface colors the slice defined by <code>g_AB1</code> by values <code>s_AB</
 </div>
 </li>
 
+<li><a id="org0010a80"></a><span class="todo TODO">TODO</span> 3D in 3D coloring<br /></li>
 
-<li><a id="org401f209"></a><span class="todo TODO">TODO</span> 3D in 3D coloring<br /></li>
+<li><a id="org1220a0c"></a><span class="todo TODO">TODO</span> 3D in 3D Spherical<br /></li>
+</ol>
+</li>
 
-<li><a id="org58080be"></a><span class="todo TODO">TODO</span> 3D in 3D Spherical<br /></li>
+<li><a id="org56cfcfb"></a>Alternatives <div id="sec:surfacealternatives"></div><br />
+<div class="outline-text-5" id="text-3-2-10-3">
+<p>
+As an alternative, we do the examples as tests solely using
+Octave/matlab's <code>surface</code> function.
+</p>
+
+<p>
+We use the meshgrid as shown in section <a href="#meshgridalternatives">meshgridalternatives</a>. A
+function <code>z_BA</code> is defined using the grid information.
+</p>
+<div class="org-src-container">
+<pre class="src src-octave" id="orge228ceb">A <span style="color: #006FE0;">=</span> 20<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span>
+x_A <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>3<span style="color: #006FE0;">,</span> 3<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
+y_B <span style="color: #006FE0;">=</span> linspace(<span style="color: #006FE0;">-</span>2<span style="color: #006FE0;">,</span> 2<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
+[x_BA<span style="color: #006FE0;">,</span> y_BA] <span style="color: #006FE0;">=</span> meshgrid(x_A<span style="color: #006FE0;">,</span> y_B)<span style="color: #006FE0;">;</span>
+z_BA <span style="color: #006FE0;">=</span> x_BA<span style="color: #006FE0;">.^</span>2 <span style="color: #006FE0;">+</span> y_BA<span style="color: #006FE0;">.^</span>2<span style="color: #006FE0;">;</span>
+</pre>
+</div>
+<p>
+Therefore, we have got a function \(z = f(x, y)\). 
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org21055b7"></a>2D in 3D<br />
+<div class="outline-text-6" id="text-3-2-10-3-1">
+<p>
+We want to present \(z = f(x, y)\) as a plane in the 3D
+space. Therefore, we need to
+</p>
+<ol class="org-ol">
+<li><p>
+create a z-plane in space, e.g. at \(z = 0\)
+</p>
+<div class="org-src-container">
+<pre class="src src-octave" id="orgce696ca">    s_BA <span style="color: #006FE0;">=</span> z_BA<span style="color: #006FE0;">;</span> <span style="color: #8D8D84; font-style: italic;">% preserve results</span>
+    z_BA <span style="color: #006FE0;">=</span> zeros(size(x_BA))<span style="color: #006FE0;">;</span> <span style="color: #8D8D84; font-style: italic;">% invent some values</span>
+</pre>
+</div></li>
+<li><p>
+show the z-plane, use \(f(x,y)\) for coloring
+</p>
+<div class="org-src-container">
+<pre class="src src-octave" id="orgb0c5d6e">    surface(x_A<span style="color: #006FE0;">,</span> y_B<span style="color: #006FE0;">,</span> z_BA<span style="color: #006FE0;">,</span> s_BA)<span style="color: #006FE0;">;</span>
+</pre>
+</div></li>
+</ol>
+<p>
+This results in a figure like shown in Figure <a href="#fig:alternative_2d_in_3d_surface">fig:alternative_2d_in_3d_surface</a>.
+</p>
+
+<p>
+<img src="img/2d_in_3d_surface_colored_octave.png" alt="2d_in_3d_surface_colored_octave.png" />
+<img src="img/2d_in_3d_surface_colored_octave.png" alt="2d_in_3d_surface_colored_octave.png" />
+</p>
+</div>
+</li>
+
+
+<li><a id="orgf93b3f4"></a>3D in 3D<br />
+<div class="outline-text-6" id="text-3-2-10-3-2">
+<p>
+3D-Fläche im 3D-Raum darstellen; und so sagt man es surface:
+</p>
+
+<div class="figure">
+<p><img src="img/3din3d_plot_surface1.png" alt="3din3d_plot_surface1.png" />
+</p>
+</div>
+
+<p>
+man kann auch die Meshgrid-Koordinaten an surface übergeben:
+</p>
+
+<div class="figure">
+<p><img src="img/3din3dplot_surface2.png" alt="3din3dplot_surface2.png" />
+</p>
+</div>
+
+<p>
+&#x2026;dann kann man auch ganz leicht die Sache im Raum drehen:
+</p>
+
+<div class="figure">
+<p><img src="img/3din3dplot_surface3.png" alt="3din3dplot_surface3.png" />
+</p>
+</div>
+
+<p>
+&#x2026;so eine Fläche kann man auch anderweitig bemalen:
+</p>
+
+<div class="figure">
+<p><img src="img/3din3dplot_surface4.png" alt="3din3dplot_surface4.png" />
+</p>
+</div>
+</div>
+</li>
 </ol>
 </li>
 </ol>
@@ -1710,27 +1861,13 @@ so surface colors the slice defined by <code>g_AB1</code> by values <code>s_AB</
 </div>
 </div>
 
-<div id="outline-container-org9842114" class="outline-2">
-<h2 id="org9842114"><span class="section-number-2">4</span> Installation</h2>
+<div id="outline-container-orge6f6427" class="outline-2">
+<h2 id="orge6f6427"><span class="section-number-2">4</span> Installation</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org6fee0b4" class="outline-3">
-<h3 id="org6fee0b4"><span class="section-number-3">4.1</span> Directory setup</h3>
+<div id="outline-container-org0832c9c" class="outline-3">
+<h3 id="org0832c9c"><span class="section-number-3">4.1</span> Matlab/Octave Installation</h3>
 <div class="outline-text-3" id="text-4-1">
-<div class="org-src-container">
-<pre class="src src-shell" id="orgc8699a9">rm -rf @vector @vectorgrid img
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-shell" id="org60ae6c8">mkdir @vector @vectorgrid img
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-org31a5bb9" class="outline-3">
-<h3 id="org31a5bb9"><span class="section-number-3">4.2</span> Matlab/Octave Installation</h3>
-<div class="outline-text-3" id="text-4-2">
 <p>
 Add the path to Octave/Matlab where you installed booast. E.g.
 </p>
@@ -1740,14 +1877,44 @@ addpath('path/to/booast/');
 </div>
 </div>
 
-<div id="outline-container-org9eb3700" class="outline-3">
-<h3 id="org9eb3700"><span class="section-number-3">4.3</span> <span class="todo TODO">TODO</span> Octave tests</h3>
+<div id="outline-container-orgfe1eaa6" class="outline-3">
+<h3 id="orgfe1eaa6"><span class="section-number-3">4.2</span> Directory setup</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+Inside the installation directory, clean up everything belonging to
+the classes vector and vectorgrid if necessary:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell" id="orgeb12cc6">rm -rf @vector @vectorgrid img
+</pre>
+</div>
+
+<p>
+create output directories for tangling files:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell" id="orgb0af9fd">mkdir @vector @vectorgrid img
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org62edf42" class="outline-3">
+<h3 id="org62edf42"><span class="section-number-3">4.3</span> <span class="todo TODO">TODO</span> Octave tests</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
-Do some automatic tests like in
+We would like to do some automatic tests like in
 <a href="https://orgmode.org/worg/org-contrib/babel/intro.html">https://orgmode.org/worg/org-contrib/babel/intro.html</a>
 </p>
+</div>
+</div>
 
+<div id="outline-container-org6b06952" class="outline-3">
+<h3 id="org6b06952"><span class="section-number-3">4.4</span> Misc</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+This toolbox was tested with octave version:
+</p>
 <div class="org-src-container">
 <pre class="src src-octave">version
 </pre>
@@ -1757,9 +1924,9 @@ Do some automatic tests like in
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: 2018-03-14; Revision Time-stamp: <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-11-01 Fr 11:31&gt;</span></span></p>
+<p class="date">Date: 2018-03-14; Revision Time-stamp: <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-11-24 So 23:05&gt;</span></span></p>
 <p class="author">Author: Johann-Markus Batke</p>
-<p class="date">Created: 2019-11-01 Fr 11:31</p>
+<p class="date">Created: 2019-11-24 So 23:06</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

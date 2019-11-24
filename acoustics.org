@@ -1,5 +1,5 @@
 #+TITLE: Acoustics
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-20 14:28:26 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-24 22:35:15 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -7,7 +7,7 @@
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 25.2.2 (Org mode 9.1.3)
 #+setupfile: booast.setup
-#+PROPERTY: header-args:octave :noweb yes :eval export
+#+PROPERTY: header-args:octave :noweb yes :eval no-export
 
 * COMMENT Admin 
 
@@ -17,12 +17,15 @@
 
 #+RESULTS:
 : 2
+* General information
+- file:booast.org
+
 
 * Acoustic Waves
 
 The calculation of acoustic waves is greatly facilitated by
 *booast*. /Plane waves/, /cylindrical waves/ and /spherical waves/ are
-all defined in $\mathcal R^3$. 
+all defined in $\mathbb R^3$. 
 
 ** Planewave
 
@@ -145,7 +148,6 @@ scalar arrays are shown using the =surface= command.
 #+attr_org: :width 500
 #+attr_html: :width 100%
 #+RESULTS: planewave cartesian example image
-[[file:img/exa_plane_wave_cartesian.png]]
 
 **** Plane wave defined on spherical coordinates
 
@@ -166,7 +168,7 @@ surface of a sphere, a cone, or a half circle respectively.
   %% slice some planes for visualisation
   g_AB1 = g_ABC(:,:,10);  % circle
   g_A1C = g_ABC(:,10,:);  % conus
-  g_1BC = g_ABC(10,:,:);  % sphere
+  g_1BC = g_ABC(20,:,:);  % sphere
 
   %% direction/wavenumbervector of planewave
   v = vector([1, 1, 0.3]', 'cartesian');
@@ -184,6 +186,7 @@ surface of a sphere, a cone, or a half circle respectively.
 #+END_SRC
 
 #+RESULTS: planewave spherical example
+: 0
 
 #+name: planewave spherical example image
 #+BEGIN_SRC octave :results file :exports results
@@ -193,6 +196,7 @@ surface of a sphere, a cone, or a half circle respectively.
 #+END_SRC
 
 #+caption: Example plane wave defined in spherical coordinates.
+#+attr_org: :width 800
 #+attr_html: :width 100%
 #+RESULTS: planewave spherical example image
 [[file:img/exa_plane_wave_spherical.png]]
