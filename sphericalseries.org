@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-20 14:22:57 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-20 15:32:58 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -822,7 +822,7 @@ sphericalnormalisation, sphericallegendre, sphericalazimuth
 
 * Spherical Series
 ** Sphericalseries_hoa_plane
-
+   
 
 #+name: spherical series hoa planewave test
 #+BEGIN_SRC octave
@@ -941,17 +941,29 @@ function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
 #+END_SRC
 *** Interface test                                                 :internal:
 
+#+BEGIN_SRC octave
+N_order = 1;
+R_src = 1;
+vg_CAB =
+k_F = 1;
+S_norm = 'norm';
+S_type = 'complex';
+[R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
+					       vg_CAB, k_F, ...
+					       S_norm, S_type);
+
+#+END_SRC
 *** Documenation                                                     :ignore:
 #+name: sphericalseries_hoa_basis doc
 #+BEGIN_SRC org
 ,*** Syntax
-
-,*** Description
 : [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
 :                                            vg_CAB, k_F, ...
 :                                            S_norm, S_type)
  
 returns spherical basis functions R = j_n Y and S = h_n Y
+
+,*** Description
     
 ,*** Input Arguments
 
@@ -1053,3 +1065,206 @@ functions F and G. The second pair (D and G) is optional.
 
 ** sphericalseries_sfc
 * Examples
+** Plane wave
+
+Grid for space
+
+#+name: sfs_plane_test
+#+BEGIN_SRC octave :tangle sfs_plane_test.m :results output
+% Rasta
+% -------------------------------------------------------------------
+R_max = 1.4;
+C = 100; r_C     = linspace(0, R_max, C);
+A = 1;   theta_A = linspace(pi/2, pi/2, A);
+B = 100; phi_B   = linspace(0, 2*pi,    B);
+gg_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
+#+END_SRC
+
+#+RESULTS: sfs_plane_test
+
+frequency direction of plane wave
+#+BEGIN_SRC octave :tangle sfs_plane_test.m  :results output
+% ebene Welle
+% -------------------------------------------------------------------
+C_snd = 342;                       % m/s
+F     = 1;                         % Hz
+F_max = 500;                       % Hz
+F_min = 1;                         % gleichförmig unterteilt
+f_F   = linspace(F_min, F_max, F); % Frequenzen
+k_F   = -2*pi*f_F/C_snd;           % Wellenzahl
+                                   %phi   = exp(i*0.5*pi/2);            % Phase einfallende Welle
+% Vektor Einfallsrichtung
+% -------------------------------------------------------------------
+Theta_src = pi/2;
+Phi_src   = 0.3*pi/2;
+R_src     = 1.2;
+vM_src    = vector(R_src, Theta_src, Phi_src, 'spherical');
+#+END_SRC
+
+#+RESULTS:
+
+HOA approximation
+#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output
+% "echte" Quelle, nicht Winkel-begrenzt
+% -------------------------------------------------------------------
+
+% Grid in lin. angeordnete Punktevektor bringen
+vm_E = vectorgrid_vector(gg_CAB);
+
+% Wellenzahlvektoren für "echte" Lautsprecherschallfelder
+vk_F = vector_scale(k_F, vector_normalise(vM_src));
+
+% nicht-winkelbegrenzte Schallfelder eben
+P_real_EF = planewave(vm_E, vk_F);
+
+%  
+for f = 1:F
+  % umsortieren
+  P_CAB{1} = vectorgrid_reshape(P_real_EF(:,f), gg_CAB);
+end
+
+
+%% Koeffzi. der Fourier-Bessel-Reihe 
+%% -----------------------------------------------------------------
+N_order_list = [5, 10];
+S_norm = 'norm';
+S_type = 'real';
+
+for n = 1:length(N_order_list)
+  N_order = N_order_list(n);
+
+  % Eingangsmode
+  Psi_src_O = sphericalmodematrix(N_order, Theta_src, Phi_src, S_norm, S_type);
+
+  % Vorfaktor für ebene Welle
+  N_pln_O = sphericalnormalisation(N_order, 'planewave');
+
+  % HOA Koeff
+  A_pln_O = N_pln_O .* Psi_src_O;
+
+  % Druckverteilungen berechnet:
+  % -------------------------------------------------------------------
+
+  % SFC-Koeffzi.
+  C_pln_OC = sphericalseries_sfc(A_pln_O, [], r_C, inf, k_F);
+
+  % Basisfunktion zum Rasta
+  Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
+
+  % ISF im Frequenzbereich
+  P_CAB{2*n} = sphericalseries_isf(C_pln_OC, Y_OAB);
+
+  % Differenz zur idealen ebenen Welle
+  P_CAB{2*n + 1} = P_CAB{2*n} - P_CAB{1};
+
+end % N_order_list
+
+
+% malen
+% -------------------------------------------------------------------
+
+v_view = [0 90];
+c_map = colormap(badcolormap(256));
+%c_map = colormap('hot');
+b_colorbar = 0;
+b_print = 1;
+
+if ~isdir('./Bilder')
+    mkdir('./Bilder');
+end
+
+for n = 1:length(P_CAB)
+  P_CABF = P_CAB{n};
+  
+  for f = 1:F
+    figure(20); clf;
+    vectorgrid_surface(gg_CAB, squeeze((real(P_CABF(:,:,:,f)))));
+    c_minmax = max(max(max(squeeze(abs(real(P_CABF(:,:,:,f))))))) * [-1 1];
+    caxis(c_minmax);
+    colormap(c_map);
+    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
+    axis('equal');
+    grid('on');
+    view(v_view);
+    title('\Re p');
+    xlabel('x (m)');
+    ylabel('y (m)');
+    zlabel('z (m)');
+    if b_colorbar colorbar; end
+  end
+  for f = 1:F
+    figure(21); clf;
+    vectorgrid_surface(gg_CAB, squeeze((imag(P_CABF(:,:,:,f)))));
+    c_minmax = max(max(max(squeeze(abs(imag(P_CABF(:,:,:,f))))))) * [-1 1];
+    caxis(c_minmax);
+    colormap(c_map);
+    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
+    axis('equal');
+    grid('on');
+    view(v_view);
+    title('\Im p');
+    xlabel('x (m)');
+    ylabel('y (m)');
+    zlabel('z (m)');
+    if b_colorbar colorbar; end
+  end
+  for f = 1:F
+    figure(22); clf;
+    vectorgrid_surface(gg_CAB, squeeze((abs(P_CABF(:,:,:,f)))));
+    if n == 1
+      c_minmax = [0 2];
+    else
+      c_minmax = caxis;
+    end
+    caxis(c_minmax);
+    colormap(c_map);
+    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
+    axis('equal');
+    grid('on');
+    view(v_view);
+    title('|p|');
+    xlabel('x (m)');
+    ylabel('y (m)');
+    zlabel('z (m)');
+    if b_colorbar colorbar; end
+  end
+  for f = 1:F
+    figure(23); clf;
+    vectorgrid_surface(gg_CAB, squeeze((angle(P_CABF(:,:,:,f)))));
+    c_minmax = max(max(max(squeeze(angle((P_CABF(:,:,:,f))))))) * [-1 1];
+    caxis(c_minmax);
+    colormap(c_map);
+    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
+    axis('equal');
+    grid('on');
+    view(v_view);
+    title('\angle p');
+    xlabel('x (m)');
+    ylabel('y (m)');
+    zlabel('z (m)');
+    if b_colorbar colorbar; end
+  end
+
+  if b_print
+    figure(20);
+    figuresize(3, 3);
+    figurefont(6);
+    figuresave(sprintf('Bilder/ebenewelle_%i_real.pdf', n));
+    figure(21);
+    figuresize(3, 3);
+    figurefont(6);
+    figuresave(sprintf('Bilder/ebenewelle_%i_imag.pdf', n));
+    figure(22);
+    figuresize(3, 3);
+    figurefont(6);
+    figuresave(sprintf('Bilder/ebenewelle_%i_abs.pdf', n));
+    figure(23);
+    figuresize(3, 3);
+    figurefont(6);
+    figuresave(sprintf('Bilder/ebenewelle_%i_angle.pdf', n));
+  end
+  %  n
+  % input('press return');
+end
+
+#+END_SRC
