@@ -1,26 +1,29 @@
 % 1 Syntax
 % ========
 % 
-% 
-% 2 Description
-% =============
-% 
 %   ,----
-%   | [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-%   |                                            vg_CAB, k_F, ...
-%   |                                            S_norm, S_type)
+%   | C_OCFD = sphericalseries_sfc(A_OFD, B_OFD, r_C, R_src, k_F)
 %   `----
 % 
 % 
-%   returns spherical basis functions R = j_n Y and S = h_n Y
+% 2 Description
+% =============
 % 
 % 
 % 3 Input Arguments
 % =================
 % 
+%   - A_OFD - matrix of HOA coefficients
+%   - B_OFD - matrix of HOA coefficients
+%   - r_C - radius ???
+%   - R_src - source radius
+%   - k_F - vector of a wave number values for a given frequency range
+% 
 % 
 % 4 Return Values
 % ===============
+% 
+%   - C_OCFD - multi-dimensional matrix of the spherical FT coefficients
 % 
 % 
 % 5 Examples
@@ -37,6 +40,8 @@
 % 
 % 8 See Also
 % ==========
+% 
+%   sphericalbessel, sphericalhankel
 % 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
@@ -57,36 +62,36 @@
 % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
+function C_OCFD = sphericalseries_sfc(A_OFD, B_OFD, r_C, R_src, k_F)
 
-function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-                                               vg_CAB, k_F, ...
-                                               S_norm, S_type)
+  % Speicher klarmachen
+  O = size(A_OFD, 1);
+  F = size(A_OFD, 2);
+  D = size(A_OFD, 3);
+  C = length(r_C);
+  C_OCFD = zeros(O, C, F, D);
+  
+  % Wertebereich aufteilen
+  ind_ext  = find(r_C <= R_src); % exterior case
+  ind_int  = find(r_C >  R_src); % interior case
 
-  if strcmp(type(vg_CAB), 'spherical')
-    
-    [r_C, theta_A, phi_B] = grid(vg_CAB);
-    
-    ind_ext  = find(r_C <= R_src); % exterior case
-    ind_int  = find(r_C >  R_src); % interior case
-    
-    % Basisfunktionen als Summanden der inversen
-    % sph. Fouriertransformation mit den Funktionen j_n und h_n
-    % berechnet:
-    Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
-
-    if ~isempty(ind_ext)
-      j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
-      R_OCABF = sphericalseries_isfs(j_OCF, Y_OAB);
-    else
-      R_OCABF = [];
+  % entsprechende spezielle Funktionen berechnen
+  N_order = sqrt(O) - 1;
+  if ~isempty(ind_ext)
+    j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
+  end
+  if ~isempty(ind_int)
+    h_OCF = sphericalhankel(N_order, r_C(ind_int).'*k_F);
+  end
+  
+  % sph. fourier coeff. berechnet
+  for d = 1:D
+    for f = 1:F
+      for c = 1:length(ind_ext)
+        C_OCFD(:,ind_ext(c), f, d) = A_OFD(:,f,d) .* j_OCF(:,c,f);
+      end
+      for c = 1:length(ind_int)
+        C_OCFD(:,ind_int(c), f, d) = B_OFD(:,f,d) .* h_OCF(:,c,f);
+      end
     end
-
-    if ~isempty(ind_int)
-      h_OCF = sphericalhankel(N_order, r_C(ind_int).'*k_F);
-      S_OCABF = sphericalseries_isfs(h_OCF, Y_OAB);
-    else
-      S_OCABF = [];
-    end
-  else 
-    error('Vectorgrid need to be spherical (at least in a way...).');
   end

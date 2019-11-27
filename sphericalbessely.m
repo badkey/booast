@@ -1,26 +1,31 @@
 % 1 Syntax
 % ========
 % 
+%   ,----
+%   | N_sph = sphericalbessely(n, x)
+%   `----
+% 
 % 
 % 2 Description
 % =============
 % 
-%   ,----
-%   | [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-%   |                                            vg_CAB, k_F, ...
-%   |                                            S_norm, S_type)
-%   `----
-% 
-% 
-%   returns spherical basis functions R = j_n Y and S = h_n Y
+%   2nd kind Bessel function is computed for each element of x.If the
+%   input argument (element of a matrix x) is = 0, the output has a value
+%   NaN.
 % 
 % 
 % 3 Input Arguments
 % =================
 % 
+%   - n - Ambisonics order
+%   - x - matrix to return the result (should not have more than 2
+%     dimensions)
+% 
 % 
 % 4 Return Values
 % ===============
+% 
+%   - N_sph - matrix of the 2nd kind Bessel function values
 % 
 % 
 % 5 Examples
@@ -37,6 +42,8 @@
 % 
 % 8 See Also
 % ==========
+% 
+%   bessely
 % 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
@@ -58,35 +65,23 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-                                               vg_CAB, k_F, ...
-                                               S_norm, S_type)
+function N_sph = sphericalbessely(n, x)
 
-  if strcmp(type(vg_CAB), 'spherical')
-    
-    [r_C, theta_A, phi_B] = grid(vg_CAB);
-    
-    ind_ext  = find(r_C <= R_src); % exterior case
-    ind_int  = find(r_C >  R_src); % interior case
-    
-    % Basisfunktionen als Summanden der inversen
-    % sph. Fouriertransformation mit den Funktionen j_n und h_n
-    % berechnet:
-    Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
-
-    if ~isempty(ind_ext)
-      j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
-      R_OCABF = sphericalseries_isfs(j_OCF, Y_OAB);
-    else
-      R_OCABF = [];
-    end
-
-    if ~isempty(ind_int)
-      h_OCF = sphericalhankel(N_order, r_C(ind_int).'*k_F);
-      S_OCABF = sphericalseries_isfs(h_OCF, Y_OAB);
-    else
-      S_OCABF = [];
-    end
-  else 
-    error('Vectorgrid need to be spherical (at least in a way...).');
+  idx_zero = find(x == 0);
+  if length(idx_zero) ~= 0
+    disp(['sphericalneumann: found zeros in input argument: setting ' ...
+          'to NaN!']);
+    idx_zero
+    x(idx_zero) = nan;
   end
+  
+  % sph. Besselfunktion der 2. Art für pos. Arg.
+  N_sph = (pi ./ (2*abs(x))).^0.5 .* bessely(n + 0.5, abs(x));
+
+  % finde neg. Arg.
+  idx_neg = (x < 0);
+  
+  % Vorzeichen für neg. Arg. retten (vlg. Gumerov/Duraiswami Glg. 2.1.90)
+  N_sph(idx_neg) = (-1)^(n+1) * N_sph(idx_neg);
+
+  N_sph = reshape(N_sph, size(x));

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-11-01 Fr 11:37 -->
+<!-- 2019-11-24 So 22:35 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Acoustics</title>
@@ -275,20 +275,21 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orged36334">1. Acoustic Waves</a>
+<li><a href="#org6b48979">1. General information</a></li>
+<li><a href="#orgf286166">2. Acoustic Waves</a>
 <ul>
-<li><a href="#org2de7739">1.1. Planewave</a>
+<li><a href="#org75b0c87">2.1. Planewave</a>
 <ul>
-<li><a href="#org300839a">1.1.1. Syntax</a></li>
-<li><a href="#org513b1fd">1.1.2. Description</a></li>
-<li><a href="#org47428a9">1.1.3. Definition</a></li>
-<li><a href="#org5ddce79">1.1.4. Examples</a></li>
+<li><a href="#org4021b18">2.1.1. Syntax</a></li>
+<li><a href="#org0af28ab">2.1.2. Description</a></li>
+<li><a href="#orgf746aae">2.1.3. Definition</a></li>
+<li><a href="#org9030150">2.1.4. Examples</a></li>
 </ul>
 </li>
-<li><a href="#org733ee51">1.2. Sphericalwave</a>
+<li><a href="#org6be9890">2.2. Sphericalwave</a>
 <ul>
-<li><a href="#orgedc3e11">1.2.1. Function definition</a></li>
-<li><a href="#org3349e3a">1.2.2. Examples</a></li>
+<li><a href="#org8100f38">2.2.1. Function definition</a></li>
+<li><a href="#org59aaf67">2.2.2. Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -297,19 +298,29 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orged36334" class="outline-2">
-<h2 id="orged36334"><span class="section-number-2">1</span> Acoustic Waves</h2>
+<div id="outline-container-org6b48979" class="outline-2">
+<h2 id="org6b48979"><span class="section-number-2">1</span> General information</h2>
 <div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li><a href="booast.html">booast.html</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgf286166" class="outline-2">
+<h2 id="orgf286166"><span class="section-number-2">2</span> Acoustic Waves</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 The calculation of acoustic waves is greatly facilitated by
 <b>booast</b>. <i>Plane waves</i>, <i>cylindrical waves</i> and <i>spherical waves</i> are
-all defined in \(\mathcal R^3\). 
+all defined in \(\mathbb R^3\). 
 </p>
 </div>
 
-<div id="outline-container-org2de7739" class="outline-3">
-<h3 id="org2de7739"><span class="section-number-3">1.1</span> Planewave</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-org75b0c87" class="outline-3">
+<h3 id="org75b0c87"><span class="section-number-3">2.1</span> Planewave</h3>
+<div class="outline-text-3" id="text-2-1">
 <p>
 A plane wave is described by \[p(\vec r, \vec k) = \mathrm e^{\mathrm
 i \vec r^T \, \vec k}.\] The implementation using <b>booast</b> is straight
@@ -322,18 +333,18 @@ and wave number vector \(\vec k\). Both vectors may be arrays of vectors.
 </p>
 </div>
 
-<div id="outline-container-org300839a" class="outline-4">
-<h4 id="org300839a"><span class="section-number-4">1.1.1</span> Syntax</h4>
-<div class="outline-text-4" id="text-1-1-1">
+<div id="outline-container-org4021b18" class="outline-4">
+<h4 id="org4021b18"><span class="section-number-4">2.1.1</span> Syntax</h4>
+<div class="outline-text-4" id="text-2-1-1">
 <pre class="example">
 p_CABFD =  planewave(vr_CAB, vk_FD)
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org513b1fd" class="outline-4">
-<h4 id="org513b1fd"><span class="section-number-4">1.1.2</span> Description</h4>
-<div class="outline-text-4" id="text-1-1-2">
+<div id="outline-container-org0af28ab" class="outline-4">
+<h4 id="org0af28ab"><span class="section-number-4">2.1.2</span> Description</h4>
+<div class="outline-text-4" id="text-2-1-2">
 <p>
 <code>p_CABFD = planewave(vr_CAB, vk_FD)</code> returns a matrix containing
 pressure values according to a plane wave.
@@ -350,11 +361,11 @@ Accordingly, <code>p_CABFD</code> is defined for 5 dimensions.
 </div>
 </div>
 
-<div id="outline-container-org47428a9" class="outline-4">
-<h4 id="org47428a9"><span class="section-number-4">1.1.3</span> Definition</h4>
-<div class="outline-text-4" id="text-1-1-3">
+<div id="outline-container-orgf746aae" class="outline-4">
+<h4 id="orgf746aae"><span class="section-number-4">2.1.3</span> Definition</h4>
+<div class="outline-text-4" id="text-2-1-3">
 <div class="org-src-container">
-<pre class="src src-octave" id="org99d903a">  <span style="color: #0000FF;">function</span> p_CABFD <span style="color: #006FE0;">=</span>  <span style="color: #006699;">planewave</span>(vr_CAB<span style="color: #006FE0;">,</span> vk_FD)
+<pre class="src src-octave" id="orge68d918">  <span style="color: #0000FF;">function</span> p_CABFD <span style="color: #006FE0;">=</span>  <span style="color: #006699;">planewave</span>(vr_CAB<span style="color: #006FE0;">,</span> vk_FD)
     <span style="color: #8D8D84; font-style: italic;">%% allocate memory</span>
     Dim_r <span style="color: #006FE0;">=</span> size(vr_CAB)<span style="color: #006FE0;">;</span>
     Dim_k <span style="color: #006FE0;">=</span> size(vk_FD)<span style="color: #006FE0;">;</span>
@@ -379,13 +390,13 @@ Accordingly, <code>p_CABFD</code> is defined for 5 dimensions.
 </div>
 </div>
 
-<div id="outline-container-org5ddce79" class="outline-4">
-<h4 id="org5ddce79"><span class="section-number-4">1.1.4</span> Examples</h4>
-<div class="outline-text-4" id="text-1-1-4">
+<div id="outline-container-org9030150" class="outline-4">
+<h4 id="org9030150"><span class="section-number-4">2.1.4</span> Examples</h4>
+<div class="outline-text-4" id="text-2-1-4">
 </div>
 <ol class="org-ol">
-<li><a id="org2416bab"></a>Plane wave defined on cartesian coordinates<br />
-<div class="outline-text-5" id="text-1-1-4-1">
+<li><a id="org14961b4"></a>Plane wave defined on cartesian coordinates<br />
+<div class="outline-text-5" id="text-2-1-4-1">
 <p>
 A <code>vectorgrid</code> is set up using three vectors <code>x_A, x_B</code> and <code>x_C</code>. For
 visualisation, certain slices of this vectorgrid <code>g_ABC</code> are selected.
@@ -394,7 +405,7 @@ scalar arrays are shown using the <code>surface</code> command.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave" id="orgc416620">    <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
+<pre class="src src-octave" id="org84f95a0">    <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
     x_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 60)<span style="color: #006FE0;">;</span>
     y_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 30)<span style="color: #006FE0;">;</span>
     z_C <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 40)<span style="color: #006FE0;">;</span>
@@ -420,24 +431,11 @@ scalar arrays are shown using the <code>surface</code> command.
     view(30<span style="color: #006FE0;">,</span>40)<span style="color: #006FE0;">;</span>
 </pre>
 </div>
-
-
-<div class="figure">
-<p><img src="img/exa_plane_wave_cartesian.png" alt="exa_plane_wave_cartesian.png" />
-</p>
-</div>
-
-
-<div class="figure">
-<p><img src="img/exa_plane_wave_cartesian.png" alt="exa_plane_wave_cartesian.png" width="100%" />
-</p>
-<p><span class="figure-number">Figure 2: </span>Example plane wave defined in cartesian coordinates.</p>
-</div>
 </div>
 </li>
 
-<li><a id="orgc5385a3"></a>Plane wave defined on spherical coordinates<br />
-<div class="outline-text-5" id="text-1-1-4-2">
+<li><a id="org7f6fec5"></a>Plane wave defined on spherical coordinates<br />
+<div class="outline-text-5" id="text-2-1-4-2">
 <p>
 The example given above can also be calculated on a vectorgrid using
 vectors <code>r_A</code>, <code>theta_B</code>, and <code>phi_C</code> describing the axes of a
@@ -446,7 +444,7 @@ surface of a sphere, a cone, or a half circle respectively.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave" id="org2b44427">  <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
+<pre class="src src-octave" id="orgf6cbdff">  <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
   A <span style="color: #006FE0;">=</span> 30<span style="color: #006FE0;">;</span> B <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span> C <span style="color: #006FE0;">=</span> 50<span style="color: #006FE0;">;</span>
   r_A     <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> A)<span style="color: #006FE0;">;</span>
   theta_B <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> pi<span style="color: #006FE0;">,</span> B)<span style="color: #006FE0;">;</span>
@@ -456,7 +454,7 @@ surface of a sphere, a cone, or a half circle respectively.
   <span style="color: #8D8D84; font-style: italic;">%% slice some planes for visualisation</span>
   g_AB1 <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,:,</span>10)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% circle</span>
   g_A1C <span style="color: #006FE0;">=</span> g_ABC(<span style="color: #006FE0;">:,</span>10<span style="color: #006FE0;">,:</span>)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% conus</span>
-  g_1BC <span style="color: #006FE0;">=</span> g_ABC(10<span style="color: #006FE0;">,:,:</span>)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% sphere</span>
+  g_1BC <span style="color: #006FE0;">=</span> g_ABC(20<span style="color: #006FE0;">,:,:</span>)<span style="color: #006FE0;">;</span>  <span style="color: #8D8D84; font-style: italic;">% sphere</span>
 
   <span style="color: #8D8D84; font-style: italic;">%% direction/wavenumbervector of planewave</span>
   v <span style="color: #006FE0;">=</span> vector([1<span style="color: #006FE0;">,</span> 1<span style="color: #006FE0;">,</span> 0.3]<span style="color: #006FE0;">',</span> <span style="color: #008000;">'cartesian'</span>)<span style="color: #006FE0;">;</span>
@@ -478,7 +476,7 @@ surface of a sphere, a cone, or a half circle respectively.
 <div class="figure">
 <p><img src="img/exa_plane_wave_spherical.png" alt="exa_plane_wave_spherical.png" width="100%" />
 </p>
-<p><span class="figure-number">Figure 3: </span>Example plane wave defined in spherical coordinates.</p>
+<p><span class="figure-number">Figure 1: </span>Example plane wave defined in spherical coordinates.</p>
 </div>
 </div>
 </li>
@@ -486,9 +484,9 @@ surface of a sphere, a cone, or a half circle respectively.
 </div>
 </div>
 
-<div id="outline-container-org733ee51" class="outline-3">
-<h3 id="org733ee51"><span class="section-number-3">1.2</span> Sphericalwave</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-org6be9890" class="outline-3">
+<h3 id="org6be9890"><span class="section-number-3">2.2</span> Sphericalwave</h3>
+<div class="outline-text-3" id="text-2-2">
 <p>
 Die \textsc{Green}sche Funktion \(G(\mathbf r|\mathbf r_s)\) für das
 Freifeld beschreibt das Schallfeld für eine Punktquelle an der Stelle
@@ -506,11 +504,11 @@ Pressure \(p\) is then
 </p>
 </div>
 
-<div id="outline-container-orgedc3e11" class="outline-4">
-<h4 id="orgedc3e11"><span class="section-number-4">1.2.1</span> Function definition</h4>
-<div class="outline-text-4" id="text-1-2-1">
+<div id="outline-container-org8100f38" class="outline-4">
+<h4 id="org8100f38"><span class="section-number-4">2.2.1</span> Function definition</h4>
+<div class="outline-text-4" id="text-2-2-1">
 <div class="org-src-container">
-<pre class="src src-octave" id="org2497737">  <span style="color: #0000FF;">function</span> p_CABSF <span style="color: #006FE0;">=</span>  <span style="color: #006699;">sphericalwave</span>(vr_CAB<span style="color: #006FE0;">,</span> vs_S<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z0)
+<pre class="src src-octave" id="org22ea804">  <span style="color: #0000FF;">function</span> p_CABSF <span style="color: #006FE0;">=</span>  <span style="color: #006699;">sphericalwave</span>(vr_CAB<span style="color: #006FE0;">,</span> vs_S<span style="color: #006FE0;">,</span> k_F<span style="color: #006FE0;">,</span> Z0)
 
     <span style="color: #8D8D84; font-style: italic;">%% detect input args</span>
     <span style="color: #0000FF;">if</span> nargin <span style="color: #006FE0;">&lt;</span> 4
@@ -553,15 +551,15 @@ Pressure \(p\) is then
 </div>
 </div>
 
-<div id="outline-container-org3349e3a" class="outline-4">
-<h4 id="org3349e3a"><span class="section-number-4">1.2.2</span> Examples</h4>
-<div class="outline-text-4" id="text-1-2-2">
+<div id="outline-container-org59aaf67" class="outline-4">
+<h4 id="org59aaf67"><span class="section-number-4">2.2.2</span> Examples</h4>
+<div class="outline-text-4" id="text-2-2-2">
 </div>
 <ol class="org-ol">
-<li><a id="org3eec0c2"></a>Simple cartesian grid<br />
-<div class="outline-text-5" id="text-1-2-2-1">
+<li><a id="org9ae4348"></a>Simple cartesian grid<br />
+<div class="outline-text-5" id="text-2-2-2-1">
 <div class="org-src-container">
-<pre class="src src-octave" id="org947a5e4">  <span style="color: #8D8D84; font-style: italic;">%% Beobachtungspunkte</span>
+<pre class="src src-octave" id="orgbbe2764">  <span style="color: #8D8D84; font-style: italic;">%% Beobachtungspunkte</span>
   X <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span>  x_X <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> X)<span style="color: #006FE0;">;</span>
   Y <span style="color: #006FE0;">=</span> 40<span style="color: #006FE0;">;</span>  y_Y <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> Y)<span style="color: #006FE0;">;</span>
   Z <span style="color: #006FE0;">=</span> 1<span style="color: #006FE0;">;</span>   z_Z <span style="color: #006FE0;">=</span> 0<span style="color: #006FE0;">;</span>
@@ -592,19 +590,19 @@ Pressure \(p\) is then
 <div class="figure">
 <p><img src="img/spherical_test.png" alt="spherical_test.png" />
 </p>
-<p><span class="figure-number">Figure 4: </span>Spherical waves calculated on a cartesian grid.</p>
+<p><span class="figure-number">Figure 2: </span>Spherical waves calculated on a cartesian grid.</p>
 </div>
 </div>
 </li>
 
-<li><a id="org94d3303"></a>Example using several planes<br />
-<div class="outline-text-5" id="text-1-2-2-2">
+<li><a id="orgc2399f3"></a>Example using several planes<br />
+<div class="outline-text-5" id="text-2-2-2-2">
 <p>
 Here we go again
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave" id="org57fc999">  <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
+<pre class="src src-octave" id="orgbb8350b">  <span style="color: #8D8D84; font-style: italic;">%% create observation grid (cartesian volume)</span>
   x_A <span style="color: #006FE0;">=</span> linspace(0<span style="color: #006FE0;">,</span> 10<span style="color: #006FE0;">,</span> 50)<span style="color: #006FE0;">;</span>
   y_B <span style="color: #006FE0;">=</span> x_A<span style="color: #006FE0;">;</span>
   z_C <span style="color: #006FE0;">=</span> x_A<span style="color: #006FE0;">;</span>
@@ -641,7 +639,7 @@ Here we go again
 <div class="figure">
 <p><img src="img/spherical_3plane_test.png" alt="spherical_3plane_test.png" />
 </p>
-<p><span class="figure-number">Figure 5: </span>Spherical waves on 3 planes defined in cartesian coordinates.</p>
+<p><span class="figure-number">Figure 3: </span>Spherical waves on 3 planes defined in cartesian coordinates.</p>
 </div>
 </div>
 </li>
@@ -651,9 +649,9 @@ Here we go again
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-11-23 Do&gt; </span></span> Rev. Time-stamp: <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-11-01 Fr 11:37&gt;</span></span></p>
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-11-23 Do&gt; </span></span> Rev. Time-stamp: <span class="timestamp-wrapper"><span class="timestamp">&lt;2019-11-24 So 22:35&gt;</span></span></p>
 <p class="author">Author: Johann-Markus Batke</p>
-<p class="date">Created: 2019-11-01 Fr 11:37</p>
+<p class="date">Created: 2019-11-24 So 22:35</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

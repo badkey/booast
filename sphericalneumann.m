@@ -1,26 +1,32 @@
 % 1 Syntax
 % ========
 % 
+%   ,----
+%   | N_sph_OCF = sphericalneumann(N_order, x_CF)
+%   `----
+% 
 % 
 % 2 Description
 % =============
 % 
-%   ,----
-%   | [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-%   |                                            vg_CAB, k_F, ...
-%   |                                            S_norm, S_type)
-%   `----
-% 
-% 
-%   returns spherical basis functions R = j_n Y and S = h_n Y
+%   First derivative of the 2nd kind Bessel function is computed for each
+%   element of x.If the input argument (element of a matrix x) is = 0, the
+%   output has a value NaN.
 % 
 % 
 % 3 Input Arguments
 % =================
 % 
+%   - N_order - Ambisonics order
+%   - x_CF - matrix to return the result (should not have more than 2
+%     dimensions)
+% 
 % 
 % 4 Return Values
 % ===============
+% 
+%   - N_sph_OCF - multi-dimensional matrix with Neumann function
+%     calculation results
 % 
 % 
 % 5 Examples
@@ -37,6 +43,8 @@
 % 
 % 8 See Also
 % ==========
+% 
+%   sphericalbessely
 % 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
@@ -57,36 +65,21 @@
 % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
+function N_sph_OCF = sphericalneumann(N_order, x_CF)
 
-function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-                                               vg_CAB, k_F, ...
-                                               S_norm, S_type)
+  if length(size(x_CF)) > 2
+    error('Input argument must not have more than 2 dimensions.');
+  end
 
-  if strcmp(type(vg_CAB), 'spherical')
-    
-    [r_C, theta_A, phi_B] = grid(vg_CAB);
-    
-    ind_ext  = find(r_C <= R_src); % exterior case
-    ind_int  = find(r_C >  R_src); % interior case
-    
-    % Basisfunktionen als Summanden der inversen
-    % sph. Fouriertransformation mit den Funktionen j_n und h_n
-    % berechnet:
-    Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
+  % Speicher
+  O = (N_order+1)^2;
+  C = size(x_CF, 1);
+  F = size(x_CF, 2);
+  N_sph_OCF = zeros(O, C, F);
 
-    if ~isempty(ind_ext)
-      j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
-      R_OCABF = sphericalseries_isfs(j_OCF, Y_OAB);
-    else
-      R_OCABF = [];
+  for n = 0:N_order
+    N_CF = sphericalbessely(n, x_CF);
+    for m = -n:n
+      N_sph_OCF(n^2+n+m+1, :, :) = N_CF;
     end
-
-    if ~isempty(ind_int)
-      h_OCF = sphericalhankel(N_order, r_C(ind_int).'*k_F);
-      S_OCABF = sphericalseries_isfs(h_OCF, Y_OAB);
-    else
-      S_OCABF = [];
-    end
-  else 
-    error('Vectorgrid need to be spherical (at least in a way...).');
   end

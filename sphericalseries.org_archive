@@ -1,0 +1,22 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/jbatke/Version/Booast-github/sphericalseries.org
+
+
+* Interface test                                                   :internal:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2019-11-24 So 13:24
+  :ARCHIVE_FILE: ~/Version/Booast-github/sphericalseries.org
+  :ARCHIVE_OLPATH: Spherical Fourier Transform/sphericalseries_isf
+  :ARCHIVE_CATEGORY: sphericalseries
+  :END:
+#+BEGIN_SRC octave
+f_OCF = ones(1, 1, 1);
+Y_OAB = ones(1, 1, 1);
+F_CABF = sphericalseries_isf(f_OCF, Y_OAB)
+ans = size(F_CABF)
+#+END_SRC
+
+#+RESULTS:
+

@@ -1,26 +1,38 @@
 % 1 Syntax
 % ========
 % 
+%   ,----
+%   | Psi_OL = sphericalmodematrix(N_order, theta_L, phi_L, S_norm, S_type)
+%   `----
+% 
+% 
+% 
+%   % $Id$
+% 
 % 
 % 2 Description
 % =============
 % 
-%   ,----
-%   | [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-%   |                                            vg_CAB, k_F, ...
-%   |                                            S_norm, S_type)
-%   `----
-% 
-% 
-%   returns spherical basis functions R = j_n Y and S = h_n Y
+%   sphericalmodematrix - returns Ambisonics complex conjugate values
 % 
 % 
 % 3 Input Arguments
 % =================
 % 
+%   - N_order - Ambisonics order
+%   - theta_L - vector representing the calculation range of inclination
+%     theta
+%   - phi_L - vector representing the calculation range of azimuth phi
+%   - S_norm - string with type of normalization: 'norm' - fully
+%     normalized; 'N3D'- normalized; 'sch0' or 'SN3D'- seminormalazed
+%     'sch1'- Schmidt-Semi-normalized (Matlab) 'sconv' - norm. over all
+%     spherical convolutions 'planewave_impinging' - norm. for plane waves
+% 
 % 
 % 4 Return Values
 % ===============
+% 
+%   - Psi_OL - matrix of complex conjugate spherical harmonics values
 % 
 % 
 % 5 Examples
@@ -37,6 +49,8 @@
 % 
 % 8 See Also
 % ==========
+% 
+%   sphericalharmonic
 % 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
@@ -57,36 +71,24 @@
 % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
-
-function [R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-                                               vg_CAB, k_F, ...
-                                               S_norm, S_type)
-
-  if strcmp(type(vg_CAB), 'spherical')
-    
-    [r_C, theta_A, phi_B] = grid(vg_CAB);
-    
-    ind_ext  = find(r_C <= R_src); % exterior case
-    ind_int  = find(r_C >  R_src); % interior case
-    
-    % Basisfunktionen als Summanden der inversen
-    % sph. Fouriertransformation mit den Funktionen j_n und h_n
-    % berechnet:
-    Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
-
-    if ~isempty(ind_ext)
-      j_OCF = sphericalbessel(N_order, r_C(ind_ext).'*k_F);
-      R_OCABF = sphericalseries_isfs(j_OCF, Y_OAB);
-    else
-      R_OCABF = [];
-    end
-
-    if ~isempty(ind_int)
-      h_OCF = sphericalhankel(N_order, r_C(ind_int).'*k_F);
-      S_OCABF = sphericalseries_isfs(h_OCF, Y_OAB);
-    else
-      S_OCABF = [];
-    end
-  else 
-    error('Vectorgrid need to be spherical (at least in a way...).');
+function Psi_OL = sphericalmodematrix(N_order, theta_L, phi_L, S_norm, S_type)
+  if nargin < 5
+    type = 'complex';
   end
+  if nargin < 4
+    norm = 'norm';
+  end
+
+  % Normierungsfaktor
+  N_O = sphericalnormalisation(N_order, S_norm);
+  
+  % Legendrefunktionen
+  P_OL = sphericallegendre(N_order, theta_L);
+
+  % Deklinationsfunktion
+  D_OL = sphericalazimuth(N_order, phi_L, S_type);
+
+  % Kugelflächenfunktion
+  Y_OL = diag(N_O) * P_OL .* D_OL;
+
+  Psi_OL = conj(Y_OL);
