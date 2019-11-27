@@ -1,5 +1,5 @@
 #+TITLE: Acoustics
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-24 22:35:15 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-27 17:27:26 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -120,10 +120,10 @@ scalar arrays are shown using the =surface= command.
     %% slice some planes for visualisation
     g_AB1 = g_ABC(:,:,1);
     g_A1C = g_ABC(:,20,:);
-    g_1BC = g_ABC(1,:,:);
+    g_1BC = g_ABC(10,:,:);
 
     %% direction/wavenumbervector of planewave
-    v = vector([1, 0.1, 0.1]', 'cartesian');
+    v = vector([1, 1, 0.1]', 'cartesian');
     p_AB1 = planewave(vector(g_AB1), v);
     p_A1C = planewave(vector(g_A1C), v);
     p_1BC = planewave(vector(g_1BC), v);
@@ -137,6 +137,8 @@ scalar arrays are shown using the =surface= command.
     view(30,40);
 #+END_SRC
 
+#+RESULTS: planewave cartesian example
+
 #+name: planewave cartesian example image
 #+BEGIN_SRC octave :tangle planewave_cartesian_test.m :results file :exports results
     <<planewave cartesian example>>
@@ -148,6 +150,7 @@ scalar arrays are shown using the =surface= command.
 #+attr_org: :width 500
 #+attr_html: :width 100%
 #+RESULTS: planewave cartesian example image
+[[file:img/exa_plane_wave_cartesian.png]]
 
 **** Plane wave defined on spherical coordinates
 
