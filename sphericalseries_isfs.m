@@ -1,18 +1,47 @@
-% *** Syntax
+% 1 Syntax
+% ========
 % 
-% *** Description
+%   ,----
+%   | F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
+%   `----
 % 
-% *** Input Arguments
 % 
-% *** Return Values
+% 2 Description
+% =============
 % 
-% *** Examples
+%   precalculation of ISF
 % 
-% *** Tips
 % 
-% *** Alternatives
+% 3 Input Arguments
+% =================
 % 
-% *** See Also
+%   f_OCF
+%         spherical fourier series coefficient
+%   Y_OAB
+%         spherical harmonics
+% 
+% 
+% 4 Return Values
+% ===============
+% 
+%   F_OCABF
+%         intermediate result
+% 
+% 
+% 5 Examples
+% ==========
+% 
+% 
+% 6 Tips
+% ======
+% 
+% 
+% 7 Alternatives
+% ==============
+% 
+% 
+% 8 See Also
+% ==========
 % 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
@@ -34,19 +63,6 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 function F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
-% sphericalseries_isfs - inverse spherical fourier series
-%
-% F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
-%
-% INPUTS
-% f_OCF - spherical fourier series coefficient
-% Y_OAB - spherical harmonics
-%
-% OUTPUTS
-% F_OCABF - intermediate result
-%
-% DESCRIPTION
-% precalculation of ISF
 
   O = size(f_OCF, 1);
   C = size(f_OCF, 2);

@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-27 15:01:41 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-12-04 14:36:36 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -1120,7 +1120,7 @@ sphericalharmonic
 
 * Spherical Fourier Transform
 ** sphericalseries_isfs
-file:sphericalseries_isfs.m: calculates something for given argument
+file:sphericalseries_isfs.m: calculate spherical series functions summands
 
 *** Octave definition                                              :internal:
 
@@ -1128,19 +1128,6 @@ file:sphericalseries_isfs.m: calculates something for given argument
 <<sphericalseries_isfs doc[:results ascii :post octave comment(s=*this*)]()>>
 <<copyright>>
 function F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
-% sphericalseries_isfs - inverse spherical fourier series
-%
-% F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
-%
-% INPUTS
-% f_OCF - spherical fourier series coefficient
-% Y_OAB - spherical harmonics
-%
-% OUTPUTS
-% F_OCABF - intermediate result
-%
-% DESCRIPTION
-% precalculation of ISF
 
   O = size(f_OCF, 1);
   C = size(f_OCF, 2);
@@ -1166,33 +1153,34 @@ vg_CAB =
 k_F = 1;
 S_norm = 'norm';
 S_type = 'complex';
-[R_OCABF, S_OCABF] = sphericalseries_hoa_basis(N_order, R_src, ...
-					       vg_CAB, k_F, ...
-					       S_norm, S_type);
-
 #+END_SRC
 *** Documenation                                                     :ignore:
 
-    #+name: sphericalseries_isfs doc
-    #+BEGIN_SRC org
-    ,*** Syntax
+#+name: sphericalseries_isfs doc
+#+BEGIN_SRC org
+,*** Syntax
+: F_OCABF = sphericalseries_isfs(f_OCF, Y_OAB)
 
-    ,*** Description
+,*** Description
+precalculation of ISF
 
-    ,*** Input Arguments
+,*** Input Arguments
+- f_OCF :: spherical fourier series coefficient
+- Y_OAB :: spherical harmonics
 
-    ,*** Return Values
+,*** Return Values
+- F_OCABF :: intermediate result
 
-    ,*** Examples
+,*** Examples
 
-    ,*** Tips
+,*** Tips
 
-    ,*** Alternatives
+,*** Alternatives
 
-    ,*** See Also
-    #+END_SRC
+,*** See Also
+#+END_SRC
 
-    #+call: sphericalseries_isfs doc[:output html]()
+#+call: sphericalseries_isfs doc[:output html]()
 
 
 ** sphericalseries_isf
@@ -1356,7 +1344,6 @@ sphericalbessel, sphericalhankel
 #+END_SRC
 
 #+call: sphericalseries_sfc doc[:output html]()
-
 
 * Higher Order Ambisonics
 ** Sphericalseries_hoa
