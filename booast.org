@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2019-11-27 15:39:25 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2020-01-03 23:32:07 jbatke>
 #+PROPERTY: header-args:octave :noweb yes :eval export
 #+setupfile: booast.setup
 
@@ -662,7 +662,7 @@ vector, reshape
 
 **** Examples
 
- Fall: 1 Vektor, 1 Scalar, 1 Wort ;)
+     Fall: 1 Vektor, 1 Scalar, 1 Wort ;)
  #+BEGIN_SRC octave
    v = vector([1, 0, -1]', 'cartesian');
    s = 2;
@@ -672,6 +672,198 @@ vector, reshape
 
  #+RESULTS:
  | 2 | 0 | -2 |
+
+*** plot
+
+file:@vector/plot.m: 
+
+**** Octave definition                                             :internal:
+
+#+BEGIN_SRC octave :tangle @vector/plot.m
+<<plot doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+
+function plot(vpos, varargin)
+r_xyz_L = get(vpos, 'cartesian');
+plot3(r_xyz_L(1, :), ...
+      r_xyz_L(2, :), ...
+      r_xyz_L(3, :), ...
+	  varargin{1});
+#+END_SRC
+**** Interface test                                                :internal:
+#+name: plot vector test 
+#+BEGIN_SRC octave :results file :var S_file="plotvectortest.png" :tangle mist.m
+<<vectortest>>
+plot(v, '*')
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 300
+#+RESULTS: plot vector test
+[[file:plotvectortest.png]]
+
+**** Documentation                                                   :ignore:
+
+#+name: plot doc
+#+BEGIN_SRC org
+,*** Syntax
+: plot(v, '*')
+,*** Description
+plots position of v in 3D space
+,*** Input Arguments
+- v :: vector
+- s :: string like "*"
+,*** Return Values
+none
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+plot, plot3, ezplot
+#+END_SRC
+
+#+call: plot doc[:output html]()
+
+#+name: doc plot vector
+#+BEGIN_SRC octave :var S_file="img/docplotvector.png" :results file :exports both
+N_x = 10;
+M_y = 20;
+vg_NM = vectorgrid(linspace(0, 1, N_x), linspace(0, 1, M_y), 0, 'cartesian');
+v_NM = vector(vg_NM);
+plot(v_NM, '*'); xlabel('x'); ylabel('y'); zlabel('z');
+%<<save S_file>>
+#+END_SRC
+#+attr_org: :width 500
+#+RESULTS: doc plot vector
+[[file:img/docplotvector.png]]
+
+#+RESULTS:
+: 0
+
+*** rotate
+file:@vector/rotate.m: calculates something for given argument
+
+**** Octave definition                                             :internal:
+
+
+#+BEGIN_SRC octave :tangle @vector/rotate.m
+<<rotate doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function v_res_NL = rotate(v_pos_N, v_rot_L)
+
+  % get positions 
+  r_pos_xyz_N = get(v_pos_N, 'cartesian');
+
+  % preserve size
+  size_pos = size(r_pos_xyz_N); % preserve size (e.g. 3xMxL)
+  N = prod(size_pos(2:end)); % N = M*L
+  r_pos_xyz_N = reshape(r_pos_xyz_N, [3, N]);
+
+  % get rotation angles according to mathematically defined spherical coordinates
+  r_rot_rtp_L = get(v_rot_L, 'spherical');
+  L = numel(v_rot_L);
+
+  % allocate memory
+  r_res_xyz_NL = zeros(3, N, L);
+  for l = 1:L
+    r_res_xyz_NL(1:3, 1:N, l) = rotationmatrix('z', r_rot_rtp_L(3, l)) * ...
+				rotationmatrix('y', r_rot_rtp_L(2, l)) * r_pos_xyz_N;    
+  end
+  v_res_NL = vector(reshape(r_res_xyz_NL, [size_pos, L]), 'cartesian');
+
+  function R = rotationmatrix(S_axis, alpha)
+  % rotationmatrix - performs a matrix rotation in cartesian coordinates
+  %
+  % R = rotationmatrix(S_axis, alpha)
+  %
+  % INPUTS
+  % S_axis - axis with respect to which rotation should be done
+  % alpha - angle of rotation
+  %
+  % OUTPUTS
+  % R - rotated matrix
+  %
+  % DESCRIPTION
+  % The input axis of rotation must be given as ('x','y',or 'z'). 
+    if strcmp(S_axis, 'z')
+      R = [cos(alpha), -sin(alpha), 0; ...
+             sin(alpha), cos(alpha), 0; ...
+             0, 0, 1];
+  
+    elseif strcmp(S_axis, 'y')
+      R = [cos(alpha), 0, sin(alpha); ...
+             0, 1, 0; ...
+             -sin(alpha), 0, cos(alpha)];
+    
+    elseif strcmp(S_axis, 'x')
+      R = [1, 0,           0; ...
+           0, cos(alpha), -sin(alpha); ...
+           0, sin(alpha),  cos(alpha)];
+    else
+      error('Unknown rotation axis.');
+    end
+#+END_SRC
+
+**** Interface test                                                :internal:
+rotate one position
+#+BEGIN_SRC octave
+v_north = vector(0, 1, 0, 'cartesian');
+v_east = vector(0, 1, 1, 'cartesian');
+v_rotated = rotate(v_north, v_east);
+ans = get(v_rotated, 'spherical');
+#+END_SRC
+
+#+RESULTS:
+|                 1 |
+| 1.570796326794897 |
+| 3.141592653589793 |
+
+
+#+name: doc rotate vector
+#+BEGIN_SRC octave :var S_file="img/docrotatevector.png" :results file :exports both
+N_x = 9;
+M_y = 5;
+vg_NM = vectorgrid(linspace(0, 1, N_x), linspace(0, 1, M_y), 0, 'cartesian');
+v_NM = vector(vg_NM);
+v_rot_L = vector(ones(1,3), zeros(1,3), linspace(pi/2, 3/2*pi, 3), 'spherical');
+v_rot_NM = rotate(v_NM, v_rot_L);
+hold('off');
+plot(v_NM, '*'); xlabel('x'); ylabel('y'); zlabel('z');
+axis('square');
+hold('on');
+plot(v_rot_NM, '*r');
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 500
+#+RESULTS: doc rotate vector
+[[file:img/docrotatevector.png]]
+0
+
+**** Documenation                                                    :ignore:
+
+    #+name: rotate doc
+    #+BEGIN_SRC org
+    ,*** Syntax
+
+    ,*** Description
+
+    ,*** Input Arguments
+
+    ,*** Return Values
+
+    ,*** Examples
+
+    ,*** Tips
+
+    ,*** Alternatives
+
+    ,*** See Also
+    #+END_SRC
+
+    #+call: rotate doc[:output html]()
+
 
 * Vectorgrid
 =vectorgrid= creates a grid of vectors.

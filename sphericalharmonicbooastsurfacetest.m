@@ -1,8 +1,8 @@
 S_file='img/sphereharmsurf.png';
 %% spherical harmonics
 N_order = 2;
-A = 50; theta_A = linspace(0, pi, A);
-B = 150; phi_B = linspace(0, 2*pi, B);
+A = 30; theta_A = linspace(0, pi, A);
+B = 40; phi_B = linspace(0, 2*pi, B);
 S_norm = 'norm';
 S_type = 'complex';
 Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
@@ -26,6 +26,7 @@ for n = 0:N_order
     view([30 40]);
     grid('on');
     axis('equal');
+    axis('nolabel');
   end
 end
 saveas(1, S_file);

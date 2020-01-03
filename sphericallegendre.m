@@ -39,7 +39,56 @@
 %         matrix of Legendre function values
 % 
 % 
-% 5 See Also
+% 5 Examples
+% ==========
+% 
+%   Legendre functions for $n = 0, 1, 2, 3, 4, 5$ according to Figure 6.2
+%   in [williams99_fourier_acoustic] are shown by the following piece of
+%   code.
+% 
+%   ,----
+%   |    N_order = 5;
+%   |    theta_A = linspace(0, pi, 90);
+%   |    P_OA = sphericallegendre(N_order, theta_A);
+%   | 
+%   |    figure(1);
+%   |    n = 0:N_order;
+%   |    m = 0;
+%   |    o = n.^2 + n + m + 1;
+%   |    for l = 1:length(n)
+%   |      S_label{l} = sprintf('n = %i, m = %i', n(l), m);
+%   |    end
+%   |    plot(theta_A, P_OA(o,:)); xlabel('\theta'); ylabel('P_{n}(\theta)'); legend(S_label);
+%   |    S_file = 'img/legendrefigure62.png'; saveas(1, S_file);
+%   |    ans = S_file;
+%   `----
+% 
+%   <file:img/legendrefigure62.png>
+% 
+%   Legendre functions for $n = 1, 2, 3, 4, 5, 6$ according to Figure 6.3
+%   in [williams99_fourier_acoustic] are shown by the following piece of
+%   code.
+% 
+%   ,----
+%   |    N_order = 6;
+%   |    theta_A = linspace(0, pi, 90);
+%   |    P_OA = sphericallegendre(N_order, theta_A);
+%   | 
+%   |    figure(1);
+%   |    n = 1:N_order;
+%   |    m = 1;
+%   |    o = n.^2 + n + m + 1;
+%   |    for l = 1:length(n)
+%   |      S_label{l} = sprintf('n = %i, m = %i', n(l), m);
+%   |    end
+%   |    plot(theta_A, P_OA(o,:)); xlabel('\theta'); ylabel('P_{n}^m(\theta)'); legend(S_label);
+%   |    S_file = 'img/legendrefigure63.png'; saveas(1, S_file);
+%   |    ans = S_file;
+%   `----
+%   <file:img/legendrefigure63.png>
+% 
+% 
+% 6 See Also
 % ==========
 % 
 %   legendre
@@ -72,15 +121,14 @@
    Q_OA = zeros(O, A);   % Legendre polynom 2. art
   
    for n = 0:N_order % order index
-     % hier keine Normierung verwendet, stattdessen sphericalnormalisation
      % legendre polynomial includes the (-1)^m term
      P_QA = legendre(n, cos(theta_A));
      % size: (n+1)xA
-     % P_n^m(cos(theta_A)) ist in Zeile m+1; m = 0..n
+     % P_n^m(cos(theta_A)) is row m+1; m = 0..n
      % see: http://www.mathworks.com/help/techdoc/ref/legendre.html
      % P_n^m(x) = (-1)^m (1-x^2)^{m/2} \frac{\mathrm d^m}{\mathrm d x^m} P_n(x).
     
-     % Indizes in der Koeffzi.-Pyramide links/mitte/rechts
+     % Indices triangle shaped left, mid, right
      o_l = n^2+1;     % 1 + ACN(n, m=-n); ACN(n, m) = n*(n+1) + m;
      o_m = n^2+n+1;   % 1 + ACN(n, m=0)
      o_r = n^2+2*n+1; % 1 + ACN(n, m=+n)

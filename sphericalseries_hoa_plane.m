@@ -1,46 +1,66 @@
-% *** Syntax
-% ,----
-% | A_OFD = sphericalseries_hoa_plane(N_order, theta_D, phi_D, S_norm, S_type, F, psi_D)
-% `----
+% 1 Syntax
+% ========
+% 
+%   ,----
+%   | A_OFD = sphericalseries_hoa_plane(N_order, theta_D, phi_D, S_norm, S_type, F, psi_D)
+%   `----
 % 
 % 
-% *** Description calculates plane wave coefficients $A$ for a HOA
-% representation.
+% 2 Description
+% =============
 % 
-% *** Input Arguments
-% N_order
-%       Ambisonics order
-% theta_D
-%       vector representing the calculation range of inclination theta
-% phi_D
-%       vector representing the calculation range of azimuth phi
-% S_norm
-%       string with type of normalization:
-%        'norm'                 fully normalized;                     
-%        'N3D'                  normalized;                           
-%        'sch0' or 'SN3D'       seminormalazed                        
-%        'sch1'                 Schmidt-Semi-normalized (Matlab)      
-%        'sconv'                norm. over all spherical convolutions 
-%        'planewave_impinging'  norm. for plane waves                 
-% S_type
-%       type of the spherical harmonic: 'real', 'real_signed',
-%       'real_unsigned' or 'complex'
-% F
-%       number of frequency bins (having all the same value)
-% psi_D
-%       weights for D input direction (optional argument)
+%   calculates plane wave coefficients $A$ for a HOA representation.
 % 
-% *** Return Values
-% A_OFD
-%       matrix of HOA coefficients
 % 
-% *** Examples
+% 3 Input Arguments
+% =================
 % 
-% *** Tips
+%   N_order
+%         Ambisonics order
+%   theta_D
+%         vector representing the calculation range of inclination theta
+%   phi_D
+%         vector representing the calculation range of azimuth phi
+%   S_norm
+%         string with type of normalization:
+%          'norm'                 fully normalized;                     
+%          'N3D'                  normalized;                           
+%          'sch0' or 'SN3D'       seminormalazed                        
+%          'sch1'                 Schmidt-Semi-normalized (Matlab)      
+%          'sconv'                norm. over all spherical convolutions 
+%          'planewave_impinging'  norm. for plane waves                 
+%   S_type
+%         type of the spherical harmonic: 'real', 'real_signed',
+%         'real_unsigned' or 'complex'
+%   F
+%         number of frequency bins (having all the same value)
+%   psi_D
+%         weights for D input direction (optional argument)
 % 
-% *** Alternatives
 % 
-% *** See Also sphericalnormalisation, sphericalmodematrix
+% 4 Return Values
+% ===============
+% 
+%   A_OFD
+%         matrix of HOA coefficients
+% 
+% 
+% 5 Examples
+% ==========
+% 
+% 
+% 6 Tips
+% ======
+% 
+% 
+% 7 Alternatives
+% ==============
+% 
+% 
+% 8 See Also
+% ==========
+% 
+%   sphericalnormalisation, sphericalmodematrix
 % 
 % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 

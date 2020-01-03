@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-12-04 14:36:36 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-01-03 12:18:15 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -17,6 +17,7 @@ This is all about Higher Order Ambisonics.
 
 We need to implement some math.
 * Spherical Mathematics
+
 ** Fourier Bessel Series
 Spherical Series provides means to calculate the "Fourier Bessel
 Series".  The form of this series is
@@ -56,7 +57,17 @@ Y_{n}^{m}(\theta, \phi)$ is combined to basefunction $S_n^m(r, \theta,
 
 ** Spherical Fourier Transform
 
-Combination of $A_{n}^{m}(k)$ and $j_n(kr)$ results in 
+The *inverse spherical Fourier Transform* is defined as
+\begin{equation}
+  \label{eq:isfs}
+  P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
+  P_{n}^{m}(k,r) 
+  Y_{n}^{m}(\theta, \phi).
+\end{equation}
+as found in cite:williams99_fourier_acoustic p. 208 equation (6.96). 
+
+Combination of $A_{n}^{m}(k)$ and $j_n(kr)$ results in Fourier
+coefficients used in the inverse transform
 \begin{equation}
   \label{eq:sfs}
   P(r, \theta, \phi, k) = \sum_{n = 0}^{\infty} \sum_{m = -n}^{n} 
@@ -583,15 +594,14 @@ file:sphericallegendre.m: calculates spherical Legendre functions
    Q_OA = zeros(O, A);   % Legendre polynom 2. art
   
    for n = 0:N_order % order index
-     % hier keine Normierung verwendet, stattdessen sphericalnormalisation
      % legendre polynomial includes the (-1)^m term
      P_QA = legendre(n, cos(theta_A));
      % size: (n+1)xA
-     % P_n^m(cos(theta_A)) ist in Zeile m+1; m = 0..n
+     % P_n^m(cos(theta_A)) is row m+1; m = 0..n
      % see: http://www.mathworks.com/help/techdoc/ref/legendre.html
      % P_n^m(x) = (-1)^m (1-x^2)^{m/2} \frac{\mathrm d^m}{\mathrm d x^m} P_n(x).
     
-     % Indizes in der Koeffzi.-Pyramide links/mitte/rechts
+     % Indices triangle shaped left, mid, right
      o_l = n^2+1;     % 1 + ACN(n, m=-n); ACN(n, m) = n*(n+1) + m;
      o_m = n^2+n+1;   % 1 + ACN(n, m=0)
      o_r = n^2+2*n+1; % 1 + ACN(n, m=+n)
@@ -608,22 +618,23 @@ file:sphericallegendre.m: calculates spherical Legendre functions
 #+END_SRC
 
 *** Interface test                                                 :internal:
- #+name: sphericallegendre test
- #+BEGIN_SRC octave :results file
-   % Legendrefunktionen
+#+name: sphericallegendre test
+#+BEGIN_SRC octave :results file
    N_order = 2;
    theta_A = linspace(0, pi, 90);
    P_OA = sphericallegendre(N_order, theta_A);
    figure(1);
-   plot(P_OA.'); xlabel('\theta'); ylabel('P_{n}(\theta)')
+   plot(theta_A, P_OA.'); xlabel('\theta'); ylabel('P_{n}(\theta)')
    S_file = 'img/legendre.png'; saveas(1, S_file);
    ans = S_file;
- #+END_SRC
- #+attr_org: :width 500
- #+RESULTS: sphericallegendre test
- [[file:img/legendre.png]]
+#+END_SRC
+#+attr_org: :width 600
+#+RESULTS: sphericallegendre test
+[[file:img/legendre.png]]
 
 *** Documenation                                                     :ignore:
+
+
 #+name: sphericallegendre doc
 #+BEGIN_SRC org
 ,*** Syntax
@@ -652,6 +663,59 @@ equivalent to (using legendre polynomial notation without Condon-Shortley phase)
 ,*** Return Values
 
 - P_OA :: matrix of Legendre function values
+
+,*** Examples
+Legendre functions for $n = 0, 1, 2, 3, 4, 5$ according to Figure 6.2
+in cite:williams99_fourier_acoustic are shown by the following piece
+of code.
+
+,#+name: sphericallegendre figure 6.2 
+,#+BEGIN_SRC octave :results file :exports both
+   N_order = 5;
+   theta_A = linspace(0, pi, 90);
+   P_OA = sphericallegendre(N_order, theta_A);
+
+   figure(1);
+   n = 0:N_order;
+   m = 0;
+   o = n.^2 + n + m + 1;
+   for l = 1:length(n)
+     S_label{l} = sprintf('n = %i, m = %i', n(l), m);
+   end
+   plot(theta_A, P_OA(o,:)); xlabel('\theta'); ylabel('P_{n}(\theta)'); legend(S_label);
+   S_file = 'img/legendrefigure62.png'; saveas(1, S_file);
+   ans = S_file;
+,#+END_SRC
+
+,#+attr_org: :width 600
+,#+caption: Legendre functions for $n = 0, 1, 2, 3, 4, 5$ and $m=0$.
+,#+RESULTS: sphericallegendre figure 6.2
+[[file:img/legendrefigure62.png]]
+
+Legendre functions for $n = 1, 2, 3, 4, 5, 6$ according to Figure 6.3
+in cite:williams99_fourier_acoustic are shown by the following piece
+of code.
+
+,#+name: sphericallegendre figure 6.3
+,#+BEGIN_SRC octave :results file :exports both
+   N_order = 6;
+   theta_A = linspace(0, pi, 90);
+   P_OA = sphericallegendre(N_order, theta_A);
+
+   figure(1);
+   n = 1:N_order;
+   m = 1;
+   o = n.^2 + n + m + 1;
+   for l = 1:length(n)
+     S_label{l} = sprintf('n = %i, m = %i', n(l), m);
+   end
+   plot(theta_A, P_OA(o,:)); xlabel('\theta'); ylabel('P_{n}^m(\theta)'); legend(S_label);
+   S_file = 'img/legendrefigure63.png'; saveas(1, S_file);
+   ans = S_file;
+,#+END_SRC
+,#+attr_org: :width 600
+,#+RESULTS: sphericallegendre figure 6.3
+[[file:img/legendrefigure63.png]]
 
 ,*** See Also
 legendre 
@@ -986,13 +1050,13 @@ m = 1) after e.g. Poletti.
 
 *** Examples
  #+name: sphericalharmonic booast surface test
- #+BEGIN_SRC octave :tangle sphericalharmonicbooastsurfacetest.m :var S_file="img/sphereharmsurf.png" :results file
+ #+BEGIN_SRC octave :tangle sphericalharmonicbooastsurfacetest.m :var S_file="img/sphereharmsurf.png" :results file :exports results
 %% spherical harmonics
 N_order = 2;
-A = 50; theta_A = linspace(0, pi, A);
-B = 150; phi_B = linspace(0, 2*pi, B);
+A = 30; theta_A = linspace(0, pi, A);
+B = 40; phi_B = linspace(0, 2*pi, B);
 S_norm = 'norm';
-S_type = 'complex';
+S_type = 'real';
 Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
 
 %% Vectorgrid for a unitsphere
@@ -1010,17 +1074,18 @@ for n = 0:N_order
     xlabel('x');
     ylabel('y');
     zlabel('z');
-    title(sprintf('|Re Y| n = %i, m = %i', n, m));
+    title(sprintf('n = %i, m = %i', n, m));
     view([30 40]);
     grid('on');
     axis('equal');
+    axis('nolabel');
   end
 end
 <<save S_file>>
 #+END_SRC
 
 #+caption: Spherical harmonic functions shown as functions of the radius.
-#+attr_org: :width 500
+#+attr_org: :width 800
 #+RESULTS: sphericalharmonic booast surface test
 [[file:img/sphereharmsurf.png]]
 
