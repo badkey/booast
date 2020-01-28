@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2020-01-03 23:32:07 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2020-01-04 23:31:09 jbatke>
 #+PROPERTY: header-args:octave :noweb yes :eval export
 #+setupfile: booast.setup
 
@@ -43,7 +43,7 @@ documentation.
 
 * Vector
 
-A new class vector is defined. It servers to handle 3-dimensional
+A new class vector is defined. It serves to handle 3-dimensional
 information using mathematical vectors or matrizes of vectors.
 
 ** Class
@@ -747,7 +747,6 @@ file:@vector/rotate.m: calculates something for given argument
 
 **** Octave definition                                             :internal:
 
-
 #+BEGIN_SRC octave :tangle @vector/rotate.m
 <<rotate doc[:results ascii :post octave comment(s=*this*)]()>>
 <<copyright>>
@@ -863,6 +862,95 @@ plot(v_rot_NM, '*r');
     #+END_SRC
 
     #+call: rotate doc[:output html]()
+
+*** translate
+file:@vector/translate.m: calculates something for given argument
+
+
+**** Octave definition                                             :internal:
+
+
+#+BEGIN_SRC octave :tangle @vector/translate.m
+<<@vector/translate doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function v_res_NL = translate(v_pos_N, v_trans_L)
+  % get positions 
+  r_pos_xyz_N = get(v_pos_N, 'cartesian');
+
+  % preserve size
+  size_pos = size(r_pos_xyz_N); % preserve size (e.g. 3xMxL)
+  N = prod(size_pos(2:end)); % N = M*L
+  r_pos_xyz_N = reshape(r_pos_xyz_N, [3, N]);
+
+  % get rotation angles according to mathematically defined spherical coordinates
+  r_trans_xyz_L = get(v_trans_L, 'cartesian');
+  L = numel(v_trans_L);
+
+  % allocate memory
+  r_res_xyz_NL = zeros(3, N, L);
+  for l = 1:L
+    r_res_xyz_NL(1:3, 1:N, l) = r_pos_xyz_N + r_trans_xyz_L(:,l) * ones(1, N);
+  end
+  v_res_NL = vector(reshape(r_res_xyz_NL, [size_pos, L]), 'cartesian');
+
+#+END_SRC
+
+**** Interface test                                                :internal:
+translate one position
+#+BEGIN_SRC octave
+v_1 = vector(0, 1, 0, 'cartesian');
+v_dir = vector(1, 0, 0, 'cartesian');
+v_translated = translate(v_1, v_dir);
+ans = get(v_translated, 'cartesian');
+#+END_SRC
+
+#+RESULTS:
+| 1 |
+| 1 |
+| 0 |
+
+
+**** Documenation                                                    :ignore:
+
+#+name: doc translate vector
+#+BEGIN_SRC octave :var S_file="img/doctranslatevector.png" :results file :exports both
+N_x = 9; M_y = 5; 
+vg_NM = vectorgrid(linspace(0, 1, N_x), linspace(0, 1, M_y), 0, 'cartesian');
+v_NM = vector(vg_NM);
+v_trans_L = vector(1:3, 1:3, 1:3, 'cartesian');
+v_trans_NM = translate(v_NM, v_trans_L);
+hold('off');
+plot(v_NM, '*'); xlabel('x'); ylabel('y'); zlabel('z');
+axis('square');
+hold('on');
+plot(v_trans_NM, '*r');
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 500
+#+RESULTS: doc translate vector
+[[file:img/doctranslatevector.png]]
+
+
+#+name: @vector/translate doc
+#+BEGIN_SRC org
+,*** Syntax
+
+,*** Description
+
+,*** Input Arguments
+
+,*** Return Values
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+#+END_SRC
+
+#+call: @vector/translate doc[:output html]()
 
 
 * Vectorgrid
@@ -1306,8 +1394,8 @@ Total is 35 elements using 274 bytes
 
 *** reshape
 **** Definition                                                    :internal:
-get() macht immer ein reshape. Um das klar sichtbar zu machen, hier
-die Schnittstellenfunktion:
+get() always shapes the output of the matrix when generating the data
+from a vectorgrid. Therefore, the function =reshape()= is identical to =get()=.
 #+name: vectorgrid reshape
 #+BEGIN_SRC octave :tangle @vectorgrid/reshape.m
   function [g_reshaped, S_type] = reshape(g, shape)
@@ -1361,7 +1449,7 @@ function [g1, g2, g3] = grid(st)
 
 Transform a vectorgrid to a meshgrid.
 
-*WARNING* meshgrid is restricted to 3D application for the time being!
+*HINT* meshgrid is restricted to 3D application for the time being!
 
 #+name: vectorgrid mesgrid
 #+BEGIN_SRC octave :tangle @vectorgrid/meshgrid.m

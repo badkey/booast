@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-01-03 12:18:15 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-01-04 23:31:12 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -302,7 +302,6 @@ bessely
 
 #+call: sphericalbessely doc[:output html]()
 
-
 ** sphericalneumann
 
 file:sphericalneumann.m: 2nd kind Bessel function for Ambisonics
@@ -380,7 +379,6 @@ sphericalbessely
 
 #+call: sphericalneumann doc[:output html]()
 
-
 ** sphericalhankel
 file:sphericalhankel.m: returns the Bessel function of the 3rd kind (Hankel function)
 
@@ -439,7 +437,6 @@ sphericalbessel, sphericalneumann
 #+END_SRC
 
 #+call: sphericalhankel doc[:output html]()
-
 
 ** sphericalnormalisation
 
@@ -1093,7 +1090,6 @@ end
 *** Alternatives
 *** See Also
 sphericalnormalisation, sphericallegendre, sphericalazimuth
-
 
 ** sphericalmodematrix
 file:sphericalmodematrix.m: calculates something for given argument
