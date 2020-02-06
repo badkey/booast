@@ -1,5 +1,5 @@
 #+TITLE: Acoustics
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2019-11-27 17:27:26 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-02-06 12:19:40 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -20,7 +20,80 @@
 * General information
 - file:booast.org
 
+* Velocity
 
+The velocity of a soundfield is described by a vector. If described
+using spherical coordiates, often the radial component is
+relevant. The function =radial_weight= is a helper function to
+calculate the radial portion of a soundfield when a plane wave
+pressure is given.
+
+#+BEGIN_SRC octave :tangle radial_weight.m
+function G_DL = radial_weight(vk_D, vr_dir_L)
+% radial_weight - 
+%
+% G_D = radial_weight(vk_D, vr_dir)
+%
+% INPUTS
+% vk_D - vector object containing direction values
+% vr_dir -  vector with spatial direction/orientation of receiver
+%
+% OUTPUTS
+% G_D - matrix
+%
+% DESCRIPTION
+% 
+%
+
+  %% unit vector 
+  vr_dir_L = normalize(vr_dir_L);
+  r_dir_xyz_L = get(vr_dir_L, 'cartesian'); % got cartesian values
+  L = size(r_dir_xyz_L, 2);
+
+  %% directions
+  k_rtp_D = get(vk_D, 'spherical'); % got spherical values
+  D = size(k_rtp_D, 2); % direction
+
+  G_DL = zeros(D, L);
+  for l = 1:L
+    for d = 1:D
+      theta = k_rtp_D(2, d);
+      phi   = k_rtp_D(3, d);
+
+      G_DL(d, l) = ...                                  
+          (r_dir_xyz_L(1, l) * sin(theta) * cos(phi) + ...   
+           r_dir_xyz_L(2, l) * sin(theta) * sin(phi) + ...
+           r_dir_xyz_L(3, l) * cos(theta));
+    end
+  end
+#+END_SRC
+
+#+name: test radial_weight
+#+BEGIN_SRC octave :var S_file="testradialweight.png" :results file :noweb yes
+%% 2-sphere
+A = 30; theta_A = linspace(0, pi, A);
+B = 40; phi_B = linspace(0, 2*pi, B);
+vg_AB = vectorgrid(1, theta_A, phi_B, 'spherical');
+vk_D = vector(reshape(vg_AB, [A*B, 1]), 'spherical');
+
+% direction of sensor
+vr_dir = vector([1, 1, 5]', 'cartesian');
+G_D = radial_weight(vk_D, vr_dir);
+G_AB = reshape(G_D, [A, B]);
+surface(vg_AB, abs(real(G_AB')), [], 'dependendSurface');
+xlabel('x'); ylabel('y'); zlabel('z');
+axis('equal');
+grid('on');
+view([30, 40]);
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 500
+#+RESULTS: test radial_weight
+[[file:testradialweight.png]]
+
+#+RESULTS:
+
+ 
 * Acoustic Waves
 
 The calculation of acoustic waves is greatly facilitated by
