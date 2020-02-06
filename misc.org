@@ -1,0 +1,121 @@
+#+title: Miscellanious 
+#+author: Johann-Markus Batke
+
+This file contains scripts fitting nowhere else.
+
+* Positions
+
+=positions= is a script for creating a vector with a certain set of
+well defined points in space.
+
+#+name: Positional sets of points in space
+| Name          | Parameter | Description                                    |
+|---------------+-----------+------------------------------------------------|
+| soundfieldmic | n/a       | capsules of the "soundfield microphone"        |
+| circle        | N         | defines N equally spaced positions on a circle |
+| sphere        | N         | defines N equally spaced positions on a sphere |
+
+** Function definition
+create file:positions.m
+#+BEGIN_SRC octave :tangle positions.m
+function [vm, varargout] = positions(S_setup, varargin)
+  switch S_setup
+    case 'soundfieldmic'
+
+      Tilt_mic = atan(1/sqrt(2))/pi*180; % Farrar
+      Theta_L = (90 + [-1, 1, 1, -1] * Tilt_mic)* pi/180; % U  D  D  U
+      Phi_L  =  (0 + [45 -45 135 -135]) * pi/180; % FL FR BL BR
+      R_mic  = 0.0147; % Gerzon 1975
+      vm = vector(R_mic*ones(1,4), Theta_L, Phi_L, 'spherical');
+      varargout{1} = pi*ones(4, 1); % gain pi is applied to adapt the soundfields amplitude to HOA theory
+
+   case 'circle'
+      % param #1: number of loudspeakers
+      % param #2: radius
+        L_pos = varargin{1};
+        R_pos = varargin{2};
+   
+
+      r_L = R_pos * ones(1, L_pos);
+      p_L = 2*pi*([1:L_pos]-1)/L_pos;
+      t_L = pi/2 * ones(1, L_pos);
+      vm = vector(r_L, t_L, p_L, 'spherical');
+
+   case 'sphere'
+     L_pos = varargin{1};
+     S_filename = sprintf('%i.txt', L_pos);
+     if exist(S_filename, 'file')
+       nodes = load(S_filename);
+     else
+       error(sprintf('Cannot load nodes file %s. Does not exist.',...
+                     S_filename));
+     end
+     vm = vector(nodes(:,1:3).', 'cartesian'); % cart. Koord.
+     varargout{1} = nodes(:,4);
+
+    otherwise
+      error(sprintf('unknown position: %s.', S_setup));
+end
+#+END_SRC
+
+** test soundfieldmic
+#+BEGIN_SRC octave :results output
+S_setup = 'soundfieldmic';
+vpos = positions(S_setup);
+get(vpos, 'spherical')
+#+END_SRC
+
+#+RESULTS:
+: ans =
+: 
+:    0.014700   0.014700   0.014700   0.014700
+:    0.955317   2.186276   2.186276   0.955317
+:    0.785398  -0.785398   2.356194  -2.356194
+: 
+
+
+#+name: plot soundfield
+#+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_soundfield.png"
+S_setup = 'soundfieldmic';
+vpos = positions(S_setup);
+plot(vpos, 'o', 'markersize', 100);
+<<save S_file>>
+#+END_SRC
+
+#+attr_org: :width 300
+#+RESULTS: plot soundfield
+[[file:img/plot_soundfield.png]]
+
+** test circle
+
+#+name: plot circle
+#+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_circle.png" :tangle mist.m
+S_setup = 'circle';
+L_num = 60; 
+R_num = 1;
+vpos = positions(S_setup, L_num, R_num);
+plot(vpos, '*');
+<<save S_file>>
+#+END_SRC
+
+#+attr_org: :width 500
+#+RESULTS: plot circle
+[[file:img/plot_circle.png]]
+
+** test sphere
+points on a surface of a sphere according to Fliege and Meier, see cite:TBD
+
+#+name: plot sphere
+#+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_sphere.png" :tangle mist.m
+S_setup = 'sphere';
+L_num = 16; 
+vpos = positions(S_setup, L_num);
+plot(vpos, '*');
+axis('square');
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 500
+#+RESULTS: plot sphere
+[[file:img/plot_sphere.png]]
+
+

@@ -1,0 +1,597 @@
+#+title: Microphones
+#+author: Johann-Markus Batke
+#+date: 2020-02-07
+#+setupfile: octavetemplates.org
+#+setupfile: booast.setup
+#+exclude_tags: internal
+#+property: header-args:org               :eval export :exports results
+#+PROPERTY: header-args:octave :noweb yes :eval no-export
+
+Simulation of microphone capsules and microphone arrays.
+
+* Microphone
+
+A microphone capsule simulation build up step by step. 
+
+cite:williams99_fourier_acoustic
+
+
+First we create a sampling grid for the diaphragm.
+#+name: setup sampling area
+#+BEGIN_SRC octave 
+if ~exist('R_disk')
+  R_disk = 0.006;
+end
+if ~exist('N_disk')
+  N_disk = 10;
+end
+#+END_SRC
+
+#+name: calc sampling area
+#+BEGIN_SRC octave 
+vr_sam_N = positions('circle', N_disk, R_disk);
+#+END_SRC
+
+Next steps include
+1. determine microphone positions
+2. rotate and translate the sampling areas accordingly
+
+#+name: setup sampling positions
+#+BEGIN_SRC octave
+vr_mic_L = positions('soundfieldmic');
+#+END_SRC
+
+
+#+name: calc sampling positions
+#+BEGIN_SRC octave :var S_file="micpositions.png" :noweb yes :results file :var vr_mic_L = positions('soundfieldmic')
+%% mic positions
+L = numel(vr_mic_L);
+r_mic_xyz_L = get(vr_mic_L, 'cartesian');
+
+%% rotate sample points
+vr_sam_NL = rotate(vr_sam_N, vr_mic_L);
+r_sam_xyz_NL = get(vr_sam_NL, 'cartesian');
+size_mic = size(r_sam_xyz_NL); % 3xNxL
+N = size_mic(2);
+
+%% translate sample points
+for l = 1:L
+  r_sam_xyz_NL(1:3, 1:N, l) = r_sam_xyz_NL(1:3, 1:N, l) + r_mic_xyz_L(1:3, l) * ones(1, N);
+end
+vr_sam_NL = vector(r_sam_xyz_NL, 'cartesian');
+#+END_SRC
+
+Lets show the sampling points now:
+#+name: show sampling points
+#+BEGIN_SRC octave  :var N_disk = 20 S_file="micpositions.png" :noweb yes :results file 
+<<setup sampling area>>
+<<calc sampling area>>
+<<setup sampling positions>>
+<<calc sampling positions>>
+figure(1);
+plot(vr_sam_NL, '*');
+grid('on');
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 300
+#+RESULTS: show sampling points
+[[file:micpositions.png]]
+
+Setup a sound field for testing puroses, we need sound from all
+directions.
+#+name: setup sound field 
+#+BEGIN_SRC octave  :var S_file="micpositions.png" :noweb yes :results file
+%% wave numbers 
+F = 3; f_F = linspace(80, 8000, F); % Hz 
+omega_F = 2*pi*f_F; % Hz 
+C_snd = 342; % m/s 
+k_F = omega_F/C_snd; % wave number
+
+%% sound field directions, e.g. a 2-sphere
+A = 30; theta_A = linspace(0, pi, A);
+B = 40; phi_B = linspace(0, 2*pi, B);
+vg_AB = vectorgrid(1, theta_A, phi_B, 'spherical');
+vk_D = vector(reshape(vg_AB, [A*B, 1]), 'spherical');
+D = numel(vk_D);
+#+END_SRC
+
+create a sound field as a plane wave
+#+name: calc sound field
+#+BEGIN_SRC octave
+p_sam_NLFD = planewave(vr_sam_NL, scale(k_F, vk_D));
+#+END_SRC
+
+Now we need to
+- capture sound field pressure
+- capture sound field velocity (velocity is calculated by radial
+  weighting of pressure) which results in a cardioid microphone
+behaviour.  So we expose the sampling points to this soundfield and
+sum up all sampling points per capsule:
+
+#+name: setup capsule
+#+BEGIN_SRC octave  :var S_file="micpositions.png" :noweb yes :results file
+%% weighting for radial portion of velocity
+alpha = 0.6;
+#+END_SRC
+
+do the  microphone modelling (adding pressure and velocity)
+#+name: calc capsule
+#+BEGIN_SRC octave 
+%% add pressure and velocity
+G_DL = radial_weight(vk_D, vr_mic_L);
+for l = 1:L
+  for d = 1:size(G_DL, 1)
+    s_sam_NLFD(:,l,:,d) = (alpha + (1-alpha) * G_DL(d,l)) .* ...
+			  p_sam_NLFD(:, l, :, d);
+  end
+end
+
+%% summarise sample points, discard leading dimension 1, reshape
+p_sam_LFD = permute(sum(s_sam_NLFD, 1), [2, 3, 4, 1]);
+#+END_SRC
+
+display polar pattern
+#+name: display capsule
+#+BEGIN_SRC octave  :var S_file="micpatterns.png" :noweb yes :results file
+<<setup sampling area>>
+<<calc sampling area>>
+<<setup sampling positions>>
+<<calc sampling positions>>
+<<setup sound field>>
+<<calc sound field>>
+<<setup capsule>>
+<<calc capsule>>
+%% reorder for display
+p_sam_LFAB = reshape(p_sam_LFD, [L, F, A, B]);
+f = 2; % selected frequency for display
+
+%% prepare translated vectorgrids
+[x_AB, y_AB, z_AB] = meshgrid(vg_AB); 
+a = 0.001;
+
+figure(1); clf;
+for l = 1:L
+  %% get l th capsules signal
+  s_AB = abs(real(squeeze(p_sam_LFAB(l, f, :, :))));
+
+  subplot(2, 4, l);
+  surface(vg_AB, s_AB.', [], 'dependendSurface');
+  view([30, 40]);
+  axis('equal');
+  
+  subplot(2, 1, 2);
+  hold('on');
+	  % surface(vg_AB, abs(real(s_AB.')), [], 'dependendSurface');
+  %% translate the grid and draw surfaces
+  surface(r_mic_xyz_L(1,l) + a * s_AB .* squeeze(x_AB), ...
+	  r_mic_xyz_L(2,l) + a * s_AB .* squeeze(y_AB), ...
+	  r_mic_xyz_L(3,l) + a * s_AB .* squeeze(z_AB), ...
+          s_AB, ...
+          'EdgeColor','black');
+  view([30, 40]);
+  axis('equal');
+end
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 1200
+#+RESULTS: display capsule
+[[file:micpatterns.png]]
+
+** capsule
+summarize to function capsule
+
+#+name: def capsule
+#+BEGIN_SRC octave :tangle capsule.m :noweb yes
+function [p_sam_LFD] = capsule(vr_mic_L, k_F, vk_D, alpha, N_disk, R_disk)
+ % capsule - simulates capsules exposed to a plane wave
+ %
+<<calc sampling area>>
+<<calc sampling positions>>
+<<calc sound field>>
+<<calc capsule>>
+#+END_SRC
+
+#+name: test capsule 
+#+BEGIN_SRC octave :noweb yes :results output :tangle capsule_test.m
+<<setup sampling area>>
+<<setup sampling positions>>
+<<setup sound field>>
+<<setup capsule>>
+s_mic_LFD = capsule(vr_mic_L, k_F, vk_D, alpha, N_disk, R_disk);
+whos;
+#+END_SRC
+
+#+RESULTS: test capsule
+#+begin_example
+Variables in the current scope:
+
+   Attr Name           Size                     Bytes  Class
+   ==== ====           ====                     =====  ===== 
+        A              1x1                          8  double
+        B              1x1                          8  double
+        C_snd          1x1                          8  double
+        D              1x1                          8  double
+        F              1x1                          8  double
+        N_disk         1x1                          8  double
+        R_disk         1x1                          8  double
+        alpha          1x1                          8  double
+        ans            1x1                          8  double
+        f_F            1x3                         24  double
+        k_F            1x3                         24  double
+        omega_F        1x3                         24  double
+        phi_B          1x40                       320  double
+   c    s_mic_LFD      4x3x1200                230400  double
+        theta_A        1x30                       240  double
+        vg_AB          1x30x40                    585  vectorgrid
+        vk_D        1200x1                      28833  vector
+        vr_mic_L       4x1                        129  vector
+
+Total is 14491 elements using 260651 bytes
+
+#+end_example
+
+* Microphone arrays
+
+All important types of microphone arrays for use with HOA are
+discussed by cite:poletti05_three_dimen_surroun_sound_system.
+
+** Free-field sphere array response
+
+The free-field sphere is referred to as "open sphere".
+
+file:arrayresponse_freefield.m: calculates something for given argument
+
+*** Octave definition                                              :internal:
+
+see [[Cite:poletti05_three_dimen_surroun_sound_system]] eq. (16)
+#+BEGIN_SRC octave :tangle arrayresponse_freefield.m
+<<arrayresponse_freefield doc[:results ascii :post octave comment(s=*this*)]()>>
+<<copyright>>
+function M_OF = arrayresponse_freefield(N_order, R_mic, k_F, alpha)
+  
+J_OF   = squeeze(sphericalbessel(N_order, R_mic * k_F));
+J_r_OF = squeeze(sphericalbessel_r(N_order, R_mic * k_F));
+
+% Array-Antwort 
+M_OF = alpha * J_OF - i * (1-alpha) * J_r_OF;
+#+END_SRC
+*** Interface test                                                 :internal:
+
+#+BEGIN_SRC octave :results output
+N_order = 4;
+R_mic = 1;
+k_F = linspace(20, 20000, 200);
+alpha = 0.5;
+M_OF = arrayresponse_freefield(N_order, R_mic, k_F, alpha);
+whos
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Variables in the current scope:
+
+   Attr Name         Size                     Bytes  Class
+   ==== ====         ====                     =====  ===== 
+   c    M_OF        25x200                    80000  double
+        N_order      1x1                          8  double
+        R_mic        1x1                          8  double
+        alpha        1x1                          8  double
+        ans          1x1                          8  double
+        k_F          1x200                     1600  double
+
+Total is 5204 elements using 81632 bytes
+
+#+end_example
+
+*** Documentation                                                     :ignore:
+#+name: array response
+#+BEGIN_SRC octave :var S_file="arrayresponse_freefield.png" :results file
+N_order = 3;
+R_mic = 0.001;
+k_F = logspace(1, 5, 500);
+alpha = 0.5;
+M_OF = arrayresponse_freefield(N_order, R_mic, k_F, alpha);
+figure(1);
+semilogx(k_F, 20*log10(abs(M_OF)));
+xlim([20 20000]);
+grid('on');
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 600
+#+RESULTS: array response
+[[file:arrayresponse_freefield.png]]
+
+
+#+name: arrayresponse_freefield doc
+#+BEGIN_SRC org
+,*** Syntax
+
+,*** Description
+
+,*** Input Arguments
+
+,*** Return Values
+
+,*** Examples
+
+,*** Tips
+
+,*** Alternatives
+
+,*** See Also
+#+END_SRC
+
+#+call: arrayresponse_freefield doc[:output html]()
+
+** Rigid sphere array response
+tbd
+
+* Micarray and HOA testing
+ 
+*** former stuff
+
+see [[file:~/Kontor/HSEL/Publikation/Konferenz/Eusipco2009/mkbsp_perfmicarray.m::% :file: <test_tetramic.m>]]
+
+frequency responses [[file:~/Kontor/HSEL/Publikation/Konferenz/Eusipco2009/Vortrag/mkbsp_micarray_freqresp.m::% -*- coding: utf-8 -*-]]
+
+*** Schallfeld
+#+name: setup plane waves
+#+BEGIN_SRC octave :tangle mkexa_frequencyresponses.m :session freqresp 
+%% Vektor mit gemessenen Einfallsrichtungen
+D_dir = 5;
+Theta_D = pi/2 * ones(1, D_dir);
+Phi_D = linspace(0, pi/2, D_dir);
+vg_D = vector([ones(1, D_dir); Theta_D(1:D_dir); Phi_D(1:D_dir)], 'spherical');
+
+%% Wellenzahl Wellenzahlvektoren
+N_dft = 256;
+F_min = 10;
+F_max = 100000;
+f_N = logspace(1, 5, N_dft);
+k_N = 2*pi*f_N/342; 
+vk_ND  = scale(k_N, vg_D);
+#+END_SRC
+
+#+RESULTS: setup plane waves
+: >
+
+*** Mikrofonsignale 
+**** Tetraeder liegend
+
+#+name: setup tetrahedral mic
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
+%% Positionen der sim. Mik.-Kapselen
+L_pos = 4;
+R_pos = 0.0147;
+[vr_mic_L, G_L] = positions('sphere', L_pos);
+vr_mic_L = scale(R_pos, vr_mic_L);
+  
+%% Kapseln
+alpha = 0.667;
+N_disk = 10;
+R_disk = 0.006;
+%S_mic_LND = microphone(vr_mic_L, vk_ND, vr_mic_L, alpha, N_disk, R_disk);
+S_mic_LND =     capsule(vr_mic_L, k_N, vg_D, alpha, N_disk, R_disk);
+S_mic_dB_LND = 20*log10(abs(S_mic_LND));
+#+END_SRC
+
+#+RESULTS: setup tetrahedral mic
+: org_babel_eoe
+
+**** Soundfield Microphone
+
+#+name: setup soundfield mic
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
+L_pos = 4;
+R_pos = 0.0147;
+[vr_mic_L, G_L] = positions('soundfieldmic');
+vr_mic_L = scale(R_pos, vr_mic_L);
+  
+%% Kapseln
+alpha = 0.667;
+N_disk = 10;
+R_disk = 0.006;
+%S_mic_LND = microphone(vr_mic_L, vk_ND, vr_mic_L, alpha, N_disk, R_disk);
+clear S_mic_LND S_mic_dB_LND;
+S_mic_LND =     capsule(vr_mic_L, k_N, vg_D, alpha, N_disk, R_disk);
+S_mic_dB_LND = 20*log10(abs(S_mic_LND));
+#+END_SRC
+
+#+RESULTS: setup soundfield mic
+: org_babel_eoe
+
+#+RESULTS:
+: org_babel_eoe
+
+*** HOA Koeffzi. aus Array
+
+!!! Verstärkung nachgebessert TODO
+
+#+name: calc micarray HOA 
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
+%% Arrayantwort offene Kugel 
+N_order = sqrt(L_pos) - 1;
+O_amb = (N_order+1)^2;
+M_ON = arrayresponse_freefield(N_order, R_pos, k_N, alpha);
+
+%% Modenmatrix
+S_norm = 'norm';
+S_type = 'real';
+r_mic_rtp_L = get(vr_mic_L, 'spherical');
+Psi_OL = sphericalmodematrix(N_order, ...
+                               r_mic_rtp_L(2,:), ...
+                               r_mic_rtp_L(3,:), ...
+                               S_norm, S_type);			       
+%% Koeffzi aus Mikrofon
+for f = 1:N_dft
+  for d = 1:D_dir
+    Y_sim_OND(:,f,d) = M_ON(:,f).^(-1) .* ... % Filterfunktion
+		       (Psi_OL * (G_L/10 .* S_mic_LND(:,f,d))); % gew. Mikrofonsignale
+  end
+end
+Y_sim_dB_OND = 20*log10(abs(Y_sim_OND));
+#+END_SRC
+
+#+RESULTS: calc micarray HOA
+: org_babel_eoe
+
+*** HOA theoretische Koeffzi.
+#+name: calc theoretical HOA
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
+A_hoa_OND = zeros(O_amb, N_dft, D_dir);
+for d = 1:D_dir
+  A_hoa_OND(:,:,d) = sphericalseries_hoa_plane(N_order, ...
+                                               Theta_D(d), ...
+                                               Phi_D(d), ...
+                                               S_norm, S_type, N_dft);
+end
+A_hoa_dB_OND = 20*log10(abs(A_hoa_OND));
+#+END_SRC
+
+#+RESULTS: calc theoretical HOA
+: org_babel_eoe
+
+*** Plot 
+
+Daten aufbereiten
+#+name: setup plot globally
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
+S_fontname = 'Helvetica'; 
+N_fontsize = 6;
+dB_min = -60;
+dB_max = 60;
+
+%% HOA-Namen
+for n = 0:N_order
+  for m = -n:n
+    o = n^2+n+m+1;
+    S_hoalabel{o} = sprintf('A_%i^{%i}', n, m);
+  end
+end
+#+END_SRC
+
+#+RESULTS: setup plot globally
+: org_babel_eoe
+
+**** Mikrofonsignale
+#+name: plot micarray signals
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var S_file = "micarray_signals.png"  d=1 :results file
+figure(1); clf; 
+semilogx(f_N, S_mic_dB_LND(:,:,d), 'Linewidth', 1);
+%% setup labels
+f_pos_L = logspace(1, 4, L_pos);
+for l = 1:L_pos
+  i_pos_L(l) = find(f_N <= f_pos_L(l), 1, 'last');
+  S_pos_L{l} = sprintf('C. %i', l);
+end
+V_dco = get(gca, 'ColorOrder');    
+for l = 1:L_pos
+  text(f_pos_L(l), ...
+       S_mic_dB_LND(l, i_pos_L(l), d) + 1, ...
+       S_pos_L{l}, ...
+       'FontName', S_fontname, ...
+       'FontSize', N_fontsize, ...
+       'BackgroundColor',[1 1 1], ...
+       'EdgeColor', V_dco(mod(l-1,7)+1,:));
+end
+S_title = sprintf('\\theta = %.1f deg, \\phi = %.1f deg', ...
+		  Theta_D(d)*180/pi, Phi_D(d)*180/pi);
+title(S_title);
+xlabel('Frequency (Hz)');
+ylabel('Level (dB)');
+grid('on');
+<<save S_file>>
+#+END_SRC
+
+**** HOA Koeffizienten
+
+#+name: plot micarray HOA
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var n=1 d=1 S_file = "micarray_hoa.png" :results file
+figure(1); clf; 
+ 
+%% setze o_disp
+if n == 0
+  o_disp = 1;
+else
+  % o_disp = [n^2+1:(n+1)^2]; % all m per order n
+  o_disp = 1:(n+1)^2; % all n
+end
+
+%% setze Absissen-Werte für Etiketten
+f_hoa_O = logspace(2, 4, length(o_disp));
+for oo = 1:length(o_disp)
+  i_hoa_O(oo) = find(f_N <= f_hoa_O(oo), 1, 'last');
+end
+
+%% malen
+hold('off');
+h = semilogx(f_N, Y_sim_dB_OND(o_disp,:,d), 'Linewidth', 1);
+set(gca, 'ColorOrder', circshift(get(gca, 'ColorOrder'), numel(h)));
+hold('on');
+semilogx(f_N, A_hoa_dB_OND(o_disp,:,d), '--', 'Linewidth', 1);
+
+S_title = sprintf('L = %i, N = %i, \\theta = %.1f deg, \\phi = %.1f deg', ...
+		  L_pos, n, Theta_D(d)*180/pi, Phi_D(d)*180/pi);
+title(S_title);
+xlabel('Frequency (Hz)');
+ylabel('Level (dB)');
+grid('on');
+axis([F_min F_max dB_min dB_max]);
+
+%% theoretical labels
+V_dco = get(gca, 'ColorOrder');    
+oo = 0;
+for o = o_disp
+  oo = oo+1;
+  if A_hoa_dB_OND(o, i_hoa_O(oo),d) < dB_min
+      A_hoa_dB = dB_min;
+  elseif A_hoa_dB_OND(o, i_hoa_O(oo),d) > dB_max
+    A_hoa_dB = dB_max-5;
+  else
+    A_hoa_dB = A_hoa_dB_OND(o, i_hoa_O(oo),d);
+  end
+  text(f_hoa_O(oo), ...
+       A_hoa_dB + 1, ...
+       S_hoalabel{o}, ...
+       'FontName', S_fontname, ...
+       'FontSize', N_fontsize, ...
+       'BackgroundColor',0.8*[1 1 1], ...
+       'EdgeColor', V_dco(mod(oo-1,7)+1,:));
+end
+text(F_min+5, dB_max-20, 'theory', ...
+     'FontName', S_fontname, ...
+     'FontSize', N_fontsize, ...
+     'BackgroundColor',0.8*[1 1 1], ...
+     'EdgeColor', [0,0,0]);
+
+%% array measured labels
+oo = 0;
+for o = o_disp
+  oo = oo + 1;
+  if Y_sim_dB_OND(o, i_hoa_O(oo),d) < dB_min
+    Y_sim_dB = dB_min;
+  elseif Y_sim_dB_OND(o, i_hoa_O(oo),d) > dB_max
+    Y_sim_dB = dB_max-5;
+  else
+    Y_sim_dB = Y_sim_dB_OND(o, i_hoa_O(oo),d);
+  end
+  text(f_hoa_O(oo)+1, ...
+       Y_sim_dB + 3, ...
+       S_hoalabel{o}, ...
+       'FontName', S_fontname, ...
+       'FontSize', N_fontsize, ...
+       'BackgroundColor',[1 1 1], ...
+       'EdgeColor', V_dco(mod(oo-1,7)+1,:));
+  text(F_min+50, dB_max-20, 'array', ...
+       'FontName', S_fontname, ...
+       'FontSize', N_fontsize, ...
+       'BackgroundColor',[1 1 1], ...
+       'EdgeColor', [0,0,0]); 
+end
+<<save S_file>>
+#+END_SRC
+
+#+RESULTS: plot micarray HOA
+[[file:micarray_hoa.png]]
+
+
