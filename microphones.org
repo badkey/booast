@@ -63,7 +63,7 @@ vr_sam_NL = vector(r_sam_xyz_NL, 'cartesian');
 
 Lets show the sampling points now:
 #+name: show sampling points
-#+BEGIN_SRC octave  :var N_disk = 20 S_file="micpositions.png" :noweb yes :results file 
+#+BEGIN_SRC octave  :var N_disk = 20 S_file="img/micpositions.png" :noweb yes :results file 
 <<setup sampling area>>
 <<calc sampling area>>
 <<setup sampling positions>>
@@ -75,12 +75,12 @@ grid('on');
 #+END_SRC
 #+attr_org: :width 300
 #+RESULTS: show sampling points
-[[file:micpositions.png]]
+[[file:img/micpositions.png]]
 
 Setup a sound field for testing puroses, we need sound from all
 directions.
 #+name: setup sound field 
-#+BEGIN_SRC octave  :var S_file="micpositions.png" :noweb yes :results file
+#+BEGIN_SRC octave :noweb yes :results file
 %% wave numbers 
 F = 3; f_F = linspace(80, 8000, F); % Hz 
 omega_F = 2*pi*f_F; % Hz 
@@ -95,11 +95,15 @@ vk_D = vector(reshape(vg_AB, [A*B, 1]), 'spherical');
 D = numel(vk_D);
 #+END_SRC
 
+#+RESULTS: setup sound field
+
 create a sound field as a plane wave
 #+name: calc sound field
 #+BEGIN_SRC octave
 p_sam_NLFD = planewave(vr_sam_NL, scale(k_F, vk_D));
 #+END_SRC
+
+#+RESULTS: calc sound field
 
 Now we need to
 - capture sound field pressure
@@ -109,7 +113,7 @@ behaviour.  So we expose the sampling points to this soundfield and
 sum up all sampling points per capsule:
 
 #+name: setup capsule
-#+BEGIN_SRC octave  :var S_file="micpositions.png" :noweb yes :results file
+#+BEGIN_SRC octave   :noweb yes :results file
 %% weighting for radial portion of velocity
 alpha = 0.6;
 #+END_SRC
@@ -132,7 +136,7 @@ p_sam_LFD = permute(sum(s_sam_NLFD, 1), [2, 3, 4, 1]);
 
 display polar pattern
 #+name: display capsule
-#+BEGIN_SRC octave  :var S_file="micpatterns.png" :noweb yes :results file
+#+BEGIN_SRC octave  :var S_file="img/micpatterns.png" :noweb yes :results file
 <<setup sampling area>>
 <<calc sampling area>>
 <<setup sampling positions>>
@@ -175,7 +179,7 @@ end
 #+END_SRC
 #+attr_org: :width 1200
 #+RESULTS: display capsule
-[[file:micpatterns.png]]
+[[file:img/micpatterns.png]]
 
 ** capsule
 summarize to function capsule
@@ -215,7 +219,6 @@ Variables in the current scope:
         N_disk         1x1                          8  double
         R_disk         1x1                          8  double
         alpha          1x1                          8  double
-        ans            1x1                          8  double
         f_F            1x3                         24  double
         k_F            1x3                         24  double
         omega_F        1x3                         24  double
@@ -226,7 +229,7 @@ Variables in the current scope:
         vk_D        1200x1                      28833  vector
         vr_mic_L       4x1                        129  vector
 
-Total is 14491 elements using 260651 bytes
+Total is 14490 elements using 260643 bytes
 
 #+end_example
 
@@ -267,25 +270,10 @@ whos
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-Variables in the current scope:
-
-   Attr Name         Size                     Bytes  Class
-   ==== ====         ====                     =====  ===== 
-   c    M_OF        25x200                    80000  double
-        N_order      1x1                          8  double
-        R_mic        1x1                          8  double
-        alpha        1x1                          8  double
-        ans          1x1                          8  double
-        k_F          1x200                     1600  double
-
-Total is 5204 elements using 81632 bytes
-
-#+end_example
 
 *** Documentation                                                     :ignore:
 #+name: array response
-#+BEGIN_SRC octave :var S_file="arrayresponse_freefield.png" :results file
+#+BEGIN_SRC octave :var S_file="img/arrayresponse_freefield.png" :results file
 N_order = 3;
 R_mic = 0.001;
 k_F = logspace(1, 5, 500);
@@ -294,12 +282,14 @@ M_OF = arrayresponse_freefield(N_order, R_mic, k_F, alpha);
 figure(1);
 semilogx(k_F, 20*log10(abs(M_OF)));
 xlim([20 20000]);
+xlabel('Frequency (Hz)');
+ylabel('Amplitude (dB)');
 grid('on');
 <<save S_file>>
 #+END_SRC
 #+attr_org: :width 600
 #+RESULTS: array response
-[[file:arrayresponse_freefield.png]]
+[[file:img/arrayresponse_freefield.png]]
 
 
 #+name: arrayresponse_freefield doc
@@ -328,22 +318,17 @@ tbd
 
 * Micarray and HOA testing
  
-*** former stuff
 
-see [[file:~/Kontor/HSEL/Publikation/Konferenz/Eusipco2009/mkbsp_perfmicarray.m::% :file: <test_tetramic.m>]]
-
-frequency responses [[file:~/Kontor/HSEL/Publikation/Konferenz/Eusipco2009/Vortrag/mkbsp_micarray_freqresp.m::% -*- coding: utf-8 -*-]]
-
-*** Schallfeld
+*** soundfield for testing
 #+name: setup plane waves
 #+BEGIN_SRC octave :tangle mkexa_frequencyresponses.m :session freqresp 
-%% Vektor mit gemessenen Einfallsrichtungen
+%% vector impinging waves
 D_dir = 5;
 Theta_D = pi/2 * ones(1, D_dir);
 Phi_D = linspace(0, pi/2, D_dir);
 vg_D = vector([ones(1, D_dir); Theta_D(1:D_dir); Phi_D(1:D_dir)], 'spherical');
 
-%% Wellenzahl Wellenzahlvektoren
+%% wave number and wave vector
 N_dft = 256;
 F_min = 10;
 F_max = 100000;
@@ -475,7 +460,7 @@ end
 
 **** Mikrofonsignale
 #+name: plot micarray signals
-#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var S_file = "micarray_signals.png"  d=1 :results file
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var S_file = "img/micarray_signals.png"  d=2 :results file
 figure(1); clf; 
 semilogx(f_N, S_mic_dB_LND(:,:,d), 'Linewidth', 1);
 %% setup labels
@@ -503,10 +488,13 @@ grid('on');
 <<save S_file>>
 #+END_SRC
 
+#+RESULTS: plot micarray signals
+[[file:img/micarray_signals.png]]
+
 **** HOA Koeffizienten
 
 #+name: plot micarray HOA
-#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var n=1 d=1 S_file = "micarray_hoa.png" :results file
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var n=1 d=2 S_file = "img/micarray_hoa.png" :results file
 figure(1); clf; 
  
 %% setze o_disp
@@ -592,6 +580,6 @@ end
 #+END_SRC
 
 #+RESULTS: plot micarray HOA
-[[file:micarray_hoa.png]]
+[[file:img/micarray_hoa.png]]
 
 

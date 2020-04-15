@@ -7,10 +7,10 @@
         %% slice some planes for visualisation
         g_AB1 = g_ABC(:,:,1);
         g_A1C = g_ABC(:,20,:);
-        g_1BC = g_ABC(1,:,:);
+        g_1BC = g_ABC(10,:,:);
     
         %% direction/wavenumbervector of planewave
-        v = vector([1, 0.1, 0.1]', 'cartesian');
+        v = vector([1, 1, 0.1]', 'cartesian');
         p_AB1 = planewave(vector(g_AB1), v);
         p_A1C = planewave(vector(g_A1C), v);
         p_1BC = planewave(vector(g_1BC), v);

@@ -8,7 +8,7 @@
   %% slice some planes for visualisation
   g_AB1 = g_ABC(:,:,10);  % circle
   g_A1C = g_ABC(:,10,:);  % conus
-  g_1BC = g_ABC(10,:,:);  % sphere
+  g_1BC = g_ABC(20,:,:);  % sphere
 
   %% direction/wavenumbervector of planewave
   v = vector([1, 1, 0.3]', 'cartesian');
