@@ -9,17 +9,34 @@
 % 2 Description
 % =============
 % 
+%   calculate spherical besselfunction of order N_order along matrix x_CF.
+% 
 % 
 % 3 Input Arguments
 % =================
+% 
+%   N_order
+%         order
+%   x_CF
+%         matrix with arguments
 % 
 % 
 % 4 Return Values
 % ===============
 % 
+%   J_sph_OCF
+%         matrix of all orders 0 up to $(N_order+1)^2$ and input
+%         dimensions CF
+% 
 % 
 % 5 Examples
 % ==========
+% 
+%   ,----
+%   | N_order = 6;
+%   | x_F = linspace(0, 15, 200);
+%   | J_sph_OF = sphericalbessel(N_order, x_F);
+%   `----
 % 
 % 
 % 6 Tips
@@ -33,7 +50,8 @@
 % 8 See Also
 % ==========
 % 
-% Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
+
+% Copyright (c) 2018-2020 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
 % Permission is hereby granted, free of charge, to any person obtaining a copy
 % of this software and associated documentation files (the "Software"), to deal

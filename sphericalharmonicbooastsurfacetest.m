@@ -4,7 +4,7 @@ N_order = 2;
 A = 30; theta_A = linspace(0, pi, A);
 B = 40; phi_B = linspace(0, 2*pi, B);
 S_norm = 'norm';
-S_type = 'complex';
+S_type = 'real';
 Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
 
 %% Vectorgrid for a unitsphere
@@ -22,7 +22,7 @@ for n = 0:N_order
     xlabel('x');
     ylabel('y');
     zlabel('z');
-    title(sprintf('|Re Y| n = %i, m = %i', n, m));
+    title(sprintf('n = %i, m = %i', n, m));
     view([30 40]);
     grid('on');
     axis('equal');

@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-01-28 17:20:12 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-11-30 21:46:09 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -80,7 +80,7 @@ coefficients used in the inverse transform
 
 * Spherical Functions
 ** sphericalbesselj
-file:sphericalbesselj.m: calculates spherical bessel function at order N
+file:sphericalbesselj.m: calculate spherical bessel function at order N
 
 *** Octave definition                                              :internal:
 
@@ -157,9 +157,36 @@ spherical bessel function at order N
 
 #+call: sphericalbesselj doc[:output html]()
 
-** sphericalbessel
+**** Examples
 
-file:sphericalbessel.m: wrapper for sphericalbesselj, return all orders up to N
+Calculate the sphericalbessel function of order 6.
+#+name: sphericalbesselj example
+#+BEGIN_SRC octave :exports code
+N_order = 6;
+x_F = linspace(0, 15, 200);
+J_sph_OF = sphericalbesselj(N_order, x_F);
+#+END_SRC
+
+This results in a graph like Figure [[ref:fig:sphbesselexa6][spherical bessel function]].
+
+#+BEGIN_SRC octave :results file :exports results
+figure(1);
+plot(x_F, J_sph_OF);
+xlabel('x');
+ylabel('j_6(x)');
+S_file = 'img/sphericalbesselj.png';
+saveas(1, S_file);
+ans = S_file;
+#+END_SRC
+#+attr_org: :width 300
+#+caption: The spherical bessel function of order 6.
+#+caption: label:fig:sphbesselexa6
+#+RESULTS:
+[[file:img/sphericalbesselj.png]]
+
+** sphericalbessel
+file:sphericalbessel.m: wrapper for sphericalbesselj, return all bessel functions orders up to N
+
 
 *** Octave definition                                              :internal:
 
@@ -204,16 +231,21 @@ ans = size(J_sph_OCF);
 #+name: sphericalbessel doc
 #+BEGIN_SRC org
 ,*** Syntax
-: J_sph_OCF = sphericalbessel(N_order, x_CF)
+    : J_sph_OCF = sphericalbessel(N_order, x_CF)
 
 ,*** Description
-
+    calculate spherical besselfunction of order N_order along matrix x_CF.
 ,*** Input Arguments
-
+    - N_order :: order
+    - x_CF :: matrix with arguments
 ,*** Return Values
+    - J_sph_OCF :: matrix of all orders 0 up to $(N_order+1)^2$ and input dimensions CF
 
-,*** Examples
-
+,*** Examples 
+    : N_order = 6;
+    : x_F = linspace(0, 15, 200);
+    : J_sph_OF = sphericalbessel(N_order, x_F);
+   
 ,*** Tips
 
 ,*** Alternatives
@@ -221,13 +253,37 @@ ans = size(J_sph_OCF);
 ,*** See Also
 #+END_SRC
 
+
 #+call: sphericalbessel doc[:output html]()
 
+calculate all spherical bessel functions up to order 6.
+#+name: spherical bessel example
+#+BEGIN_SRC octave :exports code
+N_order = 6;
+x_F = linspace(0, 15, 200);
+J_sph_OF = sphericalbessel(N_order, x_F);
+#+END_SRC
+
+#+BEGIN_SRC octave  :results file :exports results
+<<spherical bessel example>>
+figure(1);
+plot(x_F, J_sph_OF);
+xlabel('x');
+ylabel('j_6(x)');
+xlim([0, 15]);
+S_file = 'img/sphericalbessel.png';
+saveas(1, S_file);
+ans = S_file;
+#+END_SRC
+#+attr_org: :width 300
+#+caption: Spherical bessel functions up to order 6.
+#+RESULTS: spherical bessel functions
+    [[file:img/sphericalbessel.png]]
+
 ** sphericalbessely
-file:sphericalbessely.m: compute the spherical Bessel's function of the second kind
+file:sphericalbessely.m: compute the spherical Bessel function of the second kind
 
 *** Octave definition                                              :internal:
-
 
 #+BEGIN_SRC octave :tangle sphericalbessely.m
 <<sphericalbessely doc[:results ascii :post octave comment(s=*this*)]()>>
@@ -305,7 +361,7 @@ bessely
 ** sphericalneumann
 
 file:sphericalneumann.m: 2nd kind Bessel function for Ambisonics
-coefficients are given as a vector
+coefficients are given as a vector up to order N.
 
 *** Octave definition                                              :internal:
 
@@ -380,7 +436,7 @@ sphericalbessely
 #+call: sphericalneumann doc[:output html]()
 
 ** sphericalhankel
-file:sphericalhankel.m: returns the Bessel function of the 3rd kind (Hankel function)
+file:sphericalhankel.m: returns the Bessel function of the 3rd kind (Hankel function) 
 
 *** Octave definition                                              :internal:
 
@@ -437,6 +493,37 @@ sphericalbessel, sphericalneumann
 #+END_SRC
 
 #+call: sphericalhankel doc[:output html]()
+*** Example
+Lets calculate all hankel functions up to order 3.
+
+#+name: sphericalhankel example code
+#+BEGIN_SRC octave
+N_order = 3;
+x_max = 15;
+x_F = linspace(0, x_max, 200);
+h_OF = sphericalhankel(N_order, x_F.');
+#+END_SRC
+
+#+RESULTS: sphericalhankel example code
+
+We get an image like shown in Figure [[ref:fig:sphericalhankel][Hankel]].
+
+#+name: figure sphericalhankel 
+#+BEGIN_SRC octave :results file :exports results :var S_file="img/sphericalhankelexa.png"
+<<sphericalhankel example code>>
+figure(1);
+subplot(2, 2, 1); plot(x_F, real(h_OF));  xlim([0, x_max]); ylim([-1, 1]); xlabel('x'); ylabel('Re h(x)');
+subplot(2, 2, 2); plot(x_F, imag(h_OF));  xlim([0, x_max]); ylim([-1, 1]); xlabel('x'); ylabel('Im h(x)');
+subplot(2, 2, 3); plot(x_F, abs(h_OF));   xlim([0, x_max]); ylim([0, 1]); xlabel('x'); ylabel('|h(x)|');
+subplot(2, 2, 4); plot(x_F, angle(h_OF)); xlim([0, x_max]); ylim([-1, 1]*pi); xlabel('x'); ylabel('ang h(x)');
+xlim([0, x_max]);
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 300
+#+caption: Hankel functions shown as real and imaginary part (top) and as absolute value and angle (bottom).
+#+caption: label:fig:sphericalhankel
+#+RESULTS: figure sphericalhankel
+[[file:img/sphericalhankelexa.png]]
 
 ** sphericalbessel_r
 file:sphericalbessel_r.m: returns the 1st radial derivative of the spherical Bessel function
@@ -571,7 +658,6 @@ Total is 5106 elements using 40848 bytes
     #+END_SRC
 
     #+call: sphericalbessel_r doc[:output html]()
-
 
 ** sphericalnormalisation
 
@@ -1203,9 +1289,9 @@ for n = 0:N_order
     Y_AB = Y_OAB(o, :, :);
     % surface(vg, abs(real(Y_AB)), sign(real(Y_AB)), 'dependendSurface');
     surface(vg, abs(real(Y_AB)), [], 'dependendSurface');
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
+    % xlabel('x');
+    % ylabel('y');
+    % zlabel('z');
     title(sprintf('n = %i, m = %i', n, m));
     view([30 40]);
     grid('on');
@@ -1216,7 +1302,7 @@ end
 <<save S_file>>
 #+END_SRC
 
-#+caption: Spherical harmonic functions shown as functions of the radius.
+#+caption: Spherical harmonic functions shown as functions of the radius in.
 #+attr_org: :width 800
 #+RESULTS: sphericalharmonic booast surface test
 [[file:img/sphereharmsurf.png]]
@@ -1907,10 +1993,67 @@ returns spherical basis functions R = j_n Y and S = h_n Y
 
 Grid for space
 
+#+BEGIN_SRC octave :tangle planewave_spherical_test.m 
+  %% create observation grid (cartesian volume)
+  A = 30; B = 40; C = 50;
+  r_A     = linspace(0, 10, A);
+  theta_B = linspace(0, pi, B);
+  phi_C   = linspace(0, 2*pi, C);
+  g_ABC   = vectorgrid(r_A, theta_B, phi_C, 'spherical');
+
+  %% slice some planes for visualisation
+  g_AB1 = g_ABC(:,:,10);  % circle
+  g_A1C = g_ABC(:,20,:);  % conus
+  g_1BC = g_ABC(20,:,:);  % sphere
+
+  %% direction/wavenumbervector of planewave
+  v = vector([1, 1, 0]', 'cartesian');
+
+  p_AB1 = real(planewave(vector(g_AB1), v));
+  p_A1C = real(planewave(vector(g_A1C), v)); %% visualise
+  p_1BC = real(planewave(vector(g_1BC), v));
+
+figure(1); clf;
+% surface(g_AB1, p_AB1);
+surface(g_A1C, p_A1C);
+% surface(g_1BC, p_1BC);
+xlabel('x'); ylabel('y'); zlabel('z');
+view(30,40); axis('equal');
+
+  %%
+S_norm = 'norm';
+S_type = 'real';
+N_order = 5;
+v_src_rtp = get(v, 'spherical');
+Psi_src_O = sphericalmodematrix(N_order, v_src_rtp(2), v_src_rtp(3), S_norm, S_type);
+N_pln_O = sphericalnormalisation(N_order, 'planewave');
+A_pln_O = N_pln_O .* Psi_src_O;
+k_rtp = get(v, 'spherical');
+C_pln_OA = sphericalseries_sfc(A_pln_O, [], r_A, inf, k_rtp(1));
+Y_OBC = sphericalharmonic(N_order, theta_B, phi_C, S_norm, S_type);
+P_ABC = sphericalseries_isf(C_pln_OA, Y_OBC);
+
+figure(2); clf;
+% surface(g_AB1, p_AB1);
+surface(g_A1C, real(P_ABC(:,20,:)));
+% surface(g_1BC, p_1BC);
+xlabel('x'); ylabel('y'); zlabel('z');
+view(30,40); axis('equal');
+
+figure(3); clf;
+% surface(g_AB1, p_AB1);
+surface(g_A1C, p_A1C - real(P_ABC(:,20,:)));
+% surface(g_1BC, p_1BC);
+xlabel('x'); ylabel('y'); zlabel('z');
+view(30,40); axis('equal');
+
+#+END_SRC
+
+#+RESULTS:
+
+
 #+name: sfs_plane_test
 #+BEGIN_SRC octave :tangle sfs_plane_test.m :results output
-% Rasta
-% -------------------------------------------------------------------
 R_max = 1.4;
 C = 100; r_C     = linspace(0, R_max, C);
 A = 1;   theta_A = linspace(pi/2, pi/2, A);
@@ -1920,19 +2063,15 @@ gg_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
 
 #+RESULTS: sfs_plane_test
 
-frequency direction of plane wave
+We define a *plane wave* with frequency and direction of the plane wave.
 #+BEGIN_SRC octave :tangle sfs_plane_test.m  :results output
-% ebene Welle
-% -------------------------------------------------------------------
 C_snd = 342;                       % m/s
-F     = 1;                         % Hz
+F     = 1;                         % 
 F_max = 500;                       % Hz
-F_min = 1;                         % gleichförmig unterteilt
-f_F   = linspace(F_min, F_max, F); % Frequenzen
-k_F   = -2*pi*f_F/C_snd;           % Wellenzahl
+F_min = 1;                         % Hz
+f_F   = linspace(F_min, F_max, F); % frequencies
+k_F   = -2*pi*f_F/C_snd;           % wavenumber
                                    %phi   = exp(i*0.5*pi/2);            % Phase einfallende Welle
-% Vektor Einfallsrichtung
-% -------------------------------------------------------------------
 Theta_src = pi/2;
 Phi_src   = 0.3*pi/2;
 R_src     = 1.2;
@@ -1941,75 +2080,43 @@ vM_src    = vector(R_src, Theta_src, Phi_src, 'spherical');
 
 #+RESULTS:
 
-HOA approximation
+With these parameters we can describe a plane wave as follows:
 #+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output
-% "echte" Quelle, nicht Winkel-begrenzt
-% -------------------------------------------------------------------
-
-% Grid in lin. angeordnete Punktevektor bringen
-vm_E = vectorgrid_vector(gg_CAB);
-
-% Wellenzahlvektoren für "echte" Lautsprecherschallfelder
-vk_F = vector_scale(k_F, vector_normalise(vM_src));
-
-% nicht-winkelbegrenzte Schallfelder eben
-P_real_EF = planewave(vm_E, vk_F);
-
-%  
-for f = 1:F
-  % umsortieren
-  P_CAB{1} = vectorgrid_reshape(P_real_EF(:,f), gg_CAB);
+vm_E = vectorgrid_vector(gg_CAB); % a grid in space
+vk_F = vector_scale(k_F, vector_normalise(vM_src)); % wave number vector
+P_real_EF = planewave(vm_E, vk_F); % pressure of plane wave
+for f = 1:F   % reorder 
+  P_CAB{1} = vectorgrid_reshape(P_real_EF(:,f), gg_CAB); 
 end
+#+END_SRC
 
-
-%% Koeffzi. der Fourier-Bessel-Reihe 
-%% -----------------------------------------------------------------
+Now we define the HOA approximation
+#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output
 N_order_list = [5, 10];
 S_norm = 'norm';
 S_type = 'real';
 
 for n = 1:length(N_order_list)
   N_order = N_order_list(n);
-
-  % Eingangsmode
   Psi_src_O = sphericalmodematrix(N_order, Theta_src, Phi_src, S_norm, S_type);
-
-  % Vorfaktor für ebene Welle
   N_pln_O = sphericalnormalisation(N_order, 'planewave');
-
-  % HOA Koeff
   A_pln_O = N_pln_O .* Psi_src_O;
-
-  % Druckverteilungen berechnet:
-  % -------------------------------------------------------------------
-
-  % SFC-Koeffzi.
   C_pln_OC = sphericalseries_sfc(A_pln_O, [], r_C, inf, k_F);
-
-  % Basisfunktion zum Rasta
   Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
-
-  % ISF im Frequenzbereich
   P_CAB{2*n} = sphericalseries_isf(C_pln_OC, Y_OAB);
-
-  % Differenz zur idealen ebenen Welle
   P_CAB{2*n + 1} = P_CAB{2*n} - P_CAB{1};
-
 end % N_order_list
+#+END_SRC
 
-
-% malen
-% -------------------------------------------------------------------
-
+The output results in
+#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output
 v_view = [0 90];
-c_map = colormap(badcolormap(256));
-%c_map = colormap('hot');
+%c_map = colormap(badcolormap(256));
+c_map = colormap('hot');
 b_colorbar = 0;
-b_print = 1;
+b_print = 0;
 
-if ~isdir('./Bilder')
-    mkdir('./Bilder');
-end
+if ~isdir('./img') mkdir('./img'); end
 
 for n = 1:length(P_CAB)
   P_CABF = P_CAB{n};
