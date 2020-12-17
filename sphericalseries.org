@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-11-30 21:46:09 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-12-17 01:22:59 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -2053,7 +2053,7 @@ view(30,40); axis('equal');
 
 
 #+name: sfs_plane_test
-#+BEGIN_SRC octave :tangle sfs_plane_test.m :results output
+#+BEGIN_SRC octave :tangle sfs_plane_test.m :results output :session plane
 R_max = 1.4;
 C = 100; r_C     = linspace(0, R_max, C);
 A = 1;   theta_A = linspace(pi/2, pi/2, A);
@@ -2064,7 +2064,7 @@ gg_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
 #+RESULTS: sfs_plane_test
 
 We define a *plane wave* with frequency and direction of the plane wave.
-#+BEGIN_SRC octave :tangle sfs_plane_test.m  :results output
+#+BEGIN_SRC octave :tangle sfs_plane_test.m  :results output :session plane
 C_snd = 342;                       % m/s
 F     = 1;                         % 
 F_max = 500;                       % Hz
@@ -2081,135 +2081,58 @@ vM_src    = vector(R_src, Theta_src, Phi_src, 'spherical');
 #+RESULTS:
 
 With these parameters we can describe a plane wave as follows:
-#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output
-vm_E = vectorgrid_vector(gg_CAB); % a grid in space
-vk_F = vector_scale(k_F, vector_normalise(vM_src)); % wave number vector
+#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output :session plane
+vm_E = vector(gg_CAB); % a grid in space
+vk_F = scale(k_F, normalize(vM_src)); % wave number vector
 P_real_EF = planewave(vm_E, vk_F); % pressure of plane wave
-for f = 1:F   % reorder 
-  P_CAB{1} = vectorgrid_reshape(P_real_EF(:,f), gg_CAB); 
-end
+%%for f = 1:F   % reorder 
+%%  P_CAB{1} = vectorgrid_reshape(P_real_EF(:,f), gg_CAB); 
+%%end
 #+END_SRC
+
+#+RESULTS:
 
 Now we define the HOA approximation
-#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output
-N_order_list = [5, 10];
+#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output :session plane
 S_norm = 'norm';
 S_type = 'real';
-
-for n = 1:length(N_order_list)
-  N_order = N_order_list(n);
-  Psi_src_O = sphericalmodematrix(N_order, Theta_src, Phi_src, S_norm, S_type);
-  N_pln_O = sphericalnormalisation(N_order, 'planewave');
-  A_pln_O = N_pln_O .* Psi_src_O;
-  C_pln_OC = sphericalseries_sfc(A_pln_O, [], r_C, inf, k_F);
-  Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
-  P_CAB{2*n} = sphericalseries_isf(C_pln_OC, Y_OAB);
-  P_CAB{2*n + 1} = P_CAB{2*n} - P_CAB{1};
-end % N_order_list
+N_order = 10;
+Psi_src_O = sphericalmodematrix(N_order, Theta_src, Phi_src, S_norm, S_type);
+N_pln_O = sphericalnormalisation(N_order, 'planewave');
+A_pln_O = N_pln_O .* Psi_src_O;
+k_rtp_F = get(vk_F, 'spherical');
+C_pln_OC = sphericalseries_sfc(A_pln_O, [], r_C, inf, k_rtp_F(1));
+Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
+P_CAB = sphericalseries_isf(C_pln_OC, Y_OAB);
 #+END_SRC
+
+#+RESULTS:
 
 The output results in
-#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output
+#+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output :session plane :var S_file = "img/sfs_planewave.png"
 v_view = [0 90];
 %c_map = colormap(badcolormap(256));
-c_map = colormap('hot');
-b_colorbar = 0;
-b_print = 0;
-
-if ~isdir('./img') mkdir('./img'); end
-
-for n = 1:length(P_CAB)
-  P_CABF = P_CAB{n};
-  
-  for f = 1:F
-    figure(20); clf;
-    vectorgrid_surface(gg_CAB, squeeze((real(P_CABF(:,:,:,f)))));
-    c_minmax = max(max(max(squeeze(abs(real(P_CABF(:,:,:,f))))))) * [-1 1];
-    caxis(c_minmax);
-    colormap(c_map);
-    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
-    axis('equal');
-    grid('on');
-    view(v_view);
-    title('\Re p');
-    xlabel('x (m)');
-    ylabel('y (m)');
-    zlabel('z (m)');
-    if b_colorbar colorbar; end
-  end
-  for f = 1:F
-    figure(21); clf;
-    vectorgrid_surface(gg_CAB, squeeze((imag(P_CABF(:,:,:,f)))));
-    c_minmax = max(max(max(squeeze(abs(imag(P_CABF(:,:,:,f))))))) * [-1 1];
-    caxis(c_minmax);
-    colormap(c_map);
-    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
-    axis('equal');
-    grid('on');
-    view(v_view);
-    title('\Im p');
-    xlabel('x (m)');
-    ylabel('y (m)');
-    zlabel('z (m)');
-    if b_colorbar colorbar; end
-  end
-  for f = 1:F
-    figure(22); clf;
-    vectorgrid_surface(gg_CAB, squeeze((abs(P_CABF(:,:,:,f)))));
-    if n == 1
-      c_minmax = [0 2];
-    else
-      c_minmax = caxis;
-    end
-    caxis(c_minmax);
-    colormap(c_map);
-    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
-    axis('equal');
-    grid('on');
-    view(v_view);
-    title('|p|');
-    xlabel('x (m)');
-    ylabel('y (m)');
-    zlabel('z (m)');
-    if b_colorbar colorbar; end
-  end
-  for f = 1:F
-    figure(23); clf;
-    vectorgrid_surface(gg_CAB, squeeze((angle(P_CABF(:,:,:,f)))));
-    c_minmax = max(max(max(squeeze(angle((P_CABF(:,:,:,f))))))) * [-1 1];
-    caxis(c_minmax);
-    colormap(c_map);
-    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
-    axis('equal');
-    grid('on');
-    view(v_view);
-    title('\angle p');
-    xlabel('x (m)');
-    ylabel('y (m)');
-    zlabel('z (m)');
-    if b_colorbar colorbar; end
-  end
-
-  if b_print
-    figure(20);
-    figuresize(3, 3);
-    figurefont(6);
-    figuresave(sprintf('Bilder/ebenewelle_%i_real.pdf', n));
-    figure(21);
-    figuresize(3, 3);
-    figurefont(6);
-    figuresave(sprintf('Bilder/ebenewelle_%i_imag.pdf', n));
-    figure(22);
-    figuresize(3, 3);
-    figurefont(6);
-    figuresave(sprintf('Bilder/ebenewelle_%i_abs.pdf', n));
-    figure(23);
-    figuresize(3, 3);
-    figurefont(6);
-    figuresave(sprintf('Bilder/ebenewelle_%i_angle.pdf', n));
-  end
-  %  n
-  % input('press return');
-end
-
+c_map = colormap('gray');
+figure(1); clf;
+surface(gg_CAB, real(P_CAB));
+c_minmax = max(max(max((abs(real(P_CAB)))))) * [-1 1];
+caxis(c_minmax);
+colormap(c_map);
+%    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
+axis('equal');
+grid('on');
+view(v_view);
+title('\Re p');
+xlabel('x (m)');
+ylabel('y (m)');
+zlabel('z (m)');
+saveas(1, S_file);
 #+END_SRC
+
+#+RESULTS:
+
+
+#+name: HOA approximation of a plane wave.
+#+caption: HOA approximation of a plane wave.
+#+attr_org: :width 300
+[[file:img/sfs_planewave.png]]
