@@ -1,8 +1,10 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2020-01-28 22:21:58 jbatke>
-#+PROPERTY: header-args:octave :noweb yes :eval export
+#+date: 2018-03-14; Revision Time-stamp: <2021-01-14 15:33:36 jbatke>
+#+PROPERTY: header-args:octave :noweb yes :eval no-export
 #+setupfile: booast.setup
+#+SELECT_TAGS: 
+#+EXCLUDE_TAGS: internal
 
 * General Information
 
@@ -13,11 +15,11 @@ In particular, it provides two new matlab/octave classes, *vector* and
 *vectorgrid*. These can be used to implement arrays of vectors
 pointing to a location in $\mathbb R^3$.
 
-- Visit section [[*Installation][Installation]] for setup (directory creation, etc) and
-  installation.
-- [[file:acoustics.org::*Acoustic%20Waves][Acoustics]] contains some application examples for booast.
-- [[file:sphericalseries.org][Sphericalseries]] contains some stuff for using spherical series
-  approximations of a sound field, AKA Higher Order Ambisonics.
+# - Visit section [[*Installation][Installation]] for setup (directory creation, etc) and
+#   installation.
+# - [[file:acoustics.org::#overview acoustics][Acoustics]] contains some application examples for booast.
+# - [[file:sphericalseries.org][Sphericalseries]] contains some stuff for using spherical series
+#   approximations of a sound field, AKA Higher Order Ambisonics.
 
 ** Naming conventions
 
@@ -675,7 +677,7 @@ vector, reshape
 
 *** plot
 
-file:@vector/plot.m: 
+file:@vector/plot.m: plot positions of a vector using a marker
 
 **** Octave definition                                             :internal:
 
@@ -701,7 +703,7 @@ plot(v, '*')
 #+RESULTS: plot vector test
 [[file:plotvectortest.png]]
 
-**** Documentation                                                   :ignore:
+# **** Documentation                                                :ignore:
 
 #+name: plot doc
 #+BEGIN_SRC org
@@ -711,7 +713,7 @@ plot(v, '*')
 plots position of v in 3D space
 ,*** Input Arguments
 - v :: vector
-- s :: string like "*"
+- s :: marker like "*"
 ,*** Return Values
 none
 ,*** Examples
@@ -732,8 +734,8 @@ N_x = 10;
 M_y = 20;
 vg_NM = vectorgrid(linspace(0, 1, N_x), linspace(0, 1, M_y), 0, 'cartesian');
 v_NM = vector(vg_NM);
-plot(v_NM, '*'); xlabel('x'); ylabel('y'); zlabel('z');
-%<<save S_file>>
+plot(v_NM, '+'); xlabel('x'); ylabel('y'); zlabel('z');
+<<save S_file>>
 #+END_SRC
 #+attr_org: :width 500
 #+RESULTS: doc plot vector
@@ -741,216 +743,6 @@ plot(v_NM, '*'); xlabel('x'); ylabel('y'); zlabel('z');
 
 #+RESULTS:
 : 0
-
-*** rotate
-file:@vector/rotate.m: calculates something for given argument
-
-**** Octave definition                                             :internal:
-
-#+BEGIN_SRC octave :tangle @vector/rotate.m
-<<rotate doc[:results ascii :post octave comment(s=*this*)]()>>
-<<copyright>>
-function v_res_NL = rotate(v_pos_N, v_rot_L)
-
-  % get positions 
-  r_pos_xyz_N = get(v_pos_N, 'cartesian');
-
-  % preserve size
-  size_pos = size(r_pos_xyz_N); % preserve size (e.g. 3xMxL)
-  N = prod(size_pos(2:end)); % N = M*L
-  r_pos_xyz_N = reshape(r_pos_xyz_N, [3, N]);
-
-  % get rotation angles according to mathematically defined spherical coordinates
-  r_rot_rtp_L = get(v_rot_L, 'spherical');
-  L = numel(v_rot_L);
-
-  % allocate memory
-  r_res_xyz_NL = zeros(3, N, L);
-  for l = 1:L
-    r_res_xyz_NL(1:3, 1:N, l) = rotationmatrix('z', r_rot_rtp_L(3, l)) * ...
-				rotationmatrix('y', r_rot_rtp_L(2, l)) * r_pos_xyz_N;    
-  end
-  v_res_NL = vector(reshape(r_res_xyz_NL, [size_pos, L]), 'cartesian');
-
-  function R = rotationmatrix(S_axis, alpha)
-  % rotationmatrix - performs a matrix rotation in cartesian coordinates
-  %
-  % R = rotationmatrix(S_axis, alpha)
-  %
-  % INPUTS
-  % S_axis - axis with respect to which rotation should be done
-  % alpha - angle of rotation
-  %
-  % OUTPUTS
-  % R - rotated matrix
-  %
-  % DESCRIPTION
-  % The input axis of rotation must be given as ('x','y',or 'z'). 
-    if strcmp(S_axis, 'z')
-      R = [cos(alpha), -sin(alpha), 0; ...
-             sin(alpha), cos(alpha), 0; ...
-             0, 0, 1];
-  
-    elseif strcmp(S_axis, 'y')
-      R = [cos(alpha), 0, sin(alpha); ...
-             0, 1, 0; ...
-             -sin(alpha), 0, cos(alpha)];
-    
-    elseif strcmp(S_axis, 'x')
-      R = [1, 0,           0; ...
-           0, cos(alpha), -sin(alpha); ...
-           0, sin(alpha),  cos(alpha)];
-    else
-      error('Unknown rotation axis.');
-    end
-#+END_SRC
-
-**** Interface test                                                :internal:
-rotate one position
-#+BEGIN_SRC octave
-v_north = vector(0, 1, 0, 'cartesian');
-v_east = vector(0, 1, 1, 'cartesian');
-v_rotated = rotate(v_north, v_east);
-ans = get(v_rotated, 'spherical');
-#+END_SRC
-
-#+RESULTS:
-|                 1 |
-| 1.570796326794897 |
-| 3.141592653589793 |
-
-
-#+name: doc rotate vector
-#+BEGIN_SRC octave :var S_file="img/docrotatevector.png" :results file :exports both
-N_x = 9;
-M_y = 5;
-vg_NM = vectorgrid(linspace(0, 1, N_x), linspace(0, 1, M_y), 0, 'cartesian');
-v_NM = vector(vg_NM);
-v_rot_L = vector(ones(1,3), zeros(1,3), linspace(pi/2, 3/2*pi, 3), 'spherical');
-v_rot_NM = rotate(v_NM, v_rot_L);
-hold('off');
-plot(v_NM, '*'); xlabel('x'); ylabel('y'); zlabel('z');
-axis('square');
-hold('on');
-plot(v_rot_NM, '*r');
-<<save S_file>>
-#+END_SRC
-#+attr_org: :width 500
-#+RESULTS: doc rotate vector
-[[file:img/docrotatevector.png]]
-0
-
-**** Documenation                                                    :ignore:
-
-    #+name: rotate doc
-    #+BEGIN_SRC org
-    ,*** Syntax
-
-    ,*** Description
-
-    ,*** Input Arguments
-
-    ,*** Return Values
-
-    ,*** Examples
-
-    ,*** Tips
-
-    ,*** Alternatives
-
-    ,*** See Also
-    #+END_SRC
-
-    #+call: rotate doc[:output html]()
-
-*** translate
-file:@vector/translate.m: calculates something for given argument
-
-
-**** Octave definition                                             :internal:
-
-
-#+BEGIN_SRC octave :tangle @vector/translate.m
-<<@vector/translate doc[:results ascii :post octave comment(s=*this*)]()>>
-<<copyright>>
-function v_res_NL = translate(v_pos_N, v_trans_L)
-  % get positions 
-  r_pos_xyz_N = get(v_pos_N, 'cartesian');
-
-  % preserve size
-  size_pos = size(r_pos_xyz_N); % preserve size (e.g. 3xMxL)
-  N = prod(size_pos(2:end)); % N = M*L
-  r_pos_xyz_N = reshape(r_pos_xyz_N, [3, N]);
-
-  % get rotation angles according to mathematically defined spherical coordinates
-  r_trans_xyz_L = get(v_trans_L, 'cartesian');
-  L = numel(v_trans_L);
-
-  % allocate memory
-  r_res_xyz_NL = zeros(3, N, L);
-  for l = 1:L
-    r_res_xyz_NL(1:3, 1:N, l) = r_pos_xyz_N + r_trans_xyz_L(:,l) * ones(1, N);
-  end
-  v_res_NL = vector(reshape(r_res_xyz_NL, [size_pos, L]), 'cartesian');
-
-#+END_SRC
-
-**** Interface test                                                :internal:
-translate one position
-#+BEGIN_SRC octave
-v_1 = vector(0, 1, 0, 'cartesian');
-v_dir = vector(1, 0, 0, 'cartesian');
-v_translated = translate(v_1, v_dir);
-ans = get(v_translated, 'cartesian');
-#+END_SRC
-
-#+RESULTS:
-| 1 |
-| 1 |
-| 0 |
-
-
-**** Documenation                                                    :ignore:
-
-#+name: doc translate vector
-#+BEGIN_SRC octave :var S_file="img/doctranslatevector.png" :results file :exports both
-N_x = 9; M_y = 5; 
-vg_NM = vectorgrid(linspace(0, 1, N_x), linspace(0, 1, M_y), 0, 'cartesian');
-v_NM = vector(vg_NM);
-v_trans_L = vector(1:3, 1:3, 1:3, 'cartesian');
-v_trans_NM = translate(v_NM, v_trans_L);
-hold('off');
-plot(v_NM, '*'); xlabel('x'); ylabel('y'); zlabel('z');
-axis('square');
-hold('on');
-plot(v_trans_NM, '*r');
-<<save S_file>>
-#+END_SRC
-#+attr_org: :width 500
-#+RESULTS: doc translate vector
-[[file:img/doctranslatevector.png]]
-
-
-#+name: @vector/translate doc
-#+BEGIN_SRC org
-,*** Syntax
-
-,*** Description
-
-,*** Input Arguments
-
-,*** Return Values
-
-,*** Examples
-
-,*** Tips
-
-,*** Alternatives
-
-,*** See Also
-#+END_SRC
-
-#+call: @vector/translate doc[:output html]()
 
 
 * Vectorgrid
@@ -2456,7 +2248,7 @@ Darstellung immer ein Ausschnitt zu wählen.
 #+RESULTS:
 [[file:img/exa_meshgrid.png]]
 
-* Installation
+* COMMENT Installation
 ** Matlab/Octave Installation
 
 1. Check out the git repository to some directory, e.g.

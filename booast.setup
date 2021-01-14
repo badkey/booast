@@ -1,6 +1,5 @@
 # -*- mode: org; -*-
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
-
 #+name: org setup
 #+BEGIN_SRC emacs-lisp
 (org-babel-lob-ingest "octavetemplates.org")

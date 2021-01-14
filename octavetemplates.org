@@ -13,7 +13,7 @@ A copyright notice. Empty first line intentionally included.
 #+name: copyright
 #+BEGIN_SRC octave
 
-% Copyright (c) 2018-2020 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
+% Copyright (c) 2018-2021 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
 % 
 % Permission is hereby granted, free of charge, to any person obtaining a copy
 % of this software and associated documentation files (the "Software"), to deal

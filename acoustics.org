@@ -1,5 +1,5 @@
 #+TITLE: Acoustics
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-02-06 12:19:40 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-01-14 08:44:27 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -17,7 +17,10 @@
 
 #+RESULTS:
 : 2
-* General information
+* Overview
+:PROPERTIES:
+:CUSTOM_ID: overview acoustics
+:END:
 - file:booast.org
 
 * Velocity
@@ -458,4 +461,5 @@ Here we go again
 #+attr_org: :width 400
 #+RESULTS: sphericalwave cartesian 3plane example image
 [[file:img/spherical_3plane_test.png]]
+
 

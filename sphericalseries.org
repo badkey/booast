@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2020-12-17 01:22:59 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-01-14 09:26:04 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -1991,79 +1991,20 @@ returns spherical basis functions R = j_n Y and S = h_n Y
 * Examples
 ** Plane wave
 
-Grid for space
-
-#+BEGIN_SRC octave :tangle planewave_spherical_test.m 
-  %% create observation grid (cartesian volume)
-  A = 30; B = 40; C = 50;
-  r_A     = linspace(0, 10, A);
-  theta_B = linspace(0, pi, B);
-  phi_C   = linspace(0, 2*pi, C);
-  g_ABC   = vectorgrid(r_A, theta_B, phi_C, 'spherical');
-
-  %% slice some planes for visualisation
-  g_AB1 = g_ABC(:,:,10);  % circle
-  g_A1C = g_ABC(:,20,:);  % conus
-  g_1BC = g_ABC(20,:,:);  % sphere
-
-  %% direction/wavenumbervector of planewave
-  v = vector([1, 1, 0]', 'cartesian');
-
-  p_AB1 = real(planewave(vector(g_AB1), v));
-  p_A1C = real(planewave(vector(g_A1C), v)); %% visualise
-  p_1BC = real(planewave(vector(g_1BC), v));
-
-figure(1); clf;
-% surface(g_AB1, p_AB1);
-surface(g_A1C, p_A1C);
-% surface(g_1BC, p_1BC);
-xlabel('x'); ylabel('y'); zlabel('z');
-view(30,40); axis('equal');
-
-  %%
-S_norm = 'norm';
-S_type = 'real';
-N_order = 5;
-v_src_rtp = get(v, 'spherical');
-Psi_src_O = sphericalmodematrix(N_order, v_src_rtp(2), v_src_rtp(3), S_norm, S_type);
-N_pln_O = sphericalnormalisation(N_order, 'planewave');
-A_pln_O = N_pln_O .* Psi_src_O;
-k_rtp = get(v, 'spherical');
-C_pln_OA = sphericalseries_sfc(A_pln_O, [], r_A, inf, k_rtp(1));
-Y_OBC = sphericalharmonic(N_order, theta_B, phi_C, S_norm, S_type);
-P_ABC = sphericalseries_isf(C_pln_OA, Y_OBC);
-
-figure(2); clf;
-% surface(g_AB1, p_AB1);
-surface(g_A1C, real(P_ABC(:,20,:)));
-% surface(g_1BC, p_1BC);
-xlabel('x'); ylabel('y'); zlabel('z');
-view(30,40); axis('equal');
-
-figure(3); clf;
-% surface(g_AB1, p_AB1);
-surface(g_A1C, p_A1C - real(P_ABC(:,20,:)));
-% surface(g_1BC, p_1BC);
-xlabel('x'); ylabel('y'); zlabel('z');
-view(30,40); axis('equal');
-
-#+END_SRC
-
-#+RESULTS:
-
-
-#+name: sfs_plane_test
+#+name: plane wave grid
 #+BEGIN_SRC octave :tangle sfs_plane_test.m :results output :session plane
 R_max = 1.4;
-C = 100; r_C     = linspace(0, R_max, C);
-A = 1;   theta_A = linspace(pi/2, pi/2, A);
-B = 100; phi_B   = linspace(0, 2*pi,    B);
+C = 40; r_C     = linspace(0, R_max, C);
+A = 1;   theta_A = pi/2;
+B = 40; phi_B   = linspace(0, 2*pi,    B);
 gg_CAB = vectorgrid(r_C, theta_A, phi_B, 'spherical');
 #+END_SRC
 
-#+RESULTS: sfs_plane_test
+#+RESULTS: plane wave grid
+
 
 We define a *plane wave* with frequency and direction of the plane wave.
+#+name: plane wave params
 #+BEGIN_SRC octave :tangle sfs_plane_test.m  :results output :session plane
 C_snd = 342;                       % m/s
 F     = 1;                         % 
@@ -2071,28 +2012,26 @@ F_max = 500;                       % Hz
 F_min = 1;                         % Hz
 f_F   = linspace(F_min, F_max, F); % frequencies
 k_F   = -2*pi*f_F/C_snd;           % wavenumber
-                                   %phi   = exp(i*0.5*pi/2);            % Phase einfallende Welle
 Theta_src = pi/2;
-Phi_src   = 0.3*pi/2;
+Phi_src   = pi/2;
 R_src     = 1.2;
 vM_src    = vector(R_src, Theta_src, Phi_src, 'spherical');
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS: plane wave params
 
 With these parameters we can describe a plane wave as follows:
+#+name: plane wave defn
 #+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output :session plane
 vm_E = vector(gg_CAB); % a grid in space
 vk_F = scale(k_F, normalize(vM_src)); % wave number vector
 P_real_EF = planewave(vm_E, vk_F); % pressure of plane wave
-%%for f = 1:F   % reorder 
-%%  P_CAB{1} = vectorgrid_reshape(P_real_EF(:,f), gg_CAB); 
-%%end
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS: plane wave defn
 
 Now we define the HOA approximation
+#+name: plane wave hoa
 #+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output :session plane
 S_norm = 'norm';
 S_type = 'real';
@@ -2106,19 +2045,19 @@ Y_OAB = sphericalharmonic(N_order, theta_A, phi_B, S_norm, S_type);
 P_CAB = sphericalseries_isf(C_pln_OC, Y_OAB);
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS: plane wave hoa
 
 The output results in
+#+name: plane wave hoa plot
 #+BEGIN_SRC octave  :tangle sfs_plane_test.m :results output :session plane :var S_file = "img/sfs_planewave.png"
-v_view = [0 90];
+v_view = [30 50];
 %c_map = colormap(badcolormap(256));
-c_map = colormap('gray');
 figure(1); clf;
 surface(gg_CAB, real(P_CAB));
+c_map = colormap('hot');
 c_minmax = max(max(max((abs(real(P_CAB)))))) * [-1 1];
 caxis(c_minmax);
 colormap(c_map);
-%    plot_speaker(vM_src, vM_src, [1, 0, 0], [0, pi/2, 0]');
 axis('equal');
 grid('on');
 view(v_view);
@@ -2129,8 +2068,7 @@ zlabel('z (m)');
 saveas(1, S_file);
 #+END_SRC
 
-#+RESULTS:
-
+#+RESULTS: plane wave hoa plot
 
 #+name: HOA approximation of a plane wave.
 #+caption: HOA approximation of a plane wave.

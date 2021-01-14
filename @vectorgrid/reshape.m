@@ -1,6 +1,7 @@
   function [g_reshaped, S_type] = reshape(g, shape)
 
-  % Copyright (c) 2018, 2919 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
+  
+  % Copyright (c) 2018-2020 Johann-Markus Batke (johann-markus.batke@hs-emden-leer.de)
   % 
   % Permission is hereby granted, free of charge, to any person obtaining a copy
   % of this software and associated documentation files (the "Software"), to deal
