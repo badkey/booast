@@ -1,5 +1,5 @@
 #+TITLE: Acoustics
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-01-14 08:44:27 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-03-11 08:00:05 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -416,18 +416,18 @@ Here we go again
 #+name: sphericalwave cartesian 3plane example
 #+BEGIN_SRC octave :exports code
   %% create observation grid (cartesian volume)
-  x_A = linspace(0, 10, 50);
+  x_A = linspace(0, 10, 100);
   y_B = x_A;
   z_C = x_A;
   g_ABC = vectorgrid(x_A, y_B, z_C, 'cartesian');
 
   %% slice some planes for visualisation
-  g_AB = g_ABC(:,:,1);
-  g_AC = g_ABC(:,10,:);
-  g_BC = g_ABC(10,:,:);
+  g_AB = g_ABC(:,:,40);
+  g_AC = g_ABC(:,40,:);
+  g_BC = g_ABC(40,:,:);
 
   %% source position
-  vs = vector([1, 1, 1]', 'cartesian');
+  vs = vector([4, 4, 4]', 'cartesian');
 
   %% wave number
   F0_F = linspace(100,100, 1);
@@ -458,7 +458,7 @@ Here we go again
 #+END_SRC
 
 #+caption: Spherical waves on 3 planes defined in cartesian coordinates.
-#+attr_org: :width 400
+#+attr_org: :width 800
 #+RESULTS: sphericalwave cartesian 3plane example image
 [[file:img/spherical_3plane_test.png]]
 

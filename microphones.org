@@ -195,6 +195,8 @@ function [p_sam_LFD] = capsule(vr_mic_L, k_F, vk_D, alpha, N_disk, R_disk)
 <<calc capsule>>
 #+END_SRC
 
+#+RESULTS: def capsule
+
 #+name: test capsule 
 #+BEGIN_SRC octave :noweb yes :results output :tangle capsule_test.m
 <<setup sampling area>>
@@ -317,13 +319,12 @@ grid('on');
 tbd
 
 * Micarray and HOA testing
- 
-
-*** soundfield for testing
+we use a session =freqresp= here.
+** soundfield for testing
 #+name: setup plane waves
 #+BEGIN_SRC octave :tangle mkexa_frequencyresponses.m :session freqresp 
 %% vector impinging waves
-D_dir = 5;
+D_dir = 4;
 Theta_D = pi/2 * ones(1, D_dir);
 Phi_D = linspace(0, pi/2, D_dir);
 vg_D = vector([ones(1, D_dir); Theta_D(1:D_dir); Phi_D(1:D_dir)], 'spherical');
@@ -338,10 +339,10 @@ vk_ND  = scale(k_N, vg_D);
 #+END_SRC
 
 #+RESULTS: setup plane waves
-: >
+: org_babel_eoe
 
-*** Mikrofonsignale 
-**** Tetraeder liegend
+** Mikrofonsignale 
+*** Tetraeder liegend
 
 #+name: setup tetrahedral mic
 #+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
@@ -363,7 +364,7 @@ S_mic_dB_LND = 20*log10(abs(S_mic_LND));
 #+RESULTS: setup tetrahedral mic
 : org_babel_eoe
 
-**** Soundfield Microphone
+*** Soundfield Microphone
 
 #+name: setup soundfield mic
 #+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
@@ -388,7 +389,7 @@ S_mic_dB_LND = 20*log10(abs(S_mic_LND));
 #+RESULTS:
 : org_babel_eoe
 
-*** HOA Koeffzi. aus Array
+** HOA Koeffzi. aus Array
 
 !!! Verstärkung nachgebessert TODO
 
@@ -420,7 +421,7 @@ Y_sim_dB_OND = 20*log10(abs(Y_sim_OND));
 #+RESULTS: calc micarray HOA
 : org_babel_eoe
 
-*** HOA theoretische Koeffzi.
+** HOA theoretische Koeffzi.
 #+name: calc theoretical HOA
 #+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
 A_hoa_OND = zeros(O_amb, N_dft, D_dir);
@@ -436,7 +437,7 @@ A_hoa_dB_OND = 20*log10(abs(A_hoa_OND));
 #+RESULTS: calc theoretical HOA
 : org_babel_eoe
 
-*** Plot 
+** Plot 
 
 Daten aufbereiten
 #+name: setup plot globally
@@ -444,7 +445,7 @@ Daten aufbereiten
 S_fontname = 'Helvetica'; 
 N_fontsize = 6;
 dB_min = -60;
-dB_max = 60;
+dB_max = 40;
 
 %% HOA-Namen
 for n = 0:N_order
@@ -458,7 +459,7 @@ end
 #+RESULTS: setup plot globally
 : org_babel_eoe
 
-**** Mikrofonsignale
+*** Mikrofonsignale
 #+name: plot micarray signals
 #+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var S_file = "img/micarray_signals.png"  d=2 :results file
 figure(1); clf; 
@@ -487,14 +488,14 @@ ylabel('Level (dB)');
 grid('on');
 <<save S_file>>
 #+END_SRC
-
+#+attr_org: :width 800
 #+RESULTS: plot micarray signals
 [[file:img/micarray_signals.png]]
 
-**** HOA Koeffizienten
+*** HOA Koeffizienten
 
 #+name: plot micarray HOA
-#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var n=1 d=2 S_file = "img/micarray_hoa.png" :results file
+#+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp :var n=1 d=1 S_file = "img/micarray_hoa.png" :results file
 figure(1); clf; 
  
 %% setze o_disp
@@ -578,7 +579,7 @@ for o = o_disp
 end
 <<save S_file>>
 #+END_SRC
-
+#+attr_org: :width 800
 #+RESULTS: plot micarray HOA
 [[file:img/micarray_hoa.png]]
 

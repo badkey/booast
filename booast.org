@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2021-01-14 15:33:36 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2021-03-11 08:00:15 jbatke>
 #+PROPERTY: header-args:octave :noweb yes :eval no-export
 #+setupfile: booast.setup
 #+SELECT_TAGS: 
@@ -743,7 +743,6 @@ plot(v_NM, '+'); xlabel('x'); ylabel('y'); zlabel('z');
 
 #+RESULTS:
 : 0
-
 
 * Vectorgrid
 =vectorgrid= creates a grid of vectors.
@@ -2289,4 +2288,4 @@ version
 #+end_src
 
 #+RESULTS:
-: 5.1.0
+: 5.2.0
