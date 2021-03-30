@@ -1,7 +1,8 @@
 function [p_sam_LFD] = capsule(vr_mic_L, k_F, vk_D, alpha, N_disk, R_disk)
  % capsule - simulates capsules exposed to a plane wave
  %
-vr_sam_N = positions('circle', N_disk, R_disk);
+%vr_sam_N = positions('circle', N_disk, R_disk);
+vr_sam_N = positions('hexagon_circle', R_disk, R_disk/3);
 %% mic positions
 L = numel(vr_mic_L);
 r_mic_xyz_L = get(vr_mic_L, 'cartesian');

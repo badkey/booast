@@ -15,11 +15,15 @@ well defined points in space.
 | circle        | N         | defines N equally spaced positions on a circle |
 | sphere        | N         | defines N equally spaced positions on a sphere |
 
-** Function definition
+** begin function definition
 create file:positions.m
 #+BEGIN_SRC octave :tangle positions.m
 function [vm, varargout] = positions(S_setup, varargin)
   switch S_setup
+#+END_SRC
+
+** soundfieldmic
+#+BEGIN_SRC octave :tangle positions.m
     case 'soundfieldmic'
 
       Tilt_mic = atan(1/sqrt(2))/pi*180; % Farrar
@@ -29,36 +33,8 @@ function [vm, varargout] = positions(S_setup, varargin)
       vm = vector(R_mic*ones(1,4), Theta_L, Phi_L, 'spherical');
       varargout{1} = pi*ones(4, 1); % gain pi is applied to adapt the soundfields amplitude to HOA theory
 
-   case 'circle'
-      % param #1: number of loudspeakers
-      % param #2: radius
-        L_pos = varargin{1};
-        R_pos = varargin{2};
-   
+#+end_src
 
-      r_L = R_pos * ones(1, L_pos);
-      p_L = 2*pi*([1:L_pos]-1)/L_pos;
-      t_L = pi/2 * ones(1, L_pos);
-      vm = vector(r_L, t_L, p_L, 'spherical');
-
-   case 'sphere'
-     L_pos = varargin{1};
-     S_filename = sprintf('%i.txt', L_pos);
-     if exist(S_filename, 'file')
-       nodes = load(S_filename);
-     else
-       error(sprintf('Cannot load nodes file %s. Does not exist.',...
-                     S_filename));
-     end
-     vm = vector(nodes(:,1:3).', 'cartesian'); % cart. Koord.
-     varargout{1} = nodes(:,4);
-
-    otherwise
-      error(sprintf('unknown position: %s.', S_setup));
-end
-#+END_SRC
-
-** test soundfieldmic
 #+BEGIN_SRC octave :results output
 S_setup = 'soundfieldmic';
 vpos = positions(S_setup);
@@ -73,7 +49,6 @@ get(vpos, 'spherical')
 :    0.785398  -0.785398   2.356194  -2.356194
 : 
 
-
 #+name: plot soundfield
 #+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_soundfield.png"
 S_setup = 'soundfieldmic';
@@ -86,7 +61,22 @@ plot(vpos, 'o', 'markersize', 100);
 #+RESULTS: plot soundfield
 [[file:img/plot_soundfield.png]]
 
-** test circle
+** circle
+#+BEGIN_SRC octave :tangle positions.m
+
+   case 'circle'
+      % param #1: number of loudspeakers
+      % param #2: radius
+        L_pos = varargin{1};
+        R_pos = varargin{2};
+   
+
+      r_L = R_pos * ones(1, L_pos);
+      p_L = 2*pi*([1:L_pos]-1)/L_pos;
+      t_L = pi/2 * ones(1, L_pos);
+      vm = vector(r_L, t_L, p_L, 'spherical');
+
+#+end_src
 
 #+name: plot circle
 #+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_circle.png" :tangle mist.m
@@ -102,13 +92,28 @@ plot(vpos, '*');
 #+RESULTS: plot circle
 [[file:img/plot_circle.png]]
 
-** test sphere
-points on a surface of a sphere according to Fliege and Meier, see cite:TBD
+** sphere
+points on a surface of a sphere according to Fliege and Meier
+#+BEGIN_SRC octave :tangle positions.m
+   case 'sphere'
+     L_pos = varargin{1};
+     S_filename = sprintf('%i.txt', L_pos);
+     if exist(S_filename, 'file')
+       nodes = load(S_filename);
+     else
+       error(sprintf('Cannot load nodes file %s. Does not exist.',...
+                     S_filename));
+     end
+     vm = vector(nodes(:,1:3).', 'cartesian'); % cart. Koord.
+     varargout{1} = nodes(:,4);
+
+
+#+end_src
 
 #+name: plot sphere
 #+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_sphere.png" :tangle mist.m
 S_setup = 'sphere';
-L_num = 16; 
+L_num = 25; 
 vpos = positions(S_setup, L_num);
 plot(vpos, '*');
 axis('square');
@@ -119,3 +124,163 @@ axis('square');
 [[file:img/plot_sphere.png]]
 
 
+** hexagon
+#+BEGIN_SRC octave :tangle positions.m
+case 'hexagon'
+
+  X_num = varargin{1};
+  Y_num = varargin{2};
+  if length(varargin) == 2
+    Z_num = 1;
+  else
+    Z_num = varargin{3};
+  end
+      
+  x = [0:1:X_num-1];
+  y = [0:1:Y_num-1] * sqrt(3);
+  z = [0:1:Z_num-1] * sqrt(6)/3;
+  if length(x)>1 
+    u = x(1:end-1) + 1/2;
+  else 
+    u=0;
+  end
+  if length(y)>1
+    v = y(1:end-1) + sqrt(3)/2;
+  else
+    v =0;
+  end
+  gg = vectorgrid(x, y, 0, 'cartesian');
+  gf = vectorgrid(u, v, 0, 'cartesian');
+  
+				% Grid-Punkte in Ebene erzeugen:
+  g_xy0_XY = get(vector(gg), 'cartesian');
+  f_xy0_UV = get(vector(gf), 'cartesian');
+  h_xy0_M = [reshape(g_xy0_XY, 3, X_num*Y_num), ...
+	     reshape(f_xy0_UV, 3,size(f_xy0_UV,2)*size(f_xy0_UV,3))];
+  M = size(h_xy0_M, 2);
+  
+  for l = 1:length(z)
+    if mod(l,2)
+      h_xyz_L(1:2,[1:M]+ (l-1)*M) = h_xy0_M(1:2,:);
+    else
+      h_xyz_L(1,[1:M]+ (l-1)*M) = h_xy0_M(1,:) + 1/2;
+      h_xyz_L(2,[1:M]+ (l-1)*M) = h_xy0_M(2,:) + sqrt(3)/4;
+    end
+    h_xyz_L(3,[1:M]+ (l-1)*M) = z(l);
+  end
+  
+  vm = vector(h_xyz_L, 'cartesian');
+
+#+END_SRC
+
+test the interface
+#+BEGIN_SRC octave :session test
+v = positions('hexagon', 3, 3);
+ans = get(v, 'cartesian');
+#+END_SRC
+
+#+RESULTS:
+| 0 | 1 | 2 |                 0 |                 1 |                 2 |                 0 |                 1 |                 2 |                0.5 |                1.5 |               0.5 |               1.5 |
+| 0 | 0 | 0 | 1.732050807568877 | 1.732050807568877 | 1.732050807568877 | 3.464101615137754 | 3.464101615137754 | 3.464101615137754 | 0.8660254037844386 | 0.8660254037844386 | 2.598076211353316 | 2.598076211353316 |
+| 0 | 0 | 0 |                 0 |                 0 |                 0 |                 0 |                 0 |                 0 |                  0 |                  0 |                 0 |                 0 |
+
+#+name: plot hexagon
+#+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_hexagon.png" :tangle mist.m
+S_setup = 'hexagon';
+X_num = 7; 
+Y_num = 6; 
+Z_num = 5; 
+vpos = positions(S_setup, X_num, Y_num, Z_num);
+plot(vpos, '*');
+axis('square');
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 500
+#+RESULTS: plot hexagon
+[[file:img/plot_hexagon.png]]
+
+** hexagonsquare
+#+BEGIN_SRC octave :tangle positions.m
+case 'hexagon_square'
+      
+  R_length = varargin{1};
+  H_length = varargin{2};
+
+  %% bestimme Anzahl benötigter Punkte
+  X_num = ceil(R_length/H_length);
+  Y_num = ceil(R_length/(sqrt(3)*H_length));
+  vm_L = positions('hexagon', X_num, Y_num);
+      
+  %% Punkte um den Ursprung verteilen und skalieren
+  m_xyz_L = get(vm_L, 'cartesian');
+  m_xyz_L = H_length * ...
+            (m_xyz_L - ...
+             ([(X_num-1)/2, (Y_num-1)*sqrt(3)/2, 0].' * ...
+              ones(1, numel(vm_L))));
+  vm = vector(m_xyz_L, 'cartesian');
+    
+case 'hexagon_cube'
+      
+  R_length = varargin{1};
+  H_length = varargin{2};
+
+  %% bestimme Anzahl benötigter Punkte
+  X_num = ceil(R_length/H_length);
+  Y_num = ceil(R_length/(sqrt(3)*H_length));
+  Z_num = ceil(R_length/(sqrt(6)/3*H_length));
+
+  vm_L = positions('hexagon', X_num, Y_num, Z_num);
+      
+  %% Punkte um den Ursprung verteilen und skalieren
+  m_xyz_L = get(vm_L, 'cartesian');
+  m_xyz_L = H_length * ...
+            (m_xyz_L - ...
+             ([(X_num-1)/2, (Y_num-1)*sqrt(3)/2, (Z_num-1)*sqrt(6)/6].' * ...
+              ones(1, numel(vm_L))));
+  vm = vector(m_xyz_L, 'cartesian');
+    
+case 'hexagon_circle'
+      
+  R_circle = varargin{1};
+  H_length = varargin{2};
+
+  vm_L = positions('hexagon_square', 2*R_circle, H_length);
+
+  %% Kreis ausschneiden
+  m_rtp_L = get(vm_L, 'spherical');
+  idx_R = (m_rtp_L(1,:) <= R_circle);
+  vm = vector(m_rtp_L(:,idx_R), 'spherical');
+      
+case 'hexagon_sphere'
+      
+  R_circle = varargin{1};
+  H_length = varargin{2};
+  
+  vm_L = positions('hexagon_cube', 2*R_circle, H_length);
+
+  %% Kreis ausschneiden
+  m_rtp_L = get(vm_L, 'spherical');
+  idx_R = (m_rtp_L(1,:) <= R_circle);
+  vm = vector(m_rtp_L(:,idx_R), 'spherical');
+#+END_SRC
+
+#+name: plot hexagon_circle
+#+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_hexagon_circle.png" :tangle mist.m
+S_setup = 'hexagon_circle';
+R_circle = 2; 
+H_length = 1; 
+vpos = positions(S_setup, R_circle, H_length);
+plot(vpos, '*');
+axis('square');
+<<save S_file>>
+#+END_SRC
+#+attr_org: :width 500
+#+RESULTS: plot hexagon_circle
+[[file:img/plot_hexagon_circle.png]]
+
+** end function definition
+#+BEGIN_SRC octave :tangle positions.m
+    otherwise
+      error(sprintf('unknown position: %s.', S_setup));
+end
+#+END_SRC
