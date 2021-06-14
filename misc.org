@@ -1,7 +1,8 @@
-#+title: Miscellanious 
+
+#+title: Miscellanious
 #+author: Johann-Markus Batke
 
-This file contains scripts fitting nowhere else.
+This file contains Octave scripts fitting nowhere else.
 
 * Positions
 
@@ -122,7 +123,6 @@ axis('square');
 #+attr_org: :width 500
 #+RESULTS: plot sphere
 [[file:img/plot_sphere.png]]
-
 
 ** hexagon
 #+BEGIN_SRC octave :tangle positions.m

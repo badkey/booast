@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2021-03-11 08:00:15 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2021-06-09 09:47:44 jbatke>
 #+PROPERTY: header-args:octave :noweb yes :eval no-export
 #+setupfile: booast.setup
 #+SELECT_TAGS: 
@@ -9,7 +9,7 @@
 * General Information
 
 The *Bad OO Acoustics simulation toolbox (booast)* provides some means
-for simulating acoustic problems using Octave or Matlab(tm).
+for simulating acoustic problems using Octave or Matlab(tm). We refer to Octave for the rest of the document. 
 
 In particular, it provides two new matlab/octave classes, *vector* and
 *vectorgrid*. These can be used to implement arrays of vectors
@@ -20,6 +20,64 @@ pointing to a location in $\mathbb R^3$.
 # - [[file:acoustics.org::#overview acoustics][Acoustics]] contains some application examples for booast.
 # - [[file:sphericalseries.org][Sphericalseries]] contains some stuff for using spherical series
 #   approximations of a sound field, AKA Higher Order Ambisonics.
+
+Parts of booast:
+- [[file:acoustics.org]] implements acoustical stuff (plane waves,
+  spherical waves);
+  
+- file:microphones.org simulates microphones;
+  
+- file:ambisonics.org provides tools for simulation of Higher Order Ambisonics.
+
+** Usage
+
+The toolbox is entirely implemented using org-mode from emacs (see [[Installation]]).  It makes use of the babel functions, i.e. the ingest of [[file:octavetemplates.org]] is necessary. For the time being, [[file:booast.setup]] does the not automatically.
+
+You can tangle the Octave snippets and export the html documentation
+from the main org files.
+
+** Installation
+*** Matlab/Octave Installation
+
+1. Check out the git repository to some directory, e.g.
+   : git clone https://github.com/badkey/booast
+2. Add the path to Octave/Matlab where you cloned booast. E.g.
+   : addpath('path/to/booast/');
+
+*** Emacs tangling
+
+Booast is setup using Emacs's org mode. If you want to tangle yourself,
+Inside the installation directory, cleaning up everything belonging to
+the classes vector and vectorgrid might be necessary:
+#+name: cleanup directories
+#+BEGIN_SRC shell
+rm -rf @vector @vectorgrid img
+#+END_SRC
+
+#+RESULTS: cleanup directories
+
+Then create output directories for tangling files:
+#+name: setup directories
+#+BEGIN_SRC shell
+mkdir @vector @vectorgrid img
+#+END_SRC
+
+#+RESULTS: setup directories
+
+*** TODO Octave tests
+
+We would like to do some automatic tests like in
+https://orgmode.org/worg/org-contrib/babel/intro.html
+
+*** Misc 
+
+This toolbox was tested with octave version:
+#+begin_src octave
+version
+#+end_src
+
+#+RESULTS:
+: 6.2.0
 
 ** Naming conventions
 
@@ -2247,45 +2305,3 @@ Darstellung immer ein Ausschnitt zu wählen.
 #+RESULTS:
 [[file:img/exa_meshgrid.png]]
 
-* COMMENT Installation
-** Matlab/Octave Installation
-
-1. Check out the git repository to some directory, e.g.
-   : git clone https://github.com/badkey/booast
-2. Add the path to Octave/Matlab where you cloned booast. E.g.
-   : addpath('path/to/booast/');
-
-** Emacs tangling
-
-Booast is setup using Emacs's org mode. If you want to tangle yourself,
-Inside the installation directory, cleaning up everything belonging to
-the classes vector and vectorgrid might be necessary:
-#+name: cleanup directories
-#+BEGIN_SRC shell
-rm -rf @vector @vectorgrid img
-#+END_SRC
-
-#+RESULTS: cleanup directories
-
-Then create output directories for tangling files:
-#+name: setup directories
-#+BEGIN_SRC shell
-mkdir @vector @vectorgrid img
-#+END_SRC
-
-#+RESULTS: setup directories
-
-** TODO Octave tests
-
-We would like to do some automatic tests like in
-https://orgmode.org/worg/org-contrib/babel/intro.html
-
-** Misc 
-
-This toolbox was tested with octave version:
-#+begin_src octave
-version
-#+end_src
-
-#+RESULTS:
-: 5.2.0
