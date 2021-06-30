@@ -1,7 +1,6 @@
 #+title: Microphones
 #+author: Johann-Markus Batke
 #+date: 2020-02-07
-#+setupfile: octavetemplates.org
 #+setupfile: booast.setup
 #+exclude_tags: internal
 #+property: header-args:org               :eval export :exports results
@@ -471,7 +470,6 @@ grid('on');
 #+RESULTS: plot micarray signals
 [[file:img/micarray_signals.png]]
 
-
 ** HOA theoretische Koeffzi.
 #+name: calc theoretical HOA
 #+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
@@ -488,7 +486,7 @@ A_hoa_dB_OND = 20*log10(abs(A_hoa_OND));
 #+RESULTS: calc theoretical HOA
 : org_babel_eoe
 
-** Plot 
+** Vergleich Theorie Messung  
 
 Daten aufbereiten
 #+name: setup plot globally
@@ -506,9 +504,6 @@ for n = 0:N_order
   end
 end
 #+END_SRC
-
-#+RESULTS: setup plot globally
-: org_babel_eoe
 
 *** HOA Koeffizienten
 
@@ -603,8 +598,6 @@ for o = o_disp
 end
 <<save S_file>>
 #+END_SRC
-#+attr_org: :width 800
+
 #+RESULTS: plot micarray HOA
 [[file:img/micarray_hoa.png]]
-
-

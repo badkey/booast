@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2021-06-09 09:47:44 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2021-06-30 11:12:02 jbatke>
 #+PROPERTY: header-args:octave :noweb yes :eval no-export
 #+setupfile: booast.setup
 #+SELECT_TAGS: 
@@ -22,16 +22,21 @@ pointing to a location in $\mathbb R^3$.
 #   approximations of a sound field, AKA Higher Order Ambisonics.
 
 Parts of booast:
-- [[file:acoustics.org]] implements acoustical stuff (plane waves,
+- [[file:acoustics.org][Acoustics]] implements acoustical stuff (plane waves,
   spherical waves);
   
-- file:microphones.org simulates microphones;
+- [[file:microphones.org][Microphones]] simulates microphones;
   
-- file:ambisonics.org provides tools for simulation of Higher Order Ambisonics.
+- [[file:ambisonics.org][Ambisonics]] provides tools for simulation of Higher Order Ambisonics;
+
+- [[file:misc.org][Misc]] contains miscellanious tools.
 
 ** Usage
 
-The toolbox is entirely implemented using org-mode from emacs (see [[Installation]]).  It makes use of the babel functions, i.e. the ingest of [[file:octavetemplates.org]] is necessary. For the time being, [[file:booast.setup]] does the not automatically.
+The toolbox is entirely implemented using org-mode from emacs (see
+[[Installation]]).  It makes use of the babel functions, i.e. the ingest
+of [[file:octavetemplates.org]] is necessary. For the time being,
+[[file:booast.setup]] does this not automatically.
 
 You can tangle the Octave snippets and export the html documentation
 from the main org files.
@@ -71,13 +76,14 @@ https://orgmode.org/worg/org-contrib/babel/intro.html
 
 *** Misc 
 
-This toolbox was tested with octave version:
+This toolbox was recently tested with octave version:
 #+begin_src octave
 version
 #+end_src
 
 #+RESULTS:
 : 6.2.0
+
 
 ** Naming conventions
 
@@ -221,25 +227,25 @@ It is, if 1. How nice.
   As long the first dimension is 3, we can input matrices of any dimension.
   #+name: vectortest multidim param test
   #+BEGIN_SRC octave
-    x = rand(3, 4, 6, 7); S_type = 'cartesian';
+    x = rand(3, 4, 6, 8); S_type = 'cartesian';
     v = vector(x, S_type);
     ans = size(v);
   #+END_SRC
 
   #+RESULTS: vectortest multidim param test
-  | 4 | 6 | 7 |
+  | 4 | 6 | 8 |
 
 - one parameter input :: we use vectorgrid as input type
   #+name: vectortest vectorgrid param test
   #+BEGIN_SRC octave 
-    x = linspace(0,10, 10); y = x; z = x; S_type = 'cartesian';
+    x = linspace(1, 10, 9); y = x; z = x; S_type = 'cartesian';
     g = vectorgrid(x, y, z, S_type);
     v = vector(g);
     ans = size(v);
   #+END_SRC
 
   #+RESULTS: vectortest vectorgrid param test
-  | 10 | 10 | 10 |
+  | 9 | 9 | 9 |
 
 ** Methods
 Methods for class =vector=.

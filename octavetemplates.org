@@ -1,15 +1,18 @@
 * Source blocks 
-
+** "Save S_file"
 Save the result and pass S_file to ans.
+
 #+name: save S_file
 #+BEGIN_SRC octave
-saveas(1, S_file);
+print(S_file);
 ans = S_file;
 #+END_SRC
 
 #+RESULTS: save S_file
 
+** "copyright"
 A copyright notice. Empty first line intentionally included.
+
 #+name: copyright
 #+BEGIN_SRC octave
 
@@ -34,9 +37,11 @@ A copyright notice. Empty first line intentionally included.
 % SOFTWARE.
 #+END_SRC
 
-
 * Octave Documentation
 
+** "octave comment"
+
+inserts string to file as an octave comment, e.g. adds a "%".
 
 #+name: octave comment
 #+BEGIN_SRC emacs-lisp :var s="Zeile 1\nZeile 2" :results raw

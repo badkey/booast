@@ -1,9 +1,13 @@
 # -*- mode: org; -*-
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
-#+name: org setup
+#+setupfile: octavetemplates.org
+#+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+
+#+name: booast setup
 #+BEGIN_SRC emacs-lisp
 (org-babel-lob-ingest "octavetemplates.org")
 #+END_SRC
 
-#+RESULTS: org setup
-: 5
+
+# Local Variables:
+# eval: (progn (org-babel-goto-named-src-block "booast setup") (org-babel-execute-src-block) (outline-hide-sublevels 1))
+# End:
