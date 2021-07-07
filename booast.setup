@@ -7,6 +7,9 @@
 (org-babel-lob-ingest "octavetemplates.org")
 #+END_SRC
 
+#+RESULTS: booast setup
+: 5
+
 
 # Local Variables:
 # eval: (progn (org-babel-goto-named-src-block "booast setup") (org-babel-execute-src-block) (outline-hide-sublevels 1))

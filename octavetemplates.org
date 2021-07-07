@@ -1,6 +1,6 @@
 * Source blocks 
 ** "Save S_file"
-Save the result and pass S_file to ans.
+Save the result of the current figure in file =S_file= and pass =S_file= to =ans=.
 
 #+name: save S_file
 #+BEGIN_SRC octave
