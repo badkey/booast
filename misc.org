@@ -61,17 +61,17 @@ grid('on');
 
 #+attr_org: :width 300
 #+RESULTS: plot soundfield
-[[file:img/plot_soundfield.png]]
+[[file:img/plot_octomic.png]]
 
 ** octomic
 #+BEGIN_SRC octave :tangle positions.m
     case 'octomic'
 
-      Tilt_up = -30;
-      Tilt_down = 52;
+      Tilt_up = -54;
+      Tilt_down = 56.5;
       Theta_L = [(90 + [1, 1, 1, 1] * Tilt_up), (90 + [1, 1, 1, 1] * Tilt_down)];
       Phi_L  =  [90 * linspace(0, 3, 4) , (90 * linspace(0, 3, 4) + 45)];
-      R_mic  = 0.02; %????
+      R_mic  = 0.022; %????
       vm = vector(R_mic*ones(1,8), Theta_L * pi/180, Phi_L  * pi/180, 'spherical');
       varargout{1} = pi*ones(8, 1); % gain 1
 
@@ -86,22 +86,22 @@ get(vpos, 'spherical')
 #+RESULTS:
 : ans =
 : 
-:    0.0147   0.0147   0.0147   0.0147   0.0147   0.0147   0.0147   0.0147
-:    2.0944   2.0944   2.0944   2.0944   0.6632   0.6632   0.6632   0.6632
+:    0.0220   0.0220   0.0220   0.0220   0.0220   0.0220   0.0220   0.0220
+:    0.6283   0.6283   0.6283   0.6283   2.5569   2.5569   2.5569   2.5569
 :         0   1.5708   3.1416   4.7124   0.7854   2.3562   3.9270   5.4978
 : 
 
 #+name: plot soundfield
-#+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_soundfield.png"
+#+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_octomic.png"
 S_setup = 'octomic';
 vpos = positions(S_setup);
-figure('visible', false);
+figure('visible', true);
 plot(vpos, 'o', 'markersize', 100);
 grid('on');
 <<save S_file>>
 #+END_SRC
 
-#+attr_org: :width 300
+#+attr_org: :width 800
 #+RESULTS: plot soundfield
 [[file:img/plot_soundfield.png]]
 
