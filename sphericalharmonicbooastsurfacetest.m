@@ -19,9 +19,9 @@ for n = 0:N_order
     Y_AB = Y_OAB(o, :, :);
     % surface(vg, abs(real(Y_AB)), sign(real(Y_AB)), 'dependendSurface');
     surface(vg, abs(real(Y_AB)), [], 'dependendSurface');
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
+    % xlabel('x');
+    % ylabel('y');
+    % zlabel('z');
     title(sprintf('n = %i, m = %i', n, m));
     view([30 40]);
     grid('on');
@@ -29,5 +29,5 @@ for n = 0:N_order
     axis('nolabel');
   end
 end
-saveas(1, S_file);
+print(S_file);
 ans = S_file;

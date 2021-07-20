@@ -12,13 +12,13 @@ function [vm, varargout] = positions(S_setup, varargin)
 
     case 'octomic'
 
-      Tilt_up = -54;
-      Tilt_down = 56.5;
+      Tilt_up = -36;
+      Tilt_down = 36;
       Theta_L = [(90 + [1, 1, 1, 1] * Tilt_up), (90 + [1, 1, 1, 1] * Tilt_down)];
       Phi_L  =  [90 * linspace(0, 3, 4) , (90 * linspace(0, 3, 4) + 45)];
       R_mic  = 0.022; %????
       vm = vector(R_mic*ones(1,8), Theta_L * pi/180, Phi_L  * pi/180, 'spherical');
-      varargout{1} = pi*ones(8, 1); % gain 1
+      varargout{1} = ones(8, 1); % gain 1
 
    case 'circle'
       % param #1: number of loudspeakers

@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-01-14 09:26:04 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-07-15 18:29:37 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -1747,7 +1747,6 @@ function A_OFD = sphericalseries_hoa_plane(N_order, theta_D, phi_D, ...
   end
   
   % Vorfaktor ebene Welle
-  %N_O = sphericalnormalisation(N_order, 'planewave_impinging');
   N_O = sphericalnormalisation(N_order, 'planewave');
   
   % Modenmatrix für alle Einfallsrichtungen
@@ -1762,8 +1761,6 @@ function A_OFD = sphericalseries_hoa_plane(N_order, theta_D, phi_D, ...
       A_OFD(:,f,d) = psi_D(d) * (N_O .* Psi_OD(:,d));
     end
   end
-
-
 #+END_SRC
 
 *** Interface test                                                 :internal:
