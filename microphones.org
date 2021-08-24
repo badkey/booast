@@ -242,7 +242,7 @@ Total is 14490 elements using 260643 bytes
 
 #+end_example
 
-* HOA Microphone arrays
+* Microphone arrays
 
 All important types of microphone arrays for use with HOA are
 discussed by cite:poletti05_three_dimen_surroun_sound_system.
@@ -327,7 +327,7 @@ grid('on');
 ** Rigid sphere array response
 tbd
 
-* HOA by microphone arrays
+* HOA coefficients measured by microphone arrays
 we use a session =freqresp= here.
 
 ** soundfield 
