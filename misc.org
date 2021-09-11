@@ -15,7 +15,7 @@ well defined points in space.
 | circle        | N         | defines N equally spaced positions on a circle |
 | sphere        | N         | defines N equally spaced positions on a sphere |
 
-** begin function definition
+** begin position's function definition
 create file:positions.m
 #+BEGIN_SRC octave :tangle positions.m
 function [vm, varargout] = positions(S_setup, varargin)
@@ -53,7 +53,8 @@ get(vpos, 'spherical')
 #+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_soundfield.png"
 S_setup = 'soundfieldmic';
 vpos = positions(S_setup);
-figure('visible', false);
+% figure('visible', false);
+figure(1);
 plot(vpos, 'o', 'markersize', 100);
 grid('on');
 <<save S_file>>
@@ -61,12 +62,18 @@ grid('on');
 
 #+attr_org: :width 300
 #+RESULTS: plot soundfield
-[[file:img/plot_octomic.png]]
+[[file:img/plot_soundfield.png]]
 
 ** octomic
+
+The octoMic my Core Sound has positions with using the elevation
+(tilt) $\theta = \pm 36°$ and $\phi = n 45°, n = 0\ldots 7$.
+
+Using the inclination the angles are $\theta = 90°-36°=54°$ and
+$\theta = 90°+36° = 126°$.
+
 #+BEGIN_SRC octave :tangle positions.m
     case 'octomic'
-
       Tilt_up = -36;
       Tilt_down = 36;
       Theta_L = [(90 + [1, 1, 1, 1] * Tilt_up), (90 + [1, 1, 1, 1] * Tilt_down)];
@@ -74,7 +81,6 @@ grid('on');
       R_mic  = 0.022; %????
       vm = vector(R_mic*ones(1,8), Theta_L * pi/180, Phi_L  * pi/180, 'spherical');
       varargout{1} = ones(8, 1); % gain 1
-
 #+end_src
 
 #+BEGIN_SRC octave :results output
@@ -101,7 +107,7 @@ grid('on');
 <<save S_file>>
 #+END_SRC
 
-#+attr_org: :width 800
+#+attr_org: :width 300
 #+RESULTS: plot soundfield
 [[file:img/plot_soundfield.png]]
 
@@ -321,7 +327,7 @@ axis('square');
 #+RESULTS: plot hexagon_circle
 [[file:img/plot_hexagon_circle.png]]
 
-** end function definition
+** end position's function definition
 #+BEGIN_SRC octave :tangle positions.m
     otherwise
       error(sprintf('unknown position: %s.', S_setup));

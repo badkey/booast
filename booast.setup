@@ -1,6 +1,6 @@
 # -*- mode: org; -*-
 #+setupfile: octavetemplates.org
-#+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+# +setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
 #+name: booast setup
 #+BEGIN_SRC emacs-lisp
