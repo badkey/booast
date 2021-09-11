@@ -283,6 +283,8 @@ whos
 
 *** Documentation                                                     :ignore:
 
+
+
 #+name: array response
 #+BEGIN_SRC octave :var S_file="img/arrayresponse_freefield.png" :results file
 N_order = 3;

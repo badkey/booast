@@ -44,7 +44,8 @@ function surface(g_slice, s_slice, c_slice, S_flag)
     slice_size = size(g_slice);
 
     switch g_slice.S_type
-	case 'cartesian'
+
+       case 'cartesian'
 
 	  if slice_size(1) == 1
 	    %% g_ABC -> g_BC
@@ -58,6 +59,7 @@ function surface(g_slice, s_slice, c_slice, S_flag)
 	  end
 
 	case 'spherical'
+	  
 	  %% get surface of grid
 	  %% create surface as defnd. by s_slice
 	  if slice_size(1) == 1
@@ -82,5 +84,5 @@ function surface(g_slice, s_slice, c_slice, S_flag)
 	surface(x, y, z, s_slice);
     end
   else
-    surface(x, y, z, c_slice);
+    surface(x, y, z, c_slice.');
   end

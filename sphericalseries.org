@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-07-15 18:29:37 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-09-12 00:01:40 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -527,6 +527,8 @@ xlim([0, x_max]);
 
 ** sphericalbessel_r
 file:sphericalbessel_r.m: returns the 1st radial derivative of the spherical Bessel function
+
+cite:williams99_fourier_acoustic
 
 *** Octave definition                                              :internal:
 

@@ -8,5 +8,5 @@ S_file='img/2d_in_3d__spherical_surface_colored_booast.png';
   figure(1); clf;
   surface(g_AB1, s_AB);
   view([30, 40]);
-  saveas(1, S_file);
+  print(S_file);
   ans = S_file;

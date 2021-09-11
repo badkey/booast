@@ -1,6 +1,6 @@
 #+title: Bad OO Acoustics simulation toolbox (booast)
 #+author: Johann-Markus Batke
-#+date: 2018-03-14; Revision Time-stamp: <2021-06-30 11:12:02 jbatke>
+#+date: 2018-03-14; Revision Time-stamp: <2021-09-11 15:18:12 jbatke>
 #+PROPERTY: header-args:octave :noweb yes :eval no-export
 #+setupfile: booast.setup
 #+SELECT_TAGS: 
@@ -1618,10 +1618,11 @@ To get the vector information from the vectorgrid, you need to use =vector=:
 *** surface
 **** Description
 
-=surface= takes a vectorgrid as input argument and some values to
-display as a surface accordingly to the vectorgrid definition.
+=surface= takes a vectorgrid =g_CAB= as input argument and some values to
+be displayed as a surface according to the dimensions defined by the
+vectorgrid.
 
-If =g_CAB= holds a grid spanning all 3 dimensions, we need to slice
+If =g_CAB= holds a grid spanning over all 3 dimensions, we need to slice
 the grid and restrict to a singular value for one axis.
 
 **** Definition                                                    :internal:
@@ -1674,7 +1675,8 @@ function surface(g_slice, s_slice, c_slice, S_flag)
     slice_size = size(g_slice);
 
     switch g_slice.S_type
-	case 'cartesian'
+
+       case 'cartesian'
 
 	  if slice_size(1) == 1
 	    %% g_ABC -> g_BC
@@ -1688,6 +1690,7 @@ function surface(g_slice, s_slice, c_slice, S_flag)
 	  end
 
 	case 'spherical'
+	  
 	  %% get surface of grid
 	  %% create surface as defnd. by s_slice
 	  if slice_size(1) == 1
@@ -1712,15 +1715,14 @@ function surface(g_slice, s_slice, c_slice, S_flag)
 	surface(x, y, z, s_slice);
     end
   else
-    surface(x, y, z, c_slice);
+    surface(x, y, z, c_slice.');
   end
 
 #+END_SRC
 
 **** Examples
-This example illustrates the use of the method =surface= for
-=vectorgrid=. The section ref:sec:surfacealternatives discusses
-similar examples using Octave/Matlab's surface function.
+
+This example illustrates the use of the method =surface= for =vectorgrid=. The section ref:sec:surfacealternatives discusses similar examples using Octave/Matlab's surface function.
 
 ***** 2D in 3D
 
@@ -1738,8 +1740,7 @@ Now we invent some function. It should be defined for $z =
 g_AB1 = g_ABC(:,:,1);
 #+END_SRC
 
-The function should look like the example in the alternatives section
-ref:sec:surfacealternatives. Here we define the function the booasty way:
+The function should look like the example in the alternatives section ref:sec:surfacealternatives. Here we define the function the booasty way:
 #+name: surface example s_AB
 #+BEGIN_SRC octave
 r_xyz_AB = get(vector(g_AB1), 'cartesian');
@@ -1780,11 +1781,11 @@ so surface colors the slice defined by =g_AB1= by values =s_AB=.
 [[file:img/2d_in_3d__spherical_surface_colored_booast.png]]
 
 ***** 3D in 3D
-Using 'dependendSurface' we can show the data as a 3D plane in the 3D
-space. So we state
+
+Using 'dependendSurface' we can show the data as a 3D plane in the 3D space. So we state
 #+name: spherical surface example dependendSurface
 #+BEGIN_SRC octave
-surface(g_1AB, s_AB, [], 'dependendSurface');
+surface(g_AB1, s_AB, [], 'dependendSurface');
 #+END_SRC
 
 surface() colors the slice defined by =g_1AB= by values =s_AB=.
@@ -1800,32 +1801,57 @@ surface() colors the slice defined by =g_1AB= by values =s_AB=.
   view([30, 40]);
   <<save S_file>>
 #+END_SRC
-
-#+RESULTS: spherical surface example 2d in 3d figure dependendSurface
-
-#+attr_org: :width 400
+#+attr_org: :width 300
 #+caption: A surface defined using booast being *dependend* from the definition space. label:surface_example_2d_3d_dep
-#+RESULTS: surface example 2d in 3d figure dependendSurface
-[[file:img/2d_in_3d_surface_dependend.png]]
+#+RESULTS: spherical surface example 2d in 3d figure dependendSurface
+[[file:img/2d_in_3d_spherical_surface_dependend.png]]
 
-***** TODO 3D in 3D coloring
+
+***** STARTED 3D in 3D coloring
+
+We could also color the surface with an extra parameter.
+#+name: spherical surface example dependendSurface colored
+#+BEGIN_SRC octave
+c_AB = int16(s_AB > 6);
+surface(g_AB1, s_AB, c_AB, 'dependendSurface');
+#+END_SRC
+
+=surface()= colors the slice defined by =g_1AB= by values =c_AB=.
+#+name: spherical surface example 2d in 3d figure dependendSurface colored
+#+BEGIN_SRC octave :exports results :tangle _spherical_surface_example_2d_in_3d_colored.m :results file :var S_file="img/2d_in_3d_spherical_surface_dependend_colored.png" :session test
+  <<surface example g_ABC>>
+  <<surface example g_AB1>>
+  <<surface example s_AB>>
+
+  figure(1); clf;
+  <<spherical surface example dependendSurface colored>>
+  view([30, 40]);
+  <<save S_file>>
+#+END_SRC
+#+attr_org: :width 300
+#+caption: colored version
+#+RESULTS: spherical surface example 2d in 3d figure dependendSurface colored
+[[file:img/2d_in_3d_spherical_surface_dependend_colored.png]]
+
 
 ***** 2D in 3D Spherical
-We first create a vectorgrid to define some function.
+
+We first create a spherical vectorgrid and then define a function on it.
 #+name: spherical surface example g_CAB
 #+BEGIN_SRC octave
 C = 20; A = 30; B = 40; 
 g_CAB = vectorgrid(linspace(0, 1, C), pi*linspace(0, 1, A), pi*linspace(-1, 1, B), 'spherical');
 #+END_SRC
 
-Now we invent some function. It should be defined for $\theta =
-\pi/2$. Therefore we slice this space from the grid:
+#+RESULTS: spherical surface example g_CAB
+
+Now we invent the function. It should be defined for the constant grid value $\theta = \pi/2$, the second value of theta in the grid. Therefore we slice this space from the grid:
 #+name: spherical surface example g_1AB
 #+BEGIN_SRC octave
 g_1AB = g_CAB(2,:,:);
 #+END_SRC
 
-The function is arbitrary... 
+The function for demonstration purposes is arbitrary... lets invent one: 
 #+name: spherical surface example s_AB
 #+BEGIN_SRC octave
 r_rtp_AB = get(vector(g_1AB), 'spherical');
@@ -1834,8 +1860,7 @@ s_AB = squeeze(sum(r_rtp_AB, 1));
 
 #+RESULTS: spherical surface example s_AB
 
-Finally the results yields Figure ref:fig:surface_example_2d_3d after
-stating
+Finally the results yields Figure ref:fig:surface_example_2d_3d after stating
 #+name: spherical surface example surface
 #+BEGIN_SRC octave
 surface(g_1AB, s_AB');
@@ -1843,10 +1868,9 @@ surface(g_1AB, s_AB');
 
 #+RESULTS: spherical surface example surface
 
-so surface colors the slice defined by =g_AB1= by values =s_AB=.
-
+so =surface= colors the slice defined by =g_1AB= by values =s_AB=.
 #+name: spherical surface example 2d in 3d figure
-#+BEGIN_SRC octave :exports results :tangle spherical_surface_example_2d_in_3d.m :results file :var S_file="img/2d_in_3d_surface_colored_booast.png"
+#+BEGIN_SRC octave :exports results :tangle spherical_surface_example_2d_in_3d.m :results file :var S_file="img/2d_in_3d_surface_colored_booast.png" :session test
   <<spherical surface example g_CAB>>
   <<spherical surface example g_1AB>>
   <<spherical surface example s_AB>>
@@ -1856,36 +1880,19 @@ so surface colors the slice defined by =g_AB1= by values =s_AB=.
   view([30, 40]);
   <<save S_file>>
 #+END_SRC
-
-#+attr_org: :width 500
-#+RESULTS: spherical surface example 2d in 3d figure
-[[file:img/2d_in_3d_surface_colored_booast.png]]
 
 #+caption: A surface defined using booast. label:fig:surface_example_2d_3d
 #+attr_org: :width 400
-#+RESULTS: surface example 2d in 3d figure
-***** 2D in 3D Spherical
+#+RESULTS: spherical surface example 2d in 3d figure
+[[file:img/2d_in_3d_surface_colored_booast.png]]
 
-#+name: spherical surface example 2d in 3d figure
-#+BEGIN_SRC octave :exports results :tangle spherical_surface_example_2d_in_3d.m :results file :var S_file="img/2d_in_3d_surface_colored_booast.png"
-  <<spherical surface example g_CAB>>
-  <<spherical surface example g_1AB>>
-  <<spherical surface example s_AB>>
 
-  figure(1); clf;
-  <<spherical surface example surface>>
-  view([30, 40]);
-  <<save S_file>>
-#+END_SRC
 
-#+attr_org: :width 500
+**** Alternatives using Matlab/Octave directly label:sec:surfacealternatives
 
-**** Alternatives label:sec:surfacealternatives
-As an alternative, we do the examples as tests solely using
-Octave/matlab's =surface= function.
+As an alternative, we do the examples as tests solely using Octave/matlab's =surface= function.
 
-We use the meshgrid as shown in section ref:meshgridalternatives. A
-function =z_BA= is defined using the grid information.
+We use the meshgrid as shown in section ref:meshgridalternatives. A function =z_BA= is defined using the grid information.
 #+name: Beispielfunktion 3D
 #+BEGIN_SRC octave
 <<matlab meshgrid x_BA y_BA>>
@@ -1895,8 +1902,7 @@ Therefore, we have got a function $z = f(x, y)$.
 
 ***** 2D in 3D
 
-We want to present $z = f(x, y)$ as a plane in the 3D
-space. Therefore, we need to
+We want to present $z = f(x, y)$ as a plane in the 3D space. Therefore, we need to
  1. create a z-plane in space, e.g. at $z = 0$
     #+name: 2d in 3d surface
     #+BEGIN_SRC octave 
@@ -1922,15 +1928,18 @@ space. Therefore, we need to
 
 #+caption: A 2D surface in 3D space showing a function $f(x,y)$ for $z = 0$ using colors. 
 #+caption: label:fig:alternative_2d_in_3d_surface
+#+attr_org: :width 300
 #+RESULTS: alternative 2d in 3d figure
-file:img/2d_in_3d_surface_colored_octave.png
+[[file:img/2d_in_3d_surface_colored_octave.png]]
 
 
 ***** 3D in 3D
       :PROPERTIES:
       :header-args: :exports results
       :END:
-3D-Fläche im 3D-Raum darstellen; und so sagt man es surface:
+
+3D in 3D using matlab's/octave's =surface= by spanning a 2D array using two vectors:
+#+name: alternative 3d in 3d figure 
 #+BEGIN_SRC octave :var S_file = "img/3din3d_plot_surface1.png" :results file
   <<Beispielfunktion 3D>>
   clf;
@@ -1938,11 +1947,14 @@ file:img/2d_in_3d_surface_colored_octave.png
   view([30, 40]);
   <<save S_file>>
 #+END_SRC
-
-#+RESULTS:
+#+attr_org: :width 300
+#+caption: 3D surface using =surface()= 
+#+RESULTS: alternative 3d in 3d figure
 [[file:img/3din3d_plot_surface1.png]]
 
-man kann auch die Meshgrid-Koordinaten an surface übergeben:
+
+Using three 2D arrays to do the same:
+#+name: alternative 2d 2d 2d
 #+BEGIN_SRC octave :var S_file = "img/3din3dplot_surface2.png" :results file
     <<Beispielfunktion 3D>>
     clf;
@@ -1950,11 +1962,14 @@ man kann auch die Meshgrid-Koordinaten an surface übergeben:
     view([30, 40]);
     <<save S_file>>
 #+END_SRC
-
-#+RESULTS:
+#+attr_org: :width 300
+#+caption: same result as before
+#+RESULTS: alternative 2d 2d 2d
 [[file:img/3din3dplot_surface2.png]]
 
-...dann kann man auch ganz leicht die Sache im Raum drehen:
+
+same again, rotation by reordering the variables
+#+name: alternative 2d 2d 2d reorder
 #+BEGIN_SRC octave :var S_file = "img/3din3dplot_surface3.png" :results file
 <<Beispielfunktion 3D>>
 clf;
@@ -1962,22 +1977,27 @@ surface(x_BA, z_BA, y_BA);
 view([30, 40]);
 <<save S_file>>
 #+END_SRC
-
-#+RESULTS:
+#+attr_org: :width 300
+#+caption: rotation by reordering
+#+RESULTS: alternative 2d 2d 2d reorder
 [[file:img/3din3dplot_surface3.png]]
 
-...so eine Fläche kann man auch anderweitig bemalen:
+
+same again, different colors from =c_BA=
+#+name: alternative 2d 2d 2d color
 #+BEGIN_SRC octave :var S_file = "img/3din3dplot_surface4.png" :results file :exports results
 <<Beispielfunktion 3D>>
 clf;
-s_BA = randn(B, A);
-surface(z_BA, x_BA, y_BA, s_BA);
+c_BA = int16(y_BA > 0);
+surface(z_BA, x_BA, y_BA, c_BA);
 view([30, 40]);
 <<save S_file>>
 #+END_SRC
-
-#+RESULTS:
+#+attr_org: :width 300
+#+caption: color changed
+#+RESULTS: alternative 2d 2d 2d color
 [[file:img/3din3dplot_surface4.png]]
+
 
 ***** COMMENT isosurfaces
 
@@ -2274,7 +2294,6 @@ figure(1); clf;
   %% save
   S_file = 'img/exa_plane_wave_cartesian_z.png';
   %<<save S_file>>
-
 #+END_SRC
 
 #+RESULTS:
