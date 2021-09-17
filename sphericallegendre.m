@@ -115,31 +115,21 @@
 % SOFTWARE.
 
  function P_OA = sphericallegendre(N_order, theta_A)
+  O = (N_order+1)^2;
+  P_OA = zeros(O, length(theta_A));
+  for n = 0:N_order
+    % hier keine Normierung verwendet, stattdessen sphericalnorm
+    P_QA = legendre(n, cos(theta_A));
 
-   O = (N_order+1)^2;
-   A = length(theta_A);  % Anzahl der theta Werte
-   P_OA = zeros(O, A);   % Legendre polynom 1. art
-   Q_OA = zeros(O, A);   % Legendre polynom 2. art
-  
-   for n = 0:N_order % order index
-     % legendre polynomial includes the (-1)^m term
-     P_QA = legendre(n, cos(theta_A));
-     % size: (n+1)xA
-     % P_n^m(cos(theta_A)) is row m+1; m = 0..n
-     % see: http://www.mathworks.com/help/techdoc/ref/legendre.html
-     % P_n^m(x) = (-1)^m (1-x^2)^{m/2} \frac{\mathrm d^m}{\mathrm d x^m} P_n(x).
-    
-     % Indices triangle shaped left, mid, right
-     o_l = n^2+1;     % 1 + ACN(n, m=-n); ACN(n, m) = n*(n+1) + m;
-     o_m = n^2+n+1;   % 1 + ACN(n, m=0)
-     o_r = n^2+2*n+1; % 1 + ACN(n, m=+n)
+    % Indizes in der Koeffzi.-Pyramide links/mitte/rechts
+    o_l = n^2+1;
+    o_m = n^2+n+1;
+    o_r = n^2+2*n+1;
 
-     % m >= 0
-     P_OA(o_m:o_r, :) = P_QA;
-     if n > 0
-         % m < 0
-         m = -1:-1:-n;
-         fac = repmat((-1).^m(:), 1, A); 
-         P_OA([o_m-1:-1:o_l], :) = fac .* P_QA(2:end,:);
-     end
-   end
+    % m >= 0
+    P_OA(o_m:o_r, :) = P_QA;
+    % m < 0
+    P_OA([o_l:o_m-1], :) = P_OA([o_r:-1:o_m+1],:);
+  end
+
+ end

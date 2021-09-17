@@ -1,5 +1,5 @@
 #+TITLE: Spherical Series
-#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-09-12 00:01:40 jbatke>
+#+DATE: <2017-11-23 Do> Rev. Time-stamp: <2021-09-14 02:29:20 jbatke>
 #+AUTHOR: Johann-Markus Batke
 #+EMAIL: JBatke@technik-emden.de
 #+LANGUAGE: en
@@ -682,7 +682,7 @@ function N_O = sphericalnormalisation(N_order, norm)
     for n = 0:N_order
 	 for m = -n:n
         o = n^2+n+m+1;
-        N_O(o) = sqrt((2*n + 1)/(4*pi) * ...
+        N_O(o) = (-1)^m * sqrt((2*n + 1)/(4*pi) * ...
 			 factorial(n-abs(m))/...
 			 factorial(n+abs(m)));
 	 end

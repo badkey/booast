@@ -78,7 +78,7 @@ $\theta = 90°+36° = 126°$.
       Tilt_down = 36;
       Theta_L = [(90 + [1, 1, 1, 1] * Tilt_up), (90 + [1, 1, 1, 1] * Tilt_down)];
       Phi_L  =  [90 * linspace(0, 3, 4) , (90 * linspace(0, 3, 4) + 45)];
-      R_mic  = 0.022; %????
+      R_mic  = 0.0147; %????
       vm = vector(R_mic*ones(1,8), Theta_L * pi/180, Phi_L  * pi/180, 'spherical');
       varargout{1} = ones(8, 1); % gain 1
 #+end_src
@@ -92,12 +92,12 @@ get(vpos, 'spherical')
 #+RESULTS:
 : ans =
 : 
-:    0.0220   0.0220   0.0220   0.0220   0.0220   0.0220   0.0220   0.0220
-:    0.6283   0.6283   0.6283   0.6283   2.5569   2.5569   2.5569   2.5569
+:    0.0147   0.0147   0.0147   0.0147   0.0147   0.0147   0.0147   0.0147
+:    0.9425   0.9425   0.9425   0.9425   2.1991   2.1991   2.1991   2.1991
 :         0   1.5708   3.1416   4.7124   0.7854   2.3562   3.9270   5.4978
 : 
 
-#+name: plot soundfield
+#+name: plot octomic
 #+BEGIN_SRC octave :results file :noweb yes :var S_file="img/plot_octomic.png"
 S_setup = 'octomic';
 vpos = positions(S_setup);
@@ -108,8 +108,8 @@ grid('on');
 #+END_SRC
 
 #+attr_org: :width 300
-#+RESULTS: plot soundfield
-[[file:img/plot_soundfield.png]]
+#+RESULTS: plot octomic
+[[file:img/plot_octomic.png]]
 
 ** circle
 #+BEGIN_SRC octave :tangle positions.m
