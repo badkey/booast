@@ -457,7 +457,6 @@ s_sam_LFD = capsule(vr_mic_L, k_F, vk_D, alpha, dia);
 #+RESULTS: test capsule frequency
 [[file:img/capsule_fun_frequency.png]]
 
-
 * Microphone arrays
 
 All important types of microphone arrays for use with HOA are
@@ -566,9 +565,8 @@ dia.N_disk = 20;
 #+name: setup sampling positions tetrahedral
 #+BEGIN_SRC octave  :tangle mkexa_frequencyresponses.m :session freqresp
 %% Positionen der sim. Mik.-Kapselen
-L_pos = 9;
-R_pos = 0.0147;
-[vr_mic_L, G_L] = positions('sphere', L_pos);
+%L_pos = 9; R_pos = 0.0147; [vr_mic_L, G_L] = positions('sphere', L_pos);
+vr_mic_L = positions('octomic');  L_pos = 8; G_L = ones(L_pos, 1); R_pos = 0.023;
 vr_mic_L = scale(R_pos, vr_mic_L);
 #+END_SRC
 
@@ -586,6 +584,7 @@ let us look at the capsules' signals (a-format)
 
 #+name: setup tetrahedral a-format
 #+BEGIN_SRC octave :noweb yes :session microphones_afmt :results silent
+clear all;
 <<setup sampling area tetrahedral>>
 <<setup sampling positions tetrahedral>>
 <<setup far sound>>
@@ -628,7 +627,6 @@ grid('on');
 #+attr_org: :width 600
 #+RESULTS: display frequency response per direction
 [[file:img/tetrahedral_a-format.png]]
-
 
 *** B-format
 
@@ -886,11 +884,12 @@ end
 
 
 #+BEGIN_SRC octave :session microphones_bfmt
+<<setup HOA simulation>>
 <<calc HOA simulation>>
 #+END_SRC
 
 #+RESULTS:
-: org_babel_eoe
+| 9 | 256 | 5 |
 
 #+name: display HOA simulation freq
 #+BEGIN_SRC octave :session microphones_bfmt :results file :var d_disp = 1 S_file="img/simulation_HOA_freqresp.png"
@@ -928,7 +927,7 @@ grid('on');
 
 **** HOA coefficients directivity
 
-#+name: setup HOA simulation
+#+name: setup HOA simulation dir
 #+BEGIN_SRC octave :session microphones_bfmt_dir
 
 %% setup a-format
@@ -943,6 +942,9 @@ s_sam_LFD = capsule(vr_mic_L, k_F, vk_D, alpha, dia);
 <<calc HOA theoretical>>
 <<calc HOA simulation>>
 #+END_SRC
+
+#+RESULTS: setup HOA simulation dir
+| 9 | 3 | 1200 |
 
 #+RESULTS: setup HOA simulation
 | 4 | 256 | 5 |
@@ -975,12 +977,16 @@ end
 
 
 
-#+name: display HOA simulation
+#+name: display HOA simulation dir
 #+BEGIN_SRC octave :session microphones_bfmt_dir :results file :var n_disp = 3 S_file="img/simulation_HOA_dirresp.png"
 A_sim_OFAB = reshape(A_sim_OFD, [O_amb, F, A, B]);
 <<plot HOA directions>>
 <<save S_file>>
 #+END_SRC
+#+attr_org: :width 600
+#+RESULTS: display HOA simulation dir
+[[file:img/simulation_HOA_dirresp.png]]
+
 #+attr_org: :width 600
 #+RESULTS: display HOA simulation
 [[file:img/simulation_HOA_dirresp.png]]
