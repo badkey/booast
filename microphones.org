@@ -9,12 +9,9 @@
 Simulation of microphone capsules and microphone arrays.
 
 #+name: booast setup
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (org-babel-lob-ingest "~/Version/booast/octavetemplates.org")
 #+END_SRC
-
-#+RESULTS: booast setup
-: 5
 
 * Microphone capsule
 
@@ -312,10 +309,16 @@ figure(1); clf;
 semilogx(f_F, s_sam_dB_FD);
 xlabel('f/Hz');
 ylabel('A/dB');
-title('Capsule response - directions');
+title(sprintf('Capsule response per direction (\\theta, \\phi)'));
+k_rtp_D = get(vk_D, 'spherical');
+for d = 1:D
+  label_D{d} = sprintf('%.2f, %.2f', k_rtp_D(2, d)*180/pi, k_rtp_D(3,d)*180/pi);
+end
+legend(label_D, 'location', 'bestoutside');
+grid('on');	  
 <<save S_file>>
 #+END_SRC
-#+attr_org: :width 300
+#+attr_org: :width 800
 #+RESULTS: display frequency response
 [[file:img/micfrequency.png]]
 
@@ -603,7 +606,7 @@ observation
 \frac{\lambda}{2} = 2\pi f_{0}
 \end{equation}
 
-limiting frequency  
+#+name: limiting frequency  
 #+BEGIN_SRC octave  :session microphones_afmt
 r_mic_rtp_L = get(vr_mic_L, 'spherical');
 f_g = C_snd/(pi*r_mic_rtp_L(1, 1, 1));
@@ -619,8 +622,9 @@ ans = f_g;
 
 
 #+name: display frequency response per direction
-#+BEGIN_SRC octave :noweb yes :results file :var S_file = "img/tetrahedral_a-format.png" d = 2 :session microphones_afmt
-s_sam_dB_LF = 20*log10(real(squeeze(s_sam_LFD(:,:,d))));
+#+BEGIN_SRC octave :noweb yes :results file :var S_file = "img/tetrahedral_a-format.png" d = 1 :session microphones_afmt
+<<limiting frequency>>
+s_sam_dB_LF = 20*log10(abs(real(s_sam_LFD(:,:,d))));
 figure(1); clf;
 semilogx(f_F, s_sam_dB_LF);
 xlabel('f/Hz');
@@ -642,6 +646,10 @@ for l = 1:L_pos
        'BackgroundColor',[1 1 1], ...
        'EdgeColor', V_dco(mod(l-1,7)+1,:));
 end
+k_rtp_D = get(vk_D, 'spherical');
+S_title = sprintf('\\theta = %.1f deg, \\phi = %.1f deg', ...
+		  k_rtp_D(2, d)*180/pi, k_rtp_D(3,d)*180/pi);
+title(S_title);
 grid('on');
 %a = get(gca);
 %line(f_g *[1, 1], a.ylim);
